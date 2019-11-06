@@ -1,0 +1,104 @@
+<div style="height: 100%;">
+  <mat-grid-list [cols]="breakpoint" rowHeight="100%" (window:resize)="onResize($event)" class="mat-grid-styles">
+    <mat-grid-tile colspan="1" rowspan="1">
+      <mat-card class="scrollable-content parte-izquierda">
+        <div style="width: 100%; margin-bottom: 5%;">
+          <img src="assets/logousalle.png" alt="Logo Salle" width="35%" />
+        </div>
+        <mat-card-title class="titulo-izquierda">
+          {{ tituloDerecho }}
+        </mat-card-title>
+        <mat-card-subtitle class="subtitulo-izquierda">
+          {{ contentDerecho }}
+        </mat-card-subtitle>
+        <mat-card-content [style.overflow]="'auto'" class="form-content-izquierda">
+          <div class="inscripcion-form">
+            <form class="estilo-formulario">
+              <div *ngIf="inscripcion">
+                <mat-form-field class="campoTexto">
+                  <input matInput placeholder="Primer nombre *" />
+                  <mat-icon matSuffix class="style-icons">person_outline</mat-icon>
+                </mat-form-field>
+                <mat-form-field class="campoTexto">
+                  <input matInput placeholder="Segundo nombre" />
+                  <mat-icon matSuffix class="style-icons">person_outline</mat-icon>
+                </mat-form-field>
+                <mat-form-field class="campoTexto">
+                  <input matInput placeholder="Primer apellido *" />
+                  <mat-icon matSuffix class="style-icons">person_outline</mat-icon>
+                </mat-form-field>
+                <mat-form-field class="campoTexto">
+                  <input matInput placeholder="Segundo apellido" />
+                  <mat-icon matSuffix class="style-icons">person_outline</mat-icon>
+                </mat-form-field>
+                <mat-form-field class="campoTexto">
+                  <mat-select matInput placeholder="Tipo de documento"> </mat-select>
+                  <mat-icon matSuffix class="style-icons">keyboard_arrow_right</mat-icon>
+                </mat-form-field>
+                <mat-form-field class="campoTexto">
+                  <input matInput placeholder="Número de Documento" />
+                  <mat-icon matSuffix class="style-icons">account_box</mat-icon>
+                </mat-form-field>
+                <mat-form-field class="campoTexto">
+                  <input matInput placeholder="Correo electrónico *" />
+                  <mat-icon matSuffix class="style-icons">mail_outline</mat-icon>
+                </mat-form-field>
+                <mat-form-field class="campoTexto">
+                  <input matInput placeholder="Número de celular *" />
+                  <mat-icon matSuffix class="style-icons">smartphone</mat-icon>
+                </mat-form-field>
+                <mat-form-field class="campoTexto">
+                  <mat-select matInput placeholder="Oferta académica"> </mat-select>
+                  <mat-icon matSuffix class="style-icons">keyboard_arrow_right</mat-icon>
+                </mat-form-field>
+                <mat-form-field class="campoTexto">
+                  <mat-select matInput placeholder="Selecccione programa académico"> </mat-select>
+                  <mat-icon matSuffix class="style-icons">keyboard_arrow_right</mat-icon>
+                </mat-form-field>
+                <mat-checkbox matInput required>
+                  <span class="terminos-cond">
+                    He le&iacute;do y acepto los T&eacute;rminos y Condiciones <br />
+                    (Habeas data)
+                  </span>
+                </mat-checkbox>
+              </div>
+              <div *ngIf="!inscripcion">
+                <mat-form-field class="campoTexto">
+                  <input matInput placeholder="Número de Documento" />
+                  <mat-icon matSuffix class="style-icons">account_box</mat-icon>
+                </mat-form-field>
+                <mat-form-field class="campoTexto">
+                  <mat-select matInput placeholder="Oferta académica"> </mat-select>
+                  <mat-icon matSuffix class="style-icons">keyboard_arrow_right</mat-icon>
+                </mat-form-field>
+                <mat-form-field class="campoTexto">
+                  <mat-select matInput placeholder="Selecccione programa académico"> </mat-select>
+                  <mat-icon matSuffix class="style-icons">keyboard_arrow_right</mat-icon>
+                </mat-form-field>
+              </div>
+              <button mat-button mat-raised-button class="btn-inscribir">{{ labelBotonDerecho }}</button>
+            </form>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </mat-grid-tile>
+    <div class="position-button">
+      <button mat-fab class="style-button"></button>
+    </div>
+    <mat-grid-tile colspan="1" rowspan="1">
+      <mat-card class="parte-derecha">
+        <img src="assets/astronauta.svg" alt="astronauta" class="astronauta" />
+        <img src="assets/logounisalle.svg" alt="lasalle" class="logolasalle" />
+        <mat-card-content [style.overflow]="'auto'" style="height: 100%;">
+          <div style="width: 100%;">
+            <div class="text-right">
+              <h2 class="titulo-procAdmin">{{ tituloIzquierdo }}</h2>
+              <p class="content-procAdmin">{{ contentIzquierdo }}</p>
+              <button mat-button mat-raised-button class="btn-continuar" (click)="cambiarRegistro()">{{ labelBotonIzquierdo }}</button>
+            </div>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </mat-grid-tile>
+  </mat-grid-list>
+</div>
