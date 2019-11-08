@@ -6,10 +6,10 @@
           <img src="assets/logousalle.png" alt="Logo Salle" width="35%" />
         </div>
         <mat-card-title class="titulo-izquierda">
-          {{ tituloDerecho }}
+          {{ tituloIzquierdo }}
         </mat-card-title>
         <mat-card-subtitle class="subtitulo-izquierda">
-          {{ contentDerecho }}
+          {{ contentIzquierdo }}
         </mat-card-subtitle>
         <mat-card-content [style.overflow]="'auto'" class="form-content-izquierda">
           <div class="inscripcion-form">
@@ -76,7 +76,7 @@
                   <mat-icon matSuffix class="style-icons">keyboard_arrow_right</mat-icon>
                 </mat-form-field>
               </div>
-              <button mat-button mat-raised-button class="btn-inscribir">{{ labelBotonDerecho }}</button>
+              <button mat-button mat-raised-button class="btn-inscribir">{{ labelBotonIzquierdo }}</button>
             </form>
           </div>
         </mat-card-content>
@@ -92,9 +92,9 @@
         <mat-card-content [style.overflow]="'auto'" style="height: 100%;">
           <div style="width: 100%;">
             <div class="text-right">
-              <h2 class="titulo-procAdmin">{{ tituloIzquierdo }}</h2>
-              <p class="content-procAdmin">{{ contentIzquierdo }}</p>
-              <button mat-button mat-raised-button class="btn-continuar" (click)="cambiarRegistro()">{{ labelBotonIzquierdo }}</button>
+              <h2 class="titulo-procAdmin">{{ tituloDerecho }}</h2>
+              <p class="content-procAdmin">{{ contentDerecho }}</p>
+              <button mat-button mat-raised-button class="btn-continuar" (click)="cambiarRegistro()">{{ labelBotonDerecho }}</button>
             </div>
           </div>
         </mat-card-content>

@@ -1,5 +1,5 @@
 .div-complete {
-  height: 700px;
+  height: 663px;
   box-shadow: 0 4px 8px 0 #00000033, 0 6px 20px 0 #00000030;
 }
 
@@ -13,7 +13,7 @@
 
 @media screen and (min-width: 540px) {
   .div-complete {
-    width: 1115px; /*Cambiar esto por porcentaje*/
+    width: 1150px; /*Cambiar esto por porcentaje*/
     margin: auto;
     margin-top: 5%;
   }
