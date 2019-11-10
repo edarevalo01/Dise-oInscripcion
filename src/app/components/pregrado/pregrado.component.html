@@ -82,10 +82,10 @@
         </mat-card-content>
       </mat-card>
     </mat-grid-tile>
-    <div class="position-button">
+    <div class="position-button" *ngIf="ladoDerecho">
       <button mat-icon-button class="style-button"><img src="../../../assets/comparearrow.svg" alt="iconoFlechas" /></button>
     </div>
-    <mat-grid-tile colspan="1" rowspan="1">
+    <mat-grid-tile colspan="1" rowspan="1" *ngIf="ladoDerecho">
       <mat-card class="parte-derecha">
         <img src="assets/astronauta.svg" alt="astronauta" class="astronauta" />
         <img src="assets/logounisalle.svg" alt="lasalle" class="logolasalle" />

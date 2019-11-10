@@ -1,4 +1,5 @@
 import { Component, OnInit } from "@angular/core";
+import { UrlTree, Router } from "@angular/router";
 
 @Component({
   selector: "app-pregrado",
@@ -17,7 +18,22 @@ export class PregradoComponent implements OnInit {
   tituloIzquierdo: string = "Inscríbete";
   contentIzquierdo: string = "Ingresa tus datos personales e inicia un viaje estrella paso a paso al programa académico de tú interés";
 
-  constructor() {}
+  urlTree: UrlTree = null;
+  ladoDerecho: boolean = true;
+
+  constructor(private router: Router) {
+    this.urlTree = this.router.parseUrl(window.location.search);
+    if (this.urlTree.queryParams.param1 == "hola") {
+      this.ladoDerecho = false;
+      this.inscripcion = false;
+      this.breakpoint = 1;
+    } else {
+      this.ladoDerecho = true;
+      this.inscripcion = true;
+      this.breakpoint = window.innerWidth <= 540 ? 1 : 2;
+    }
+    // console.log(window.location.search);
+  }
 
   cambiarRegistro() {
     this.inscripcion = !this.inscripcion;
@@ -41,11 +57,11 @@ export class PregradoComponent implements OnInit {
     }
   }
 
-  ngOnInit() {
-    this.breakpoint = window.innerWidth <= 540 ? 1 : 2;
-  }
+  ngOnInit() {}
 
   onResize(event) {
-    this.breakpoint = event.target.innerWidth <= 540 ? 1 : 2;
+    if (this.ladoDerecho) {
+      this.breakpoint = event.target.innerWidth <= 540 ? 1 : 2;
+    }
   }
 }
