@@ -1,3 +1,15 @@
+  .vinculo {
+  background: none!important;
+  border: none;
+  padding: 0!important;
+  /*optional*/
+  font-family: arial, sans-serif;
+  /*input has OS specific font-family*/
+  color: #069;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
 .inscripcion-form {
   width: 100%;
   padding-bottom: 32px;
@@ -77,7 +89,7 @@
 .style-button {
   width: 70px;
   height: 70px;
-  background-image: linear-gradient(to right bottom, #ffffff, #ffffff, #ffe1a0);
+  background-color: white;
   border: 5px solid #ff9100;
   cursor: default;
 }
@@ -221,3 +233,4 @@
   /*change color of underline when focused*/
   background-color: #000000c5 !important;
 }
+
