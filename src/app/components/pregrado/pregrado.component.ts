@@ -63,6 +63,7 @@ export class PregradoComponent implements OnInit {
   private msgCaptcha: string = environment.msgCaptcha;
   private msgCaptchaNoValido :  boolean = false;
   private loading : boolean = false;
+  private dialogRef : any;
 
   constructor(private pregradoServ: PregradoService, private formBuilder: FormBuilder, private dialog: MatDialog, private router: Router, private cookieService: CookieService, @Inject(DOCUMENT) private document: Document) { }
 
@@ -179,7 +180,7 @@ export class PregradoComponent implements OnInit {
   }
   //ventana mensajes
   public openMensajes(titulo: string, mensaje: string, opcion: number): void {
-    const dialogRef = this.dialog.open(VentanaDialogoMensajesPreg, {
+      this.dialogRef = this.dialog.open(VentanaDialogoMensajesPreg, {
       width: '35%',
       data: {titulo: titulo,
              mensaje: mensaje,
@@ -187,14 +188,8 @@ export class PregradoComponent implements OnInit {
             }
     });
 
-    dialogRef.afterClosed().subscribe(
-      result => {
-                if(1==opcion){
-                   
-                }
-                else if(2==opcion){
-                      this.document.location.href = environment.urlPaginaUniver;    
-                }
+    this.dialogRef.afterClosed().subscribe( 
+      result => {     
     });
   }
   //ventana habeas data
@@ -208,6 +203,9 @@ export class PregradoComponent implements OnInit {
     }
     else{
         this.openMensajes(environment.titGracias,environment.msgGracias,1);
+        setTimeout(function(){
+                  this.document.location.href = environment.urlPaginaUniver;    
+        },3000);
     }
   }
   //parametros
