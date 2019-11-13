@@ -76,7 +76,6 @@ export class PregradoComponent implements OnInit {
   ) {
     var paramUrl = this.obtenerParametro("programa");
     if (paramUrl != 0) {
-      console.log(paramUrl);
       this.formReducido = true;
       this.pantalla = 1;
     }
@@ -154,7 +153,6 @@ export class PregradoComponent implements OnInit {
           });
         },
         error => {
-          console.log(error);
         }
       );
     } else {
@@ -212,7 +210,6 @@ export class PregradoComponent implements OnInit {
           }
         },
         error => {
-          console.log(error);
         }
       );
     }
@@ -282,7 +279,6 @@ export class PregradoComponent implements OnInit {
               }
             },
             error => {
-              console.log(error);
             }
           );
         }
