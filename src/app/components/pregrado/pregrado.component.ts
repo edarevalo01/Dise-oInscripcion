@@ -265,11 +265,6 @@ export class PregradoComponent implements OnInit {
     }
     return results[1] || 0;
   }
-  //ir a linea de tiempo
-  public irLineaTiempo():void{
-    
-    
-  }
 }
 //mensajes
 @Component({

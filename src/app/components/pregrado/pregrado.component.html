@@ -101,7 +101,7 @@
                         <mat-error *ngIf="registrarInscripcionForm.hasError('required', 'terminos')">
                             {{lblTerminos}}
                         </mat-error>
-                        <p-captcha #captcha [siteKey]="siteKey" initCallback="loadCaptcha"></p-captcha>
+                        <p-captcha #captcha [siteKey]="siteKey" initCallback="loadCaptcha" size="invisible"></p-captcha>
                         <mat-error *ngIf="msgCaptchaNoValido">
                             {{msgCaptcha}}
                         </mat-error>
