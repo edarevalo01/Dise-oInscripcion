@@ -185,7 +185,8 @@ export class PregradoComponent implements OnInit {
       data: {titulo: titulo,
              mensaje: mensaje,
              opcion:opcion
-            }
+            },
+      disableClose: (1==opcion||2==opcion)?true:false
     });
 
     this.dialogRef.afterClosed().subscribe( 
@@ -203,10 +204,10 @@ export class PregradoComponent implements OnInit {
     }
     else{
         this.openMensajes(environment.titGracias,environment.msgGracias,1);
-        setTimeout(function(){
-                  this.document.location.href = environment.urlPaginaUniver;    
-        },3000);
     }
+    setTimeout(function(){
+        this.document.location.href = environment.urlPaginaUniver;    
+    },3500);
   }
   //parametros
   public obtenerParametro(name: string){
