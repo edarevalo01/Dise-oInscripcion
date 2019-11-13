@@ -99,7 +99,6 @@ export class PregradoContinuarComponent implements OnInit {
           });
         },
         error => {
-          console.log(error);
         }
       );
     } else {
@@ -157,7 +156,6 @@ export class PregradoContinuarComponent implements OnInit {
               }
             },
             error => {
-              console.log(error);
             }
           );
         }

@@ -105,7 +105,7 @@
                 {{lblTerminos}}
               </mat-error>
               <div class="captcha">
-                <p-captcha #captcha [siteKey]="siteKey" (onResponse)="showResponse($event)" initCallback="initRecaptcha" size='invisible'></p-captcha>
+                <p-captcha #captcha [siteKey]="siteKey" (onResponse)="showResponse($event)" initCallback="loadCaptcha"></p-captcha>
               </div>
               <mat-error *ngIf="msgCaptchaNoValido">
                 {{msgCaptcha}}

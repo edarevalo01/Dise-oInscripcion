@@ -13,7 +13,6 @@ export class AppComponent {
   constructor(private router: Router) {
     var paramUrl = this.obtenerParametro("programa");
     if (paramUrl != 0) {
-      console.log("lo reduce");
       this.formReducido = true;
     }
   }
