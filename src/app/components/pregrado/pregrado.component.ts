@@ -84,7 +84,14 @@ export class PregradoComponent implements OnInit {
       terminos : [false, Validators.requiredTrue]
     });    
     if(!this.cookieService.get(environment.cookieLeadSource)){
-      this.cookieService.set(environment.cookieLeadSource, this.obtenerParametro('lead_source').toString(), 15/1440,'/',environment.dominio);
+      var ls = '';
+      if('0'!=this.obtenerParametro('lead_source')){
+        ls = this.obtenerParametro('lead_source').toString();
+      }
+      else{
+           ls = environment.leadSource;
+      }
+      this.cookieService.set(environment.cookieLeadSource, ls, 15/1440,'/',environment.dominio);
     }
   }
   public onResize(event) {
