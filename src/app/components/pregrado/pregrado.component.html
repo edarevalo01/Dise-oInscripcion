@@ -1,140 +1,147 @@
 <div style="height: 100%;">
- <mat-grid-list [cols]="pantalla" rowHeight="100%" (window:resize)="onResize($event)" class="mat-grid-styles">
+  <div class="titulo-izquierda-reducido" *ngIf='formReducido'>
+    Formulario de incripción
+  </div>
+  <mat-grid-list [cols]="pantalla" rowHeight="100%" (window:resize)="onResize($event)" class="mat-grid-styles">
     <mat-grid-tile colspan="1" rowspan="1">
-           <mat-card class="scrollable-content parte-izquierda">  
-            <div style="width: 100%; margin-bottom: 5%;">
-                 <img src="assets/logousalle.png" alt="Logo Salle" width="35%" />
-            </div>
-            <mat-card-title class="titulo-izquierda">
-              {{titInscribite}}
-            </mat-card-title>
-            <mat-card-subtitle class="subtitulo-izquierda">
-              {{lblInscribete}}
-            </mat-card-subtitle>
-           <mat-card-content [style.overflow]="'auto'" class="form-content-izquierda">
-              <div class="inscripcion-form">
-                <form  class="estilo-formulario" [formGroup]="registrarInscripcionForm">
-                      <mat-form-field class="campoTexto"> 
-                          <input matInput placeholder="Primer nombre *" formControlName="primerNombre">
-                          <mat-icon matSuffix class="style-icons">person_outline</mat-icon>
-                          <mat-error *ngIf="registrarInscripcionForm.controls.primerNombre.hasError('required')">
-                              {{lblRequerido}}
-                           </mat-error>
-                        </mat-form-field>
-                        <mat-form-field class="campoTexto">
-                          <input matInput placeholder="Segundo nombre" formControlName="segundoNombre">
-                          <mat-icon matSuffix class="style-icons">person_outline</mat-icon>
-                        </mat-form-field>
-                        <mat-form-field class="campoTexto">
-                           <input matInput placeholder="Primer apellido *" formControlName="primerApellido">
-                           <mat-icon matSuffix>person_outline</mat-icon>
-                           <mat-error *ngIf="registrarInscripcionForm.controls.primerApellido.hasError('required')">
-                              {{lblRequerido}}
-                           </mat-error>
-                        </mat-form-field>
-                        <mat-form-field class="campoTexto">
-                            <input matInput placeholder="Segundo apellido" formControlName="segundoApellido">
-                            <mat-icon matSuffix class="style-icons">person_outline</mat-icon>
-                        </mat-form-field>
-                        <mat-form-field class="campoTexto">
-                            <mat-select matInput formControlName="tipoDocumentoSelected" placeholder="Tipo de documento">
-                                <mat-option *ngFor="let tipoDoc of tiposDocumento" [value]="tipoDoc.codigo">
-                                  {{tipoDoc.nombre}}
-                                </mat-option>
-                            </mat-select>
-                            <mat-icon matSuffix class="style-icons">keyboard_arrow_right</mat-icon>
-                        </mat-form-field>
-                        <mat-form-field class="campoTexto">
-                            <input matInput formControlName="documento" placeholder="Número de Documento">
-                            <mat-icon matSuffix class="style-icons">account_box</mat-icon>
-                            <mat-error *ngIf="registrarInscripcionForm.controls.documento.hasError('required')">
-                                {{lblRequerido}}
-                            </mat-error>
-                            <mat-error *ngIf="registrarInscripcionForm.controls.documento.hasError('pattern')">
-                                {{lblSoloNumeros}} 
-                            </mat-error>
-                        </mat-form-field>
-                        <mat-form-field class="campoTexto">
-                            <input matInput placeholder="Correo electrónico *" formControlName="correo">
-                            <mat-icon matSuffix class="style-icons">mail_outline</mat-icon>
-                            <mat-error *ngIf="registrarInscripcionForm.controls.correo.hasError('required')">
-                               {{lblRequerido}}
-                            </mat-error>
-                            <mat-error *ngIf="registrarInscripcionForm.controls.correo.hasError('email')">
-                                {{lblCorreo}}
-                             </mat-error>
-                         </mat-form-field>
-                         <mat-form-field class="campoTexto">
-                             <input matInput placeholder="Número de celular *" formControlName="celular"> 
-                             <mat-icon matSuffix class="style-icons">smartphone</mat-icon>
-                             <mat-error *ngIf="registrarInscripcionForm.controls.celular.hasError('required')">
-                                {{lblRequerido}}
-                             </mat-error>
-                             <mat-error *ngIf="registrarInscripcionForm.controls.celular.hasError('pattern')">
-                                 {{lblSoloNumeros}} 
-                             </mat-error>
-                         </mat-form-field>
-                         <mat-form-field  class="campoTexto"> 
-                            <mat-select matInput formControlName="tipoSelected" placeholder="Oferta académica">
-                                <mat-option *ngFor="let tipoProg of tiposPrograma" [value]="tipoProg.codigo" (click)="getProgramas()">
-                                  {{tipoProg.nombre}}
-                                </mat-option>
-                            </mat-select>
-                            <mat-icon matSuffix class="style-icons">keyboard_arrow_right</mat-icon>
-                        </mat-form-field>
-                        <mat-form-field class="campoTexto">
-                            <mat-select matInput formControlName="programaSelected" placeholder="Selecccione programa académico">
-                                <mat-option *ngFor="let prog of programs" [value]="prog.codigo+prog.jornada">
-                                  {{prog.nombre}} ({{prog.jornada=='D'?'Diurno':'Nocturno'}})
-                                </mat-option>
-                            </mat-select>
-                            <mat-icon matSuffix class="style-icons">school</mat-icon>
-                        </mat-form-field>
-                        <mat-checkbox matInput formControlName="terminos">
-                           <span class="terminos-cond">
-                             He le&iacute;do y acepto los 
-                            <button (click)="openHabeasData()" class="vinculo">{{lblTermCond}}</button>
-                            <br/>
-                            (Habeas data)
-                           </span>
-                        </mat-checkbox>
-                        <mat-error *ngIf="registrarInscripcionForm.hasError('required', 'terminos')">
-                            {{lblTerminos}}
-                        </mat-error>
-                        <p-captcha #captcha [siteKey]="siteKey" initCallback="loadCaptcha" size="invisible"></p-captcha>
-                        <mat-error *ngIf="msgCaptchaNoValido">
-                            {{msgCaptcha}}
-                        </mat-error>
-                </form>
-                <button mat-raised-button (click)="enviarDatosInscripcion()" class="btn-inscribir" [disabled]="registrarInscripcionForm.invalid&&!msgCaptchaNoValido">{{lblInscribirme}}</button>
-            </div>
-           </mat-card-content>
-          </mat-card>
-        </mat-grid-tile>
-        <div class="position-button">
-             <button mat-fab class="style-button"><img src="assets/flechas.svg" /></button>
+      <mat-card class="scrollable-content parte-izquierda">  
+        <div style="width: 100%; margin-bottom: 5%;" *ngIf='!formReducido'>
+          <img src="assets/logousalle.png" alt="Logo Salle" width="35%" />
         </div>
-        <div class="position-button" *ngIf="loading">
-            <mat-progress-spinner [mode]="'indeterminate'">
-            </mat-progress-spinner>            
-        </div>
-        <mat-grid-tile colspan="1" rowspan="1">
-                    <mat-card class="parte-derecha"> 
-                        <img src="assets/astronauta.svg" alt="astronauta" class="astronauta" />
-                        <img src="assets/logounisalle.svg" alt="lasalle" class="logolasalle" />
-                        <mat-card-content [style.overflow]="'auto'" style="height: 100%;">
-                                <div style="width: 100%;">
-                                        <div class="text-right">
-                                          <h2 class="titulo-procAdmin">{{titContinuar}}</h2>
-                                          <p class="content-procAdmin">
-                                               {{lblContinuar}}
-                                           </p>
-                                          <button mat-raised-button (click)="continuarProceso()" class="btn-continuar">{{lblContinuarr}}</button>
-                                        </div>
-                                </div>
-                        </mat-card-content>
-                    </mat-card>
-        </mat-grid-tile>
+        <mat-card-title class="titulo-izquierda" *ngIf='!formReducido'>
+        {{titInscribite}}
+        </mat-card-title>
+        <mat-card-subtitle class="subtitulo-izquierda" *ngIf='!formReducido'>
+        {{lblInscribete}}
+        </mat-card-subtitle>
+        <mat-card-content [style.overflow]="'auto'" class="form-content-izquierda">
+          <div class="inscripcion-form">
+            <form class="estilo-formulario" [formGroup]="registrarInscripcionForm">
+              <mat-form-field class="campoTexto"> 
+                <input matInput placeholder="Primer nombre *" formControlName="primerNombre">
+                <mat-icon matSuffix class="style-icons">person_outline</mat-icon>
+                <mat-error *ngIf="registrarInscripcionForm.controls.primerNombre.hasError('required')">
+                  {{lblRequerido}}
+                </mat-error>
+              </mat-form-field>
+              <mat-form-field class="campoTexto">
+                <input matInput placeholder="Segundo nombre" formControlName="segundoNombre">
+                <mat-icon matSuffix class="style-icons">person_outline</mat-icon>
+              </mat-form-field>
+              <mat-form-field class="campoTexto">
+                <input matInput placeholder="Primer apellido *" formControlName="primerApellido">
+                <mat-icon matSuffix>person_outline</mat-icon>
+                <mat-error *ngIf="registrarInscripcionForm.controls.primerApellido.hasError('required')">
+                  {{lblRequerido}}
+                </mat-error>
+              </mat-form-field>
+              <mat-form-field class="campoTexto">
+                <input matInput placeholder="Segundo apellido" formControlName="segundoApellido">
+                <mat-icon matSuffix class="style-icons">person_outline</mat-icon>
+              </mat-form-field>
+              <mat-form-field class="campoTexto">
+                <mat-select matInput formControlName="tipoDocumentoSelected" placeholder="Tipo de documento">
+                  <mat-option *ngFor="let tipoDoc of tiposDocumento" [value]="tipoDoc.codigo">
+                    {{tipoDoc.nombre}}
+                  </mat-option>
+                </mat-select>
+                <mat-icon matSuffix class="style-icons">keyboard_arrow_right</mat-icon>
+              </mat-form-field>
+              <mat-form-field class="campoTexto">
+                <input matInput formControlName="documento" placeholder="Número de Documento">
+                <mat-icon matSuffix class="style-icons">account_box</mat-icon>
+                <mat-error *ngIf="registrarInscripcionForm.controls.documento.hasError('required')">
+                  {{lblRequerido}}
+                </mat-error>
+                <mat-error *ngIf="registrarInscripcionForm.controls.documento.hasError('pattern')">
+                  {{lblSoloNumeros}} 
+                </mat-error>
+              </mat-form-field>
+              <mat-form-field class="campoTexto">
+                <input matInput placeholder="Correo electrónico *" formControlName="correo">
+                <mat-icon matSuffix class="style-icons">mail_outline</mat-icon>
+                <mat-error *ngIf="registrarInscripcionForm.controls.correo.hasError('required')">
+                  {{lblRequerido}}
+                </mat-error>
+                <mat-error *ngIf="registrarInscripcionForm.controls.correo.hasError('email')">
+                  {{lblCorreo}}
+                </mat-error>
+              </mat-form-field>
+              <mat-form-field class="campoTexto">
+                <input matInput placeholder="Número de celular *" formControlName="celular"> 
+                <mat-icon matSuffix class="style-icons">smartphone</mat-icon>
+                <mat-error *ngIf="registrarInscripcionForm.controls.celular.hasError('required')">
+                  {{lblRequerido}}
+                </mat-error>
+                <mat-error *ngIf="registrarInscripcionForm.controls.celular.hasError('pattern')">
+                  {{lblSoloNumeros}} 
+                </mat-error>
+              </mat-form-field>
+              <mat-form-field  class="campoTexto"> 
+                <mat-select matInput formControlName="tipoSelected" placeholder="Oferta académica">
+                  <mat-option *ngFor="let tipoProg of tiposPrograma" [value]="tipoProg.codigo" (click)="getProgramas()">
+                    {{tipoProg.nombre}}
+                  </mat-option>
+                </mat-select>
+                <mat-icon matSuffix class="style-icons">keyboard_arrow_right</mat-icon>
+              </mat-form-field>
+              <mat-form-field class="campoTexto">
+                <mat-select matInput formControlName="programaSelected" placeholder="Selecccione programa académico">
+                  <mat-option *ngFor="let prog of programs" [value]="prog.codigo+prog.jornada">
+                    {{prog.nombre}} ({{prog.jornada=='D'?'Diurno':'Nocturno'}})
+                  </mat-option>
+                </mat-select>
+                <mat-icon matSuffix class="style-icons">school</mat-icon>
+              </mat-form-field>
+              <mat-checkbox matInput formControlName="terminos">
+                <span class="terminos-cond">
+                  He le&iacute;do y acepto los 
+                <button (click)="openHabeasData()" class="vinculo">{{lblTermCond}}</button>
+                <br/>
+                (Habeas data)
+                </span>
+              </mat-checkbox>
+              <mat-error *ngIf="registrarInscripcionForm.hasError('required', 'terminos')">
+                {{lblTerminos}}
+              </mat-error>
+              <div class="captcha">
+                <p-captcha #captcha [siteKey]="siteKey" (onResponse)="showResponse($event)" initCallback="initRecaptcha" size='invisible'></p-captcha>
+              </div>
+              <mat-error *ngIf="msgCaptchaNoValido">
+                {{msgCaptcha}}
+              </mat-error>
+            </form>
+            <button [style.width]="formReducido? '100%' : ''" mat-raised-button (click)="enviarDatosInscripcion()" class="btn-inscribir" [disabled]="registrarInscripcionForm.invalid&&!msgCaptchaNoValido">{{lblInscribirme}}</button>
+            <div style="width: 100%; text-align: center; color: #ffc107; margin-top: 30px; float: right;" *ngIf='formReducido'>
+              <a href='/inscripcion?lead_source=""' target="_blank">CONTINUAR PROCESO DE ADMISIÓN</a>
+            </div>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </mat-grid-tile>
+    <div class="position-button" *ngIf='!formReducido'>
+      <button mat-fab class="style-button"><img src="assets/flechas.svg" /></button>
+    </div>
+    <div class="position-button" *ngIf="loading">
+      <mat-progress-spinner [mode]="'indeterminate'"></mat-progress-spinner>
+    </div>
+    <mat-grid-tile colspan="1" rowspan="1" *ngIf='!formReducido'>
+      <mat-card class="parte-derecha"> 
+        <img src="assets/astronauta.svg" alt="astronauta" class="astronauta" />
+        <img src="assets/logounisalle.svg" alt="lasalle" class="logolasalle" />
+        <mat-card-content [style.overflow]="'auto'" style="height: 100%;">
+          <div style="width: 100%;">
+            <div class="text-right">
+              <h2 class="titulo-procAdmin">{{titContinuar}}</h2>
+              <p class="content-procAdmin">
+                {{lblContinuar}}
+              </p>
+              <button mat-raised-button (click)="continuarProceso()" class="btn-continuar">{{lblContinuarr}}</button>
+            </div>
+          </div>
+        </mat-card-content>
+      </mat-card> 
+    </mat-grid-tile>
   </mat-grid-list>
 </div>
 

@@ -1,32 +1,31 @@
-import { BrowserModule } from '@angular/platform-browser';
-import { NgModule, Injectable } from '@angular/core';
-import { AppRoutingModule } from './app-routing.module';
-import { AppComponent } from './app.component';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import {MatInputModule} from '@angular/material/input';
-import {MatCardModule} from '@angular/material/card'; 
-import {MatButtonModule, MatIconModule, MatGridListModule, MatSelectModule, MatCheckboxModule, MatDialogModule, MatProgressSpinnerModule} from '@angular/material';
-import {MatDividerModule} from '@angular/material';
-import { PregradoComponent, VentanaDialogoMensajesPreg } from './components/pregrado/pregrado.component';
-import { HttpClientModule } from '@angular/common/http';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { ScrollingModule } from '@angular/cdk/scrolling';
-import { PregradoContinuarComponent, VentanaDialogoMensajes } from './components/pregrado-continuar/pregrado-continuar.component';
-import { CaptchaModule } from 'primeng/captcha';
-import { CookieService } from 'ngx-cookie-service';
+import { BrowserModule } from "@angular/platform-browser";
+import { NgModule, Injectable } from "@angular/core";
+import { AppRoutingModule } from "./app-routing.module";
+import { AppComponent } from "./app.component";
+import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
+import { MatInputModule } from "@angular/material/input";
+import { MatCardModule } from "@angular/material/card";
+import {
+  MatButtonModule,
+  MatIconModule,
+  MatGridListModule,
+  MatSelectModule,
+  MatCheckboxModule,
+  MatDialogModule,
+  MatProgressSpinnerModule
+} from "@angular/material";
+import { MatDividerModule } from "@angular/material";
+import { PregradoComponent, VentanaDialogoMensajesPreg } from "./components/pregrado/pregrado.component";
+import { HttpClientModule } from "@angular/common/http";
+import { FormsModule, ReactiveFormsModule } from "@angular/forms";
+import { ScrollingModule } from "@angular/cdk/scrolling";
+import { PregradoContinuarComponent, VentanaDialogoMensajes } from "./components/pregrado-continuar/pregrado-continuar.component";
+import { CaptchaModule } from "primeng/captcha";
+import { CookieService } from "ngx-cookie-service";
 
 @NgModule({
-  declarations: [
-    AppComponent,
-    PregradoComponent,
-    VentanaDialogoMensajes,
-    VentanaDialogoMensajesPreg,
-    PregradoContinuarComponent
-  ],
-  entryComponents: [
-    VentanaDialogoMensajes,
-    VentanaDialogoMensajesPreg
-  ],
+  declarations: [AppComponent, PregradoComponent, VentanaDialogoMensajes, VentanaDialogoMensajesPreg, PregradoContinuarComponent],
+  entryComponents: [VentanaDialogoMensajes, VentanaDialogoMensajesPreg],
   imports: [
     BrowserModule,
     AppRoutingModule,
@@ -51,4 +50,4 @@ import { CookieService } from 'ngx-cookie-service';
   providers: [CookieService],
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {}

@@ -1,23 +1,18 @@
-  .vinculo {
-  background: none!important;
+.vinculo {
+  background: none !important;
   border: none;
-  padding: 0!important;
+  padding: 0 !important;
   /*optional*/
   font-family: arial, sans-serif;
   /*input has OS specific font-family*/
   color: #069;
-  text-decoration: underline;
+  /*text-decoration: underline;*/
   cursor: pointer;
 }
 
 .inscripcion-form {
   width: 100%;
   padding-bottom: 32px;
-}
-
-.form-content-izquierda {
-  height: 100%;
-  padding: 0% 9.21% 12% 9.21%;
 }
 
 .btn-inscribir {
@@ -65,6 +60,7 @@
 }
 
 @media screen and (max-width: 540px) {
+  /* Pequeño */
   .position-button {
     position: absolute;
     top: calc(100% - 35px) !important;
@@ -73,9 +69,23 @@
     height: 70px;
     z-index: 1000;
   }
+
+  .parte-izquierda {
+    width: 100%;
+    height: calc(100% - 8px);
+    border: 0px solid black;
+    padding: 5.71% 5.55% 0% 5.55%;
+    border-radius: 0px !important;
+  }
+
+  .form-content-izquierda {
+    height: 100%;
+    padding: 0%;
+  }
 }
 
 @media screen and (min-width: 540px) {
+  /* Grande */
   .position-button {
     position: absolute;
     top: calc(50% - 35px) !important;
@@ -83,6 +93,19 @@
     width: 70px;
     height: 70px;
     z-index: 1000;
+  }
+
+  .parte-izquierda {
+    width: 100%;
+    height: calc(100% - 34px);
+    border: 0px solid black;
+    padding: 5.71% 13.04% 0% 13.04%;
+    border-radius: 0px !important;
+  }
+
+  .form-content-izquierda {
+    height: 100%;
+    padding: 0% 9.21% 12% 9.21%;
   }
 }
 
@@ -94,20 +117,23 @@
   cursor: default;
 }
 
-.parte-izquierda {
-  width: 100%;
-  height: calc(100% - 34px);
-  border: 0px solid black;
-  padding: 5.71% 13.04% 0% 13.04%;
-  border-radius: 0px !important;
-}
-
 .titulo-izquierda {
   font-weight: 500;
   font-size: 24px;
   letter-spacing: -0.37px;
   color: #ffc107;
   font: Open, Sans;
+}
+
+.titulo-izquierda-reducido {
+  width: calc(100% - 40px);
+  font-weight: 500;
+  font-size: 16px;
+  letter-spacing: 0.15px;
+  color: #ffc107;
+  font: Roboto, Condensed;
+  background-color: black;
+  padding: 13px 20px;
 }
 
 .subtitulo-izquierda {
@@ -173,6 +199,10 @@
   letter-spacing: 1.25px;
 }
 
+.captcha {
+  margin-top: 10px;
+}
+
 .terminos-cond {
   font-size: 12px !important;
   line-height: 0px !important;
@@ -191,7 +221,7 @@
 
 /*Mariano*/
 .campoTexto {
-  width: 95%;
+  width: 100%;
   font-size: 16px;
   letter-spacing: 0.15px;
   color: #000000de;
@@ -221,7 +251,7 @@
 .mat-accent .mat-pseudo-checkbox-indeterminate,
 .mat-pseudo-checkbox-checked,
 .mat-pseudo-checkbox-indeterminate {
-  background-color: #448aff !important; /* Red background for example */
+  background-color: #449bff !important; /* Red background for example */
 }
 
 ::ng-deep .mat-focused .mat-form-field-label {
@@ -234,3 +264,14 @@
   background-color: #000000c5 !important;
 }
 
+a:link,
+a:visited {
+  color: #ffc107;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+a:link:active,
+a:visited:active {
+  color: #ffc107;
+}
