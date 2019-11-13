@@ -83,6 +83,9 @@ export class PregradoComponent implements OnInit {
       programaSelected : ['', Validators.required],
       terminos : [false, Validators.requiredTrue]
     });    
+    if(!this.cookieService.get(environment.cookieLeadSource)){
+      this.cookieService.set(environment.cookieLeadSource, this.obtenerParametro('lead_source').toString(), 15/1440,'/',environment.dominio);
+    }
   }
   public onResize(event) {
     this.pantalla = event.target.innerWidth <= 540 ? 1 : 2;
@@ -98,7 +101,7 @@ export class PregradoComponent implements OnInit {
                       program=>{
                         program.jornadas.forEach(
                            jornad=>{
-                              this.programs.push({nombre:program.nombre, jornada:jornad.jornada, codigo:program.codigo,inscripcion:jornad.inscripcion, jornadas:[], contacto:program.contacto});
+                              this.programs.push({nombre:program.nombre, jornada:jornad.jornada, codigo:program.codigo,inscripcion:jornad.inscripcion, jornadas:[], contacto:program.contacto, fa:null, correo:null});
                            }
                         );
                       }
@@ -123,8 +126,8 @@ export class PregradoComponent implements OnInit {
     else{
         //doctorados
         this.programs =[
-          {codigo:'1',nombre:'DOCTORADO EN AGROCIENCIAS',jornada:'N',inscripcion:'S',jornadas:[],contacto:null},
-          {codigo:'2',nombre:'DOCTORADO EN EDUCACIÓN',jornada:'N',inscripcion:'S',jornadas:[],contacto:null}
+          {codigo:'1',nombre:'DOCTORADO EN AGROCIENCIAS',jornada:'N',inscripcion:'S',jornadas:[],contacto:null,fa:null,correo:null},
+          {codigo:'2',nombre:'DOCTORADO EN EDUCACIÓN',jornada:'N',inscripcion:'S',jornadas:[],contacto:null,fa:null,correo:null}
         ];
     }
   }  
@@ -140,12 +143,10 @@ export class PregradoComponent implements OnInit {
         return;
     }
     else{
-      if(!this.cookieService.get(environment.cookieLeadSource)){
-        this.cookieService.set(environment.cookieLeadSource,environment.leadSource, 15/1440,'/',environment.dominio);
-      }
       var prog = this.registrarInscripcionForm.controls.programaSelected.value;
       this.getProgramaSeleccionado(prog);
-      this.pregradoServ.guardarParte1(this.registrarInscripcionForm,this.programaSelected, respCaptcha).subscribe(
+      var cookieLs  = this.cookieService.get(environment.cookieLeadSource).toString();
+      this.pregradoServ.guardarParte1(this.registrarInscripcionForm,this.programaSelected, respCaptcha, cookieLs).subscribe(
            tiposObs => {
               this.mensaje = tiposObs;
               if('fail'!=this.mensaje.status){
@@ -166,7 +167,7 @@ export class PregradoComponent implements OnInit {
   }
   //continuar
   public continuarProceso(){
-    this.router.navigate(['/pregrado-continuar'])
+    this.router.navigate(['/continuar'])
   }
   //programa seleccionado
   public getProgramaSeleccionado(progSelected: string): void{
@@ -201,13 +202,53 @@ export class PregradoComponent implements OnInit {
   public openGracias(tipoDoc: string): void{
     if('P'==tipoDoc){
       this.openMensajes(environment.titGracias,environment.msgGraciasExt,2);
+       setTimeout(function(){
+       this.document.location.href = environment.urlPaginaUniver;    
+       },3500);
     }
     else{
         this.openMensajes(environment.titGracias,environment.msgGracias,1);
+        var tipo = this.registrarInscripcionForm.controls.tipoSelected.value;
+        var programa  = this.registrarInscripcionForm.controls.programaSelected.value;
+        var documento = this.registrarInscripcionForm.controls.documento.value;
+        if('3'!=tipo){
+          if('1'==tipo){
+           this.pregradoServ.validarContinuar(documento,programa.substring(0,2),programa.substring(2,3)).subscribe(     
+             tiposObs => {
+                         this.mensaje = tiposObs;
+                         if('fail'!=this.mensaje.status&&'go'==this.mensaje.status){
+                           if(!this.cookieService.get(environment.cookiePregrado)){
+                             var datos = {
+                               doc: documento,
+                               fac:{
+                                    codigo:programa,
+                                    inscripcion:this.programaSelected.inscripcion,
+                                    contacto:this.programaSelected.contacto,
+                                    correo:this.programaSelected.correo,
+                                    nombre:this.programaSelected.nombre,
+                                    fa:this.programaSelected.fa
+                                    }
+                             };
+                             this.cookieService.set(environment.cookiePregrado,JSON.stringify(datos), 15/1440,'/',environment.dominio);
+                           }
+                           setTimeout(function(){
+                           this.document.location.href = environment.urlPregrado;
+                           },5000);
+                          }
+                          else{
+                              this.openMensajes(environment.titMensaje,this.mensaje.mensaje,0);
+                          }
+              },
+              error=>{
+                     console.log(error)
+               }
+             );  
+          }
+        }
+        else{
+            this.document.location.href = environment.urlDoctorados.replace('?1',programa.substring(0,1)).replace('?2',documento);
+        }
     }
-    setTimeout(function(){
-        this.document.location.href = environment.urlPaginaUniver;    
-    },3500);
   }
   //parametros
   public obtenerParametro(name: string){
@@ -217,8 +258,12 @@ export class PregradoComponent implements OnInit {
     }
     return results[1] || 0;
   }
+  //ir a linea de tiempo
+  public irLineaTiempo():void{
+    
+    
+  }
 }
-
 //mensajes
 @Component({
   selector: 'ventanaDialogo',

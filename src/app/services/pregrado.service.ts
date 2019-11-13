@@ -34,7 +34,7 @@ export class PregradoService {
   }
 
   //guardar parte 1
-  public guardarParte1(inter : FormGroup, progSelected :  Programa, captcha: string): Observable<Mensaje>{
+  public guardarParte1(inter : FormGroup, progSelected :  Programa, captcha: string, lead_source: string): Observable<Mensaje>{
     var tipoPrograma : string;
     var tipo = inter.controls.tipoSelected.value;
     if('1'==tipo){
@@ -56,11 +56,10 @@ export class PregradoService {
       jornada: inter.controls.programaSelected.value.substring(2, 3),
       programa: inter.controls.programaSelected.value.substring(0, 2),
       contactoUA: progSelected.contacto,
-      origen: environment.leadSource,
+      origen: lead_source,
       captcha: captcha
     };
     this.mensaje = this.http.post<Mensaje>(environment.urlBackend+environment.guardarParte1, JSON.stringify(interesado), httpOptions);
     return this.mensaje;
   }
-
 }

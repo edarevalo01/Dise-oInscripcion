@@ -68,7 +68,7 @@ export class PregradoContinuarComponent implements OnInit {
                       program=>{
                         program.jornadas.forEach(
                           jornad=>{ 
-                            this.programs.push({nombre:program.nombre, jornada:jornad.jornada, codigo:program.codigo,inscripcion:jornad.inscripcion, jornadas:[], contacto:program.contacto});
+                            this.programs.push({nombre:program.nombre, jornada:jornad.jornada, codigo:program.codigo,inscripcion:jornad.inscripcion, jornadas:[], contacto:program.contacto, fa:null, correo:null});
                           }
                         );
                       }
@@ -92,8 +92,8 @@ export class PregradoContinuarComponent implements OnInit {
     else{
       //doctorados
       this.programs =[
-        {codigo:'1',nombre:'DOCTORADO EN AGROCIENCIAS',jornada:'N',inscripcion:'S',jornadas:[],contacto:null},
-        {codigo:'2',nombre:'DOCTORADO EN EDUCACIÓN',jornada:'N',inscripcion:'S',jornadas:[],contacto:null}
+        {codigo:'1',nombre:'DOCTORADO EN AGROCIENCIAS',jornada:'N',inscripcion:'S',jornadas:[],contacto:null,fa:null,correo:null},
+        {codigo:'2',nombre:'DOCTORADO EN EDUCACIÓN',jornada:'N',inscripcion:'S',jornadas:[],contacto:null,fa:null,correo:null}
       ];
     } 
   }
@@ -139,7 +139,8 @@ export class PregradoContinuarComponent implements OnInit {
       width: '35%',
       data: {titulo:titulo,
              mensaje: mensaje,
-             opcion:opcion}
+             opcion:opcion,
+             disableClose: true}
     });
 
     dialogRef.afterClosed().subscribe(result => {
@@ -148,7 +149,7 @@ export class PregradoContinuarComponent implements OnInit {
 
   //inscribirse
   public inscribir(){
-    this.router.navigate(['/pregrado'])
+    this.router.navigate(['/inscripcion'])
   }
 }
 //mensajes

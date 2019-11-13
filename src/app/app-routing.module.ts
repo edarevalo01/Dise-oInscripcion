@@ -6,17 +6,15 @@ import { PregradoContinuarComponent } from './components/pregrado-continuar/preg
 
 const routes: Routes = [
   { path: '',
-    redirectTo: '/pregrado',
-    //redirectTo: '/pregrado',
+    redirectTo: '/inscripcion',
     pathMatch: 'full'
   },
    {
-     //path: 'pregrado', 
-     path: 'pregrado', 
+     path: 'inscripcion', 
      component: PregradoComponent
    },
    {
-     path: 'pregrado-continuar',
+     path: 'continuar',
      component: PregradoContinuarComponent
    }
 ];

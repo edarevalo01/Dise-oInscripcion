@@ -7,4 +7,6 @@ export class Programa{
     jornada : string;
     inscripcion : string;
     contacto : string;
+    correo : string;
+    fa: string;
 }
