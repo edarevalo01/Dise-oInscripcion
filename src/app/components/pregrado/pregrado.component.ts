@@ -209,7 +209,10 @@ export class PregradoComponent implements OnInit {
 
   public cambiarPantalla() {
     //href='/continuar?lead_source=sepRebr5' target="_blank"
-    window.open("/#/continuar?lead_source=" + this.obtenerParametro("lead_source"), "_blank");
+    window.open(
+      "/#/continuar?lead_source=" + (this.obtenerParametro("lead_source") != 0 ? String(this.obtenerParametro("lead_source")) : "sepRebr5"),
+      "_blank"
+    );
   }
   //programa seleccionado
   public getProgramaSeleccionado(progSelected: string): void {
@@ -224,17 +227,12 @@ export class PregradoComponent implements OnInit {
   //ventana mensajes
   public openMensajes(titulo: string, mensaje: string, opcion: number): void {
     this.dialogRef = this.dialog.open(VentanaDialogoMensajesPreg, {
-      width: '35%',
-      data: {titulo: titulo,
-            mensaje: mensaje,
-            opcion:opcion
-            },
-      disableClose: (1==opcion||2==opcion)?true:false
+      width: "35%",
+      data: { titulo: titulo, mensaje: mensaje, opcion: opcion },
+      disableClose: 1 == opcion || 2 == opcion ? true : false
     });
 
-    this.dialogRef.afterClosed().subscribe( 
-      result => {     
-    });
+    this.dialogRef.afterClosed().subscribe(result => {});
   }
 
   //ventana habeas data
@@ -245,23 +243,23 @@ export class PregradoComponent implements OnInit {
   public openGracias(tipoDoc: string): void {
     if ("P" == tipoDoc) {
       this.openMensajes(environment.titGracias, environment.msgGraciasExt, 2);
-      setTimeout(function(){
-        this.document.location.href = environment.urlPaginaUniver;    
-       },3500);
+      setTimeout(function() {
+        this.document.location.href = environment.urlPaginaUniver;
+      }, 3500);
     } else {
       this.openMensajes(environment.titGracias, environment.msgGracias, 1);
       var tipo = this.registrarInscripcionForm.controls.tipoSelected.value;
       var programa = this.registrarInscripcionForm.controls.programaSelected.value;
       var documento = this.registrarInscripcionForm.controls.documento.value;
       if ("3" != tipo) {
-        if ("1" ==  tipo || "2"== tipo) {
+        if ("1" == tipo || "2" == tipo) {
           this.pregradoServ.validarContinuar(documento, programa.substring(0, 2), programa.substring(2, 3)).subscribe(
             tiposObs => {
               this.mensaje = tiposObs;
               if ("fail" != this.mensaje.status && "go" == this.mensaje.status) {
-                if ("1"==tipo) {
-                   if(!this.cookieService.get(environment.cookiePregrado)){
-                     var datos = {
+                if ("1" == tipo) {
+                  if (!this.cookieService.get(environment.cookiePregrado)) {
+                    var datos = {
                       doc: documento,
                       fac: {
                         codigo: programa,
@@ -271,25 +269,25 @@ export class PregradoComponent implements OnInit {
                         nombre: this.programaSelected.nombre,
                         fa: this.programaSelected.fa
                       }
-                     };
-                     this.cookieService.set(environment.cookiePregrado, JSON.stringify(datos), 15 / 1440, "/", environment.dominio);
-                   }
-                   setTimeout(function() {
+                    };
+                    this.cookieService.set(environment.cookiePregrado, JSON.stringify(datos), 15 / 1440, "/", environment.dominio);
+                  }
+                  setTimeout(function() {
                     this.document.location.href = environment.urlPregrado;
-                   }, 5000);
+                  }, 5000);
                 }
-                if("2"==tipo){
-                    if(!this.cookieService.get(environment.cookiePosgrado)){
-                      var datosPos = {
-                        doc:documento,
-                        fac:programa.substring(0, 2),
-                        jor:programa.substring(2, 3)
-                      };
-                      this.cookieService.set(environment.cookiePosgrado, JSON.stringify(datosPos), 15 / 1440, "/", environment.dominio);
-                    }
-                    setTimeout(function() {
-                      this.document.location.href = environment.urlPosgrado;
-                     }, 5000);
+                if ("2" == tipo) {
+                  if (!this.cookieService.get(environment.cookiePosgrado)) {
+                    var datosPos = {
+                      doc: documento,
+                      fac: programa.substring(0, 2),
+                      jor: programa.substring(2, 3)
+                    };
+                    this.cookieService.set(environment.cookiePosgrado, JSON.stringify(datosPos), 15 / 1440, "/", environment.dominio);
+                  }
+                  setTimeout(function() {
+                    this.document.location.href = environment.urlPosgrado;
+                  }, 5000);
                 }
               } else {
                 this.openMensajes(environment.titMensaje, this.mensaje.mensaje, 0);
