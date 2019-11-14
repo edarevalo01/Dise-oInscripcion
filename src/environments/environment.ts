@@ -5,7 +5,7 @@
 export const environment = {
   production: false,
   siteKey: "6LcLgzEUAAAAAEW_qzzLErRbf_6CicDG7ExEjzQc",
-  urlBackend: "http://vili.lasalle.edu.co:8082/admisiones-backend/oar/",
+  urlBackend: "http://estctimrua.lasalle.edu.co:8080/admisiones-backend/oar/",
   getProgramas: "facultades.json",
   urlDoctorados: "http://tigris.lasalle.edu.co/InscripcionDoctorados/IndexDoctorado?idDoctorado=?1&txtDocumento=?2",
   urlPregrado: "https://www.lasalle.edu.co/inscripciones2/index.html/#!/timeline",

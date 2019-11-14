@@ -152,8 +152,7 @@ export class PregradoComponent implements OnInit {
             return 0;
           });
         },
-        error => {
-        }
+        error => {}
       );
     } else {
       //doctorados
@@ -209,8 +208,7 @@ export class PregradoComponent implements OnInit {
             this.cap.reset();
           }
         },
-        error => {
-        }
+        error => {}
       );
     }
     this.loading = false;
@@ -278,8 +276,7 @@ export class PregradoComponent implements OnInit {
                 this.openMensajes(environment.titMensaje, this.mensaje.mensaje, 0);
               }
             },
-            error => {
-            }
+            error => {}
           );
         }
       } else {
