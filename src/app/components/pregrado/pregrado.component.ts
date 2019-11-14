@@ -64,6 +64,7 @@ export class PregradoComponent implements OnInit {
   private dialogRef: any;
 
   private formReducido: boolean = false;
+  // private ls: string = "";
 
   constructor(
     private pregradoServ: PregradoService,
@@ -78,6 +79,7 @@ export class PregradoComponent implements OnInit {
       this.formReducido = true;
       this.pantalla = 1;
     }
+    // this.ls = this.obtenerParametro("lead_source") != 0 ? String(this.obtenerParametro("lead_source")) : "sepRebr5";
   }
 
   ngOnInit() {
@@ -206,7 +208,13 @@ export class PregradoComponent implements OnInit {
   }
   //continuar
   public continuarProceso() {
-    this.router.navigate(["/continuar"]);
+    // this.router.navigateByUrl("/continuar?lead_source=" + this.obtenerParametro('lead_source'));
+    this.router.navigate(["/continuar"], { queryParams: { lead_source: this.obtenerParametro("lead_source") } });
+  }
+
+  public cambiarPantalla() {
+    //href='/continuar?lead_source=sepRebr5' target="_blank"
+    window.open("/#/continuar?lead_source=" + this.obtenerParametro("lead_source"), "_blank");
   }
   //programa seleccionado
   public getProgramaSeleccionado(progSelected: string): void {

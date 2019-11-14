@@ -219,6 +219,15 @@
   width: 100%;
 }
 
+::ng-deep .cdk-overlay-pane {
+  /* Altera el tamaño de los mat-select para que se pueda ver bien los programas*/
+  min-width: 30% !important;
+}
+
+::ng-deep .mat-option-text {
+  font-size: 14px !important;
+}
+
 /*Mariano*/
 .campoTexto {
   width: 100%;

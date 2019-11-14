@@ -44,6 +44,8 @@ export class PregradoContinuarComponent implements OnInit {
   private lblDerecha: string = environment.lblDerecha;
   private titContinuar: string = environment.titContinuar;
 
+  // private ls: string = "";
+
   constructor(
     private pregradoServ: PregradoService,
     private formBuilder: FormBuilder,
@@ -51,7 +53,9 @@ export class PregradoContinuarComponent implements OnInit {
     private cookieService: CookieService,
     private dialog: MatDialog,
     private router: Router
-  ) {}
+  ) {
+    // this.ls = this.obtenerParametro("lead_source") != 0 ? String(this.obtenerParametro("lead_source")) : "sepRebr5";
+  }
 
   ngOnInit() {
     this.pantalla = window.innerWidth <= 540 ? 1 : 2;
@@ -98,8 +102,7 @@ export class PregradoContinuarComponent implements OnInit {
             return 0;
           });
         },
-        error => {
-        }
+        error => {}
       );
     } else {
       //doctorados
@@ -155,8 +158,7 @@ export class PregradoContinuarComponent implements OnInit {
                 this.openMensajes(environment.titMensaje, this.mensaje.mensaje, 0);
               }
             },
-            error => {
-            }
+            error => {}
           );
         }
       } else {
@@ -164,7 +166,14 @@ export class PregradoContinuarComponent implements OnInit {
       }
     }
   }
-
+  //parametros
+  public obtenerParametro(name: string) {
+    const results = new RegExp("[?&]" + name + "=([^&#]*)").exec(window.location.href);
+    if (!results) {
+      return 0;
+    }
+    return results[1] || 0;
+  }
   //ventana mensajes
   public openMensajes(titulo: string, mensaje: string, opcion: number): void {
     const dialogRef = this.dialog.open(VentanaDialogoMensajes, {
@@ -177,7 +186,8 @@ export class PregradoContinuarComponent implements OnInit {
 
   //inscribirse
   public inscribir() {
-    this.router.navigate(["/inscripcion"]);
+    this.router.navigate(["/inscripcion"], { queryParams: { lead_source: this.obtenerParametro("lead_source") } });
+    // this.router.navigateByUrl("/inscripcion?lead_source=" + this.obtenerParametro("lead_source"));
   }
 }
 //mensajes

@@ -7,11 +7,9 @@ const routes: Routes = [
   {
     path: "",
     redirectTo: "/inscripcion",
-    //redirectTo: '/pregrado',
     pathMatch: "full"
   },
   {
-    //path: 'pregrado',
     path: "inscripcion",
     component: PregradoComponent
   },
@@ -22,7 +20,8 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes)],
+  imports: [RouterModule.forRoot(routes, { useHash: true })], //Produccion
+  //imports: [RouterModule.forRoot(routes)],
   exports: [RouterModule]
 })
 export class AppRoutingModule {}
