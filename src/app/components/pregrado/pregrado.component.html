@@ -109,13 +109,13 @@
               <div class="captcha"> 
                 <re-captcha
                   #captchaRef="reCaptcha"
-                  siteKey="6LcLgzEUAAAAAEW_qzzLErRbf_6CicDG7ExEjzQc"
+                  [siteKey]="siteKey"
                   size="invisible"
                   (resolved)="$event && enviarDatosInscripcion($event)"
                 ></re-captcha>
               </div>
             </form>
-            <button [style.width]="formReducido? '100%' : ''" mat-raised-button (click)="captchaRef.execute()" class="btn-inscribir" [disabled]="registrarInscripcionForm.invalid&&!msgCaptchaNoValido">{{lblInscribirme}}</button>
+            <button [style.width]="formReducido? '100%' : ''" mat-raised-button (click)="captchaRef.execute()" class="btn-inscribir" [disabled]="registrarInscripcionForm.invalid">{{lblInscribirme}}</button>
             <div style="width: 100%; text-align: center; color: #ffc107; margin-top: 30px; float: right; cursor: pointer;" *ngIf='formReducido'>
               <span (click)='cambiarPantalla()'>CONTINUAR PROCESO DE ADMISIÓN</span>
             </div>

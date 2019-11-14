@@ -43,6 +43,8 @@ export class PregradoContinuarComponent implements OnInit {
   private lblContinuarr: string = environment.lblContinuarr;
   private lblDerecha: string = environment.lblDerecha;
   private titContinuar: string = environment.titContinuar;
+  private programaSelected: Programa;
+  private loading: boolean = false;
 
   // private ls: string = "";
 
@@ -69,7 +71,6 @@ export class PregradoContinuarComponent implements OnInit {
   public onResize(event) {
     this.pantalla = event.target.innerWidth <= 540 ? 1 : 2;
   }
-
   //programas
   public getProgramas() {
     var tipo = this.continuarInscripcionForm.controls.tipoSelected.value;
@@ -86,8 +87,8 @@ export class PregradoContinuarComponent implements OnInit {
                 inscripcion: jornad.inscripcion,
                 jornadas: [],
                 contacto: program.contacto,
-                fa: null,
-                correo: null
+                fa: program.fa,
+                correo: program.correo
               });
             });
           });
@@ -130,30 +131,53 @@ export class PregradoContinuarComponent implements OnInit {
       ];
     }
   }
-
   //continuar
   public enviarDatosInscripcionContinuar() {
+    this.loading = true;
     var tipo = this.continuarInscripcionForm.controls.tipoSelected.value;
     var programa = this.continuarInscripcionForm.controls.programaSelected.value;
     var documento = this.continuarInscripcionForm.controls.documento.value;
+    var prog = this.continuarInscripcionForm.controls.programaSelected.value;
     if (this.continuarInscripcionForm.invalid) {
       this.continuarInscripcionForm.markAllAsTouched();
       return;
+      this.loading = false;
     } else {
+      this.getProgramaSeleccionado(prog);
       if ("3" != tipo) {
-        if ("1" == tipo) {
+        if ("1" ==  tipo || "2"== tipo) {
           this.pregradoServ.validarContinuar(documento, programa.substring(0, 2), programa.substring(2, 3)).subscribe(
             tiposObs => {
               this.mensaje = tiposObs;
-              if ("fail" != this.mensaje.status) {
-                this.cookieService.set(
-                  environment.cookiePregrado,
-                  "{doc:" + documento + ",fac:" + programa + "}",
-                  15 / 1440,
-                  "/",
-                  environment.dominio
-                );
-                this.document.location.href = environment.urlPregrado;
+              if ("fail" != this.mensaje.status && "go" == this.mensaje.status) {
+                if ("1"==tipo) {
+                   if(!this.cookieService.get(environment.cookiePregrado)){
+                     var datos = {
+                      doc: documento,
+                      fac: {
+                        codigo: programa,
+                        inscripcion: this.programaSelected.inscripcion,
+                        contacto: this.programaSelected.contacto,
+                        correo: this.programaSelected.correo,
+                        nombre: this.programaSelected.nombre,
+                        fa: this.programaSelected.fa
+                      }
+                     };
+                     this.cookieService.set(environment.cookiePregrado, JSON.stringify(datos), 15 / 1440, "/", environment.dominio);
+                   }
+                   this.document.location.href = environment.urlPregrado;
+                }
+                if("2"==tipo){
+                    if(!this.cookieService.get(environment.cookiePosgrado)){
+                      var datosPos = {
+                        doc:documento,
+                        fac:programa.substring(0, 2),
+                        jor:programa.substring(2, 3)
+                      };
+                      this.cookieService.set(environment.cookiePosgrado, JSON.stringify(datosPos), 15 / 1440, "/", environment.dominio);
+                    }
+                    this.document.location.href = environment.urlPosgrado;
+                }
               } else {
                 this.openMensajes(environment.titMensaje, this.mensaje.mensaje, 0);
               }
@@ -162,9 +186,10 @@ export class PregradoContinuarComponent implements OnInit {
           );
         }
       } else {
-        this.document.location.href = environment.urlDoctorados.replace("?1", programa.substring(0, 1)).replace("?2", documento);
+          this.document.location.href = environment.urlDoctorados.replace("?1", programa.substring(0, 1)).replace("?2", documento);
       }
     }
+    this.loading = false;
   }
   //parametros
   public obtenerParametro(name: string) {
@@ -177,17 +202,30 @@ export class PregradoContinuarComponent implements OnInit {
   //ventana mensajes
   public openMensajes(titulo: string, mensaje: string, opcion: number): void {
     const dialogRef = this.dialog.open(VentanaDialogoMensajes, {
-      width: "35%",
-      data: { titulo: titulo, mensaje: mensaje, opcion: opcion }
+      width: '35%',
+      data: {titulo:titulo,
+             mensaje: mensaje,
+             opcion:opcion,
+             disableClose: true}
     });
 
-    dialogRef.afterClosed().subscribe(result => {});
+    dialogRef.afterClosed().subscribe(result => {
+    });
   }
-
   //inscribirse
   public inscribir() {
     this.router.navigate(["/inscripcion"], { queryParams: { lead_source: this.obtenerParametro("lead_source") } });
     // this.router.navigateByUrl("/inscripcion?lead_source=" + this.obtenerParametro("lead_source"));
+  }
+  //programa seleccionado
+  public getProgramaSeleccionado(progSelected: string): void {
+    this.programaSelected = new Programa();
+    for (let prog of this.programs) {
+      if (prog.codigo || prog.jornada == progSelected) {
+        this.programaSelected = prog;
+        break;
+      }
+    }
   }
 }
 //mensajes

@@ -37,12 +37,22 @@ export class PregradoService {
   public guardarParte1(inter : FormGroup, progSelected :  Programa, captcha: string, lead_source: string): Observable<Mensaje>{
     var tipoPrograma : string;
     var tipo = inter.controls.tipoSelected.value;
-    if('1'==tipo){
-      tipoPrograma='0';
-    }
-    else if('2'==tipo){
-            tipoPrograma='1';
-    }
+    var programa = '';
+    var jornada  = '';
+    if('3'!=tipo){
+      programa = inter.controls.programaSelected.value.substring(0,2);
+      jornada  = inter.controls.programaSelected.value.substring(2,3);
+      if('1'==tipo){
+        tipoPrograma='0';
+      }
+      else if('2'==tipo){
+              tipoPrograma='1';
+      }
+    } 
+    else{
+        programa = inter.controls.programaSelected.value.substring(0,1)=='1'?'DA':'DE';
+        jornada  = inter.controls.programaSelected.value.substring(1,2);
+     }
     var interesado = {
       primerNombre: inter.controls.primerNombre.value.toUpperCase().trim(),
       segundoNombre: (null==inter.controls.segundoNombre.value) ? null : inter.controls.segundoNombre.value.toUpperCase().trim(),
@@ -53,8 +63,8 @@ export class PregradoService {
       email: inter.controls.correo.value.trim(),
       movil: inter.controls.celular.value.trim(),
       tipoPrograma: tipoPrograma,
-      jornada: inter.controls.programaSelected.value.substring(2, 3),
-      programa: inter.controls.programaSelected.value.substring(0, 2),
+      jornada: jornada,
+      programa: programa,
       contactoUA: progSelected.contacto,
       origen: lead_source,
       captcha: captcha

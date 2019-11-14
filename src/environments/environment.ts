@@ -4,13 +4,15 @@
 
 export const environment = {
   production: false,
-  siteKey: "6LcLgzEUAAAAAEW_qzzLErRbf_6CicDG7ExEjzQc",
+  siteKey: "6LcLgzEUAAAAAEW_qzzLErRbf_6CicDG7ExEjzQc", 
   urlBackend: "http://estctimrua.lasalle.edu.co:8080/admisiones-backend/oar/",
   //urlBackend: "http://vili.lasalle.edu.co:8082/admisiones-backend/oar/",
   getProgramas: "facultades.json",
   urlDoctorados: "http://tigris.lasalle.edu.co/InscripcionDoctorados/IndexDoctorado?idDoctorado=?1&txtDocumento=?2",
   urlPregrado: "https://www.lasalle.edu.co/inscripciones2/index.html#!/timeline",
+  urlPosgrado: "http://zeus.lasalle.edu.co/oar/postgrado/?v=1.2",
   cookiePregrado: "9iewoetrlUswou3i",
+  cookiePosgrado:"ik80fmj37t7elhbb",
   cookieLeadSource: "stouh0eph5umoa1h",
   leadSource: "sepRebr5",
   validarContinuar: "?1/?2/?3/continuar.json",
@@ -19,7 +21,7 @@ export const environment = {
   titInscribete: "Inscríbete",
   titInscribete2: "Proceso de admisión!",
   lblInscribete: "Ingresa tus datos personales e inicia un viaje estrella paso a paso al programa académico de tú interés",
-  titContinuar: "Bienevenido de nuevo!",
+  titContinuar: "Bienvenido de nuevo!",
   lblContinuar:
     "Estamos listos para llevar tu proceso de admisión al siguiente nivel, en cualquier momento que lo necesites¡ para mantenerte conectado con nosotros, inicie sesión con su información personal",
   lblContinuar2: "Estamos listos para llevar tu proceso de admisión al siguiente nivel, en cualquier momento que lo necesites!",
@@ -30,7 +32,7 @@ export const environment = {
   lblCorreo: "Por favor ingrese un correo electrónico válido",
   lblTerminos: "Por favor aceptar términos y condiciones",
   lblTermCond: "Términos y condiciones",
-  lblInscribirme: "INCRÍBIRME",
+  lblInscribirme: "INSCRÍBIRME",
   lblContinuarr: "CONTINUAR",
   titHabeasData: "Habeas data",
   msgHabeasData:

@@ -56,6 +56,9 @@
   <div class="position-button">
     <button mat-fab class="style-button"><img src="assets/flechas.svg" /></button>
   </div>
+  <div class="position-button" *ngIf="loading">
+    <mat-progress-spinner [mode]="'indeterminate'"></mat-progress-spinner>
+  </div>
   <mat-grid-tile colspan="1" rowspan="1">
     <mat-card class="parte-derecha">
       <img src="assets/astronauta.svg" alt="astronauta" class="astronauta" />

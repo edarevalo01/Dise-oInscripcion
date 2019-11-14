@@ -10,7 +10,6 @@ import { Router } from "@angular/router";
 import { environment } from "src/environments/environment";
 import { Mensaje } from "src/app/models/Mensaje";
 import { CookieService } from "ngx-cookie-service";
-import { Captcha } from "primeng/captcha";
 import { DOCUMENT } from "@angular/common";
 
 export class MyErrorStateMatcher implements ErrorStateMatcher {
@@ -58,8 +57,6 @@ export class PregradoComponent implements OnInit {
   private msgHabeasData: string = environment.msgHabeasData;
   private programaSelected: Programa;
   private mensaje: Mensaje = new Mensaje();
-  private msgCaptcha: string = environment.msgCaptcha;
-  private msgCaptchaNoValido: boolean = false;
   private loading: boolean = false;
   private dialogRef: any;
 
@@ -132,8 +129,8 @@ export class PregradoComponent implements OnInit {
                 inscripcion: jornad.inscripcion,
                 jornadas: [],
                 contacto: program.contacto,
-                fa: null,
-                correo: null
+                fa: program.fa,
+                correo: program.correo
               });
             });
           });
@@ -181,11 +178,9 @@ export class PregradoComponent implements OnInit {
   public enviarDatosInscripcion(captchaCode) {
     this.loading = true;
     var respCaptcha = captchaCode;
-    if (!respCaptcha) {
-      this.msgCaptchaNoValido = true;
-    }
     if (this.registrarInscripcionForm.invalid) {
       this.registrarInscripcionForm.markAllAsTouched();
+      this.loading = false;
       return;
     } else {
       var prog = this.registrarInscripcionForm.controls.programaSelected.value;
@@ -229,12 +224,19 @@ export class PregradoComponent implements OnInit {
   //ventana mensajes
   public openMensajes(titulo: string, mensaje: string, opcion: number): void {
     this.dialogRef = this.dialog.open(VentanaDialogoMensajesPreg, {
-      width: "35%",
-      data: { titulo: titulo, mensaje: mensaje, opcion: opcion }
+      width: '35%',
+      data: {titulo: titulo,
+            mensaje: mensaje,
+            opcion:opcion
+            },
+      disableClose: (1==opcion||2==opcion)?true:false
     });
 
-    this.dialogRef.afterClosed().subscribe(result => {});
+    this.dialogRef.afterClosed().subscribe( 
+      result => {     
+    });
   }
+
   //ventana habeas data
   public openHabeasData(): void {
     this.openMensajes(environment.titHabeasData, this.msgHabeasData, 0);
@@ -243,34 +245,52 @@ export class PregradoComponent implements OnInit {
   public openGracias(tipoDoc: string): void {
     if ("P" == tipoDoc) {
       this.openMensajes(environment.titGracias, environment.msgGraciasExt, 2);
+      setTimeout(function(){
+        this.document.location.href = environment.urlPaginaUniver;    
+       },3500);
     } else {
       this.openMensajes(environment.titGracias, environment.msgGracias, 1);
       var tipo = this.registrarInscripcionForm.controls.tipoSelected.value;
       var programa = this.registrarInscripcionForm.controls.programaSelected.value;
       var documento = this.registrarInscripcionForm.controls.documento.value;
       if ("3" != tipo) {
-        if ("1" == tipo) {
+        if ("1" ==  tipo || "2"== tipo) {
           this.pregradoServ.validarContinuar(documento, programa.substring(0, 2), programa.substring(2, 3)).subscribe(
             tiposObs => {
               this.mensaje = tiposObs;
               if ("fail" != this.mensaje.status && "go" == this.mensaje.status) {
-                if (!this.cookieService.get(environment.cookiePregrado)) {
-                  var datos = {
-                    doc: documento,
-                    fac: {
-                      codigo: programa,
-                      inscripcion: this.programaSelected.inscripcion,
-                      contacto: this.programaSelected.contacto,
-                      correo: this.programaSelected.correo,
-                      nombre: this.programaSelected.nombre,
-                      fa: this.programaSelected.fa
-                    }
-                  };
-                  this.cookieService.set(environment.cookiePregrado, JSON.stringify(datos), 15 / 1440, "/", environment.dominio);
+                if ("1"==tipo) {
+                   if(!this.cookieService.get(environment.cookiePregrado)){
+                     var datos = {
+                      doc: documento,
+                      fac: {
+                        codigo: programa,
+                        inscripcion: this.programaSelected.inscripcion,
+                        contacto: this.programaSelected.contacto,
+                        correo: this.programaSelected.correo,
+                        nombre: this.programaSelected.nombre,
+                        fa: this.programaSelected.fa
+                      }
+                     };
+                     this.cookieService.set(environment.cookiePregrado, JSON.stringify(datos), 15 / 1440, "/", environment.dominio);
+                   }
+                   setTimeout(function() {
+                    this.document.location.href = environment.urlPregrado;
+                   }, 5000);
                 }
-                setTimeout(function() {
-                  this.document.location.href = environment.urlPregrado;
-                }, 5000);
+                if("2"==tipo){
+                    if(!this.cookieService.get(environment.cookiePosgrado)){
+                      var datosPos = {
+                        doc:documento,
+                        fac:programa.substring(0, 2),
+                        jor:programa.substring(2, 3)
+                      };
+                      this.cookieService.set(environment.cookiePosgrado, JSON.stringify(datosPos), 15 / 1440, "/", environment.dominio);
+                    }
+                    setTimeout(function() {
+                      this.document.location.href = environment.urlPosgrado;
+                     }, 5000);
+                }
               } else {
                 this.openMensajes(environment.titMensaje, this.mensaje.mensaje, 0);
               }
@@ -279,7 +299,9 @@ export class PregradoComponent implements OnInit {
           );
         }
       } else {
-        this.document.location.href = environment.urlDoctorados.replace("?1", programa.substring(0, 1)).replace("?2", documento);
+        setTimeout(function() {
+          this.document.location.href = environment.urlDoctorados.replace("?1", programa.substring(0, 1)).replace("?2", documento);
+        }, 5000);
       }
     }
   }
