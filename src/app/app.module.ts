@@ -20,8 +20,8 @@ import { HttpClientModule } from "@angular/common/http";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { ScrollingModule } from "@angular/cdk/scrolling";
 import { PregradoContinuarComponent, VentanaDialogoMensajes } from "./components/pregrado-continuar/pregrado-continuar.component";
-import { CaptchaModule } from "primeng/captcha";
 import { CookieService } from "ngx-cookie-service";
+import { RecaptchaModule } from "ng-recaptcha";
 
 @NgModule({
   declarations: [AppComponent, PregradoComponent, VentanaDialogoMensajes, VentanaDialogoMensajesPreg, PregradoContinuarComponent],
@@ -44,8 +44,8 @@ import { CookieService } from "ngx-cookie-service";
     ReactiveFormsModule,
     MatCheckboxModule,
     MatDialogModule,
-    CaptchaModule,
-    MatProgressSpinnerModule
+    MatProgressSpinnerModule,
+    RecaptchaModule
   ],
   providers: [CookieService],
   bootstrap: [AppComponent]
