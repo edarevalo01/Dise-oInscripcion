@@ -58,7 +58,6 @@ export class PregradoComponent implements OnInit {
   private msgHabeasData: string = environment.msgHabeasData;
   private programaSelected: Programa;
   private mensaje: Mensaje = new Mensaje();
-  @ViewChild("captcha", { static: false }) cap: Captcha;
   private msgCaptcha: string = environment.msgCaptcha;
   private msgCaptchaNoValido: boolean = false;
   private loading: boolean = false;
@@ -110,10 +109,6 @@ export class PregradoComponent implements OnInit {
     }
   }
 
-  showResponse(response) {
-    console.log(response);
-  }
-
   public onResize(event) {
     if (!this.formReducido) {
       this.pantalla = event.target.innerWidth <= 540 ? 1 : 2;
@@ -152,8 +147,7 @@ export class PregradoComponent implements OnInit {
             return 0;
           });
         },
-        error => {
-        }
+        error => {}
       );
     } else {
       //doctorados
@@ -182,9 +176,9 @@ export class PregradoComponent implements OnInit {
     }
   }
   //inscripciÓn
-  public enviarDatosInscripcion() {
+  public enviarDatosInscripcion(captchaCode) {
     this.loading = true;
-    var respCaptcha = this.cap.getResponse().toString();
+    var respCaptcha = captchaCode;
     if (!respCaptcha) {
       this.msgCaptchaNoValido = true;
     }
@@ -192,9 +186,6 @@ export class PregradoComponent implements OnInit {
       this.registrarInscripcionForm.markAllAsTouched();
       return;
     } else {
-      if (!this.cookieService.get(environment.cookieLeadSource)) {
-        this.cookieService.set(environment.cookieLeadSource, environment.leadSource, 15 / 1440, "/", environment.dominio);
-      }
       var prog = this.registrarInscripcionForm.controls.programaSelected.value;
       this.getProgramaSeleccionado(prog);
       var cookieLs = this.cookieService.get(environment.cookieLeadSource).toString();
@@ -206,11 +197,9 @@ export class PregradoComponent implements OnInit {
             this.openGracias(tipDoc);
           } else {
             this.openMensajes(environment.titMensaje, this.mensaje.mensaje, 0);
-            this.cap.reset();
           }
         },
-        error => {
-        }
+        error => {}
       );
     }
     this.loading = false;
@@ -278,8 +267,7 @@ export class PregradoComponent implements OnInit {
                 this.openMensajes(environment.titMensaje, this.mensaje.mensaje, 0);
               }
             },
-            error => {
-            }
+            error => {}
           );
         }
       } else {

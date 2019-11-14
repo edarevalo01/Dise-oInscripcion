@@ -104,14 +104,16 @@
               <mat-error *ngIf="registrarInscripcionForm.hasError('required', 'terminos')">
                 {{lblTerminos}}
               </mat-error>
-              <div class="captcha">
-                <p-captcha #captcha [siteKey]="siteKey" (onResponse)="showResponse($event)" initCallback="loadCaptcha"></p-captcha>
+              <div class="captcha"> 
+                <re-captcha
+                  #captchaRef="reCaptcha"
+                  siteKey="6LcLgzEUAAAAAEW_qzzLErRbf_6CicDG7ExEjzQc"
+                  size="invisible"
+                  (resolved)="$event && enviarDatosInscripcion($event)"
+                ></re-captcha>
               </div>
-              <mat-error *ngIf="msgCaptchaNoValido">
-                {{msgCaptcha}}
-              </mat-error>
             </form>
-            <button [style.width]="formReducido? '100%' : ''" mat-raised-button (click)="enviarDatosInscripcion()" class="btn-inscribir" [disabled]="registrarInscripcionForm.invalid&&!msgCaptchaNoValido">{{lblInscribirme}}</button>
+            <button [style.width]="formReducido? '100%' : ''" mat-raised-button (click)="captchaRef.execute()" class="btn-inscribir" [disabled]="registrarInscripcionForm.invalid&&!msgCaptchaNoValido">{{lblInscribirme}}</button>
             <div style="width: 100%; text-align: center; color: #ffc107; margin-top: 30px; float: right;" *ngIf='formReducido'>
               <a href='/inscripcion?lead_source=""' target="_blank">CONTINUAR PROCESO DE ADMISIÓN</a>
             </div>
