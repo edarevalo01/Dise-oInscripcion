@@ -8,7 +8,7 @@ export const environment = {
   urlBackend: "http://estctimrua.lasalle.edu.co:8080/admisiones-backend/oar/",
   getProgramas: "facultades.json",
   urlDoctorados: "http://tigris.lasalle.edu.co/InscripcionDoctorados/IndexDoctorado?idDoctorado=?1&txtDocumento=?2",
-  urlPregrado: "https://www.lasalle.edu.co/inscripciones2/index.html/#!/timeline",
+  urlPregrado: "https://www.lasalle.edu.co/inscripciones2/index.html#!/timeline",
   cookiePregrado: "9iewoetrlUswou3i",
   cookieLeadSource: "stouh0eph5umoa1h",
   leadSource: "sepRebr5",
