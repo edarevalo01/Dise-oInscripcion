@@ -7,11 +7,9 @@ const routes: Routes = [
   {
     path: "",
     redirectTo: "/inscripcion",
-    //redirectTo: '/pregrado',
     pathMatch: "full"
   },
   {
-    //path: 'pregrado',
     path: "inscripcion",
     component: PregradoComponent
   },
