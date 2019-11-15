@@ -80,7 +80,7 @@
                 </mat-error>
               </mat-form-field>
               <mat-form-field  class="campoTexto"> 
-                <mat-select matInput formControlName="tipoSelected" placeholder="Oferta académica">
+                <mat-select matInput formControlName="tipoSelected" placeholder="Oferta académica" [value]='tipSelected'>
                   <mat-option *ngFor="let tipoProg of tiposPrograma" [value]="tipoProg.codigo" (click)="getProgramas()">
                     {{tipoProg.nombre}}
                   </mat-option>
@@ -88,8 +88,8 @@
                 <mat-icon matSuffix class="style-icons">keyboard_arrow_right</mat-icon>
               </mat-form-field>
               <mat-form-field class="campoTexto">
-                <mat-select matInput formControlName="programaSelected" placeholder="Selecccione programa académico">
-                  <mat-option *ngFor="let prog of programs" [value]="prog.codigo+prog.jornada">
+                <mat-select matInput formControlName="programaSelected" placeholder="Selecccione programa académico" [value]='progSelected'>
+                  <mat-option *ngFor="let prog of programs" [value]="prog.codigo + prog.jornada">
                     {{prog.nombre}} ({{prog.jornada=='D'?'Diurno':'Nocturno'}})
                   </mat-option>
                 </mat-select>
