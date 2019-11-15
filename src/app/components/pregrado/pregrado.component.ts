@@ -59,6 +59,8 @@ export class PregradoComponent implements OnInit {
   private mensaje: Mensaje = new Mensaje();
   private loading: boolean = false;
   private dialogRef: any;
+  private progSelected: any;
+  private tipSelected: string = "";
 
   private formReducido: boolean = false;
   // private ls: string = "";
@@ -71,19 +73,6 @@ export class PregradoComponent implements OnInit {
     private cookieService: CookieService,
     @Inject(DOCUMENT) private document: Document
   ) {
-    var paramUrl = this.obtenerParametro("programa");
-    if (paramUrl != 0) {
-      this.formReducido = true;
-      this.pantalla = 1;
-    }
-    // this.ls = this.obtenerParametro("lead_source") != 0 ? String(this.obtenerParametro("lead_source")) : "sepRebr5";
-  }
-
-  ngOnInit() {
-    this.siteKey = environment.siteKey;
-    if (!this.formReducido) {
-      this.pantalla = window.innerWidth <= 540 ? 1 : 2;
-    }
     this.registrarInscripcionForm = this.formBuilder.group({
       primerNombre: ["", Validators.required],
       segundoNombre: [""],
@@ -97,6 +86,117 @@ export class PregradoComponent implements OnInit {
       programaSelected: ["", Validators.required],
       terminos: [false, Validators.requiredTrue]
     });
+
+    var paramUrlPrograma = this.obtenerParametro("programa");
+    if (paramUrlPrograma != 0) {
+      this.formReducido = true;
+      this.pantalla = 1;
+      this.getProgramaParam(paramUrlPrograma);
+    }
+    // this.ls = this.obtenerParametro("lead_source") != 0 ? String(this.obtenerParametro("lead_source")) : "sepRebr5";
+  }
+
+  getProgramaParam(param): any {
+    this.pregradoServ.getProgramasByTipo("1").subscribe(
+      tiposObs => {
+        tiposObs.forEach(program => {
+          program.jornadas.forEach(jornad => {
+            this.programs.push({
+              nombre: program.nombre,
+              jornada: jornad.jornada,
+              codigo: program.codigo,
+              inscripcion: jornad.inscripcion,
+              jornadas: [],
+              contacto: program.contacto,
+              fa: program.fa,
+              correo: program.correo
+            });
+          });
+        });
+        var res = this.programs.filter(prog => prog.codigo == param.substring(0, 2) && prog.jornada == param.substring(2, 3));
+        this.programaSelected = res[0];
+        if (this.programaSelected != undefined) {
+          this.progSelected = this.programaSelected.codigo + this.programaSelected.jornada;
+          this.registrarInscripcionForm.controls.programaSelected.setValue(this.progSelected);
+          this.registrarInscripcionForm.controls.tipoSelected.setValue("1");
+          this.tipSelected = "1";
+        }
+      },
+      error => {},
+      () => {
+        if (this.tipSelected == "") {
+          this.programs = [];
+          this.pregradoServ.getProgramasByTipo("2").subscribe(
+            tiposObs => {
+              tiposObs.forEach(program => {
+                program.jornadas.forEach(jornad => {
+                  this.programs.push({
+                    nombre: program.nombre,
+                    jornada: jornad.jornada,
+                    codigo: program.codigo,
+                    inscripcion: jornad.inscripcion,
+                    jornadas: [],
+                    contacto: program.contacto,
+                    fa: program.fa,
+                    correo: program.correo
+                  });
+                });
+              });
+              var res = this.programs.filter(prog => prog.codigo == param.substring(0, 2) && prog.jornada == param.substring(2, 3));
+              this.programaSelected = res[0];
+              if (this.programaSelected != undefined) {
+                this.progSelected = this.programaSelected.codigo + this.programaSelected.jornada;
+                this.registrarInscripcionForm.controls.tipoSelected.setValue("2");
+                this.registrarInscripcionForm.controls.programaSelected.setValue(this.progSelected);
+                this.tipSelected = "2";
+              }
+            },
+            error => {},
+            () => {
+              if (this.tipSelected == "") {
+                this.programs = [
+                  {
+                    codigo: "1",
+                    nombre: "DOCTORADO EN AGROCIENCIAS",
+                    jornada: "N",
+                    inscripcion: "S",
+                    jornadas: [],
+                    contacto: null,
+                    fa: null,
+                    correo: null
+                  },
+                  {
+                    codigo: "2",
+                    nombre: "DOCTORADO EN EDUCACIÓN",
+                    jornada: "N",
+                    inscripcion: "S",
+                    jornadas: [],
+                    contacto: null,
+                    fa: null,
+                    correo: null
+                  }
+                ];
+                if (param.substring(0, 2) == "DA") {
+                  this.registrarInscripcionForm.controls.programaSelected.setValue("1N");
+                } else {
+                  this.registrarInscripcionForm.controls.programaSelected.setValue("2N");
+                }
+                this.tipSelected = "3";
+                this.registrarInscripcionForm.controls.tipoSelected.setValue("3");
+              }
+            }
+          );
+        }
+      }
+    );
+  }
+
+  ngOnInit() {
+    this.siteKey = environment.siteKey;
+    if (!this.formReducido) {
+      this.pantalla = window.innerWidth <= 540 ? 1 : 2;
+    }
+
     if (!this.cookieService.get(environment.cookieLeadSource)) {
       var ls = "";
       if ("0" != this.obtenerParametro("lead_source")) {
