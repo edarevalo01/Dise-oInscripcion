@@ -207,7 +207,6 @@ export class PregradoComponent implements OnInit {
       this.cookieService.set(environment.cookieLeadSource, ls, 15 / 1440, "/", environment.dominio);
     }
   }
-
   public onResize(event) {
     if (!this.formReducido) {
       this.pantalla = event.target.innerWidth <= 540 ? 1 : 2;
@@ -334,7 +333,6 @@ export class PregradoComponent implements OnInit {
 
     this.dialogRef.afterClosed().subscribe(result => {});
   }
-
   //ventana habeas data
   public openHabeasData(): void {
     this.openMensajes(environment.titHabeasData, this.msgHabeasData, 0);
@@ -345,7 +343,7 @@ export class PregradoComponent implements OnInit {
       this.openMensajes(environment.titGracias, environment.msgGraciasExt, 2);
       setTimeout(function() {
         this.document.location.href = environment.urlPaginaUniver;
-      }, 3500);
+      }, 5000);
     } else {
       this.openMensajes(environment.titGracias, environment.msgGracias, 1);
       var tipo = this.registrarInscripcionForm.controls.tipoSelected.value;

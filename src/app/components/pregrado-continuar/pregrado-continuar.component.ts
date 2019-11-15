@@ -137,13 +137,12 @@ export class PregradoContinuarComponent implements OnInit {
     var tipo = this.continuarInscripcionForm.controls.tipoSelected.value;
     var programa = this.continuarInscripcionForm.controls.programaSelected.value;
     var documento = this.continuarInscripcionForm.controls.documento.value;
-    var prog = this.continuarInscripcionForm.controls.programaSelected.value;
     if (this.continuarInscripcionForm.invalid) {
       this.continuarInscripcionForm.markAllAsTouched();
       return;
       this.loading = false;
     } else {
-      this.getProgramaSeleccionado(prog);
+      this.getProgramaSeleccionado(programa);
       if ("3" != tipo) {
         if ("1" ==  tipo || "2"== tipo) {
           this.pregradoServ.validarContinuar(documento, programa.substring(0, 2), programa.substring(2, 3)).subscribe(
