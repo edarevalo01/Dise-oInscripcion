@@ -37,8 +37,8 @@ export class PregradoService {
   public guardarParte1(inter : FormGroup, progSelected :  Programa, captcha: string, lead_source: string): Observable<Mensaje>{
     var tipoPrograma : string;
     var tipo = inter.controls.tipoSelected.value;
-    var programa = '';
-    var jornada  = '';
+    var programa : string;
+    var jornada  : string;
     if('3'!=tipo){
       programa = inter.controls.programaSelected.value.substring(0,2);
       jornada  = inter.controls.programaSelected.value.substring(2,3);
