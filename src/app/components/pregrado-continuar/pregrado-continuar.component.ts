@@ -171,7 +171,7 @@ export class PregradoContinuarComponent implements OnInit {
                   this.document.location.href = environment.urlPosgrado;
                 }
               } else {
-                this.openMensajes(environment.titMensaje, this.mensaje.mensaje, 0);
+                this.openMensajes(this.stringHelper.getResource("titMensaje"), this.mensaje.mensaje, 0);
               }
             },
             error => {}

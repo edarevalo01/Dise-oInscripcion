@@ -49,7 +49,7 @@ export class PregradoComponent implements OnInit {
   public captchaForm: FormGroup;
   public siteKey: string;
   public programs: Programa[] = [];
-  public msgHabeasData: string = environment.msgHabeasData;
+  public msgHabeasData: string = "";
   public programaSelected: Programa;
   public mensaje: Mensaje = new Mensaje();
   public loading: boolean = false;
@@ -69,6 +69,7 @@ export class PregradoComponent implements OnInit {
     @Inject(DOCUMENT) private document: Document
   ) {
     this.stringHelper = new StringResourceHelper("titulos-mensajes");
+    this.msgHabeasData = this.stringHelper.getResource("msgHabeasData");
     this.registrarInscripcionForm = this.formBuilder.group({
       primerNombre: ["", Validators.required],
       segundoNombre: [""],
@@ -299,17 +300,17 @@ export class PregradoComponent implements OnInit {
   }
 
   public openHabeasData(): void {
-    this.openMensajes(environment.titHabeasData, this.msgHabeasData, 0);
+    this.openMensajes(this.stringHelper.getResource("titHabeasData"), this.msgHabeasData, 0);
   }
 
   public openGracias(tipoDoc: string): void {
     if ("P" == tipoDoc) {
-      this.openMensajes(environment.titGracias, environment.msgGraciasExt, 2);
+      this.openMensajes(this.stringHelper.getResource("titGracias"), this.stringHelper.getResource("msgGraciasExt"), 2);
       setTimeout(function() {
         this.document.location.href = environment.urlPaginaUniver;
       }, 5000);
     } else {
-      this.openMensajes(environment.titGracias, environment.msgGracias, 1);
+      this.openMensajes(this.stringHelper.getResource("titGracias"), this.stringHelper.getResource("msgGracias"), 1);
       var tipo = this.registrarInscripcionForm.controls.tipoSelected.value;
       var programa = this.registrarInscripcionForm.controls.programaSelected.value;
       var documento = this.registrarInscripcionForm.controls.documento.value;
@@ -352,7 +353,7 @@ export class PregradoComponent implements OnInit {
                   }, 5000);
                 }
               } else {
-                this.openMensajes(environment.titMensaje, this.mensaje.mensaje, 0);
+                this.openMensajes(this.stringHelper.getResource("titMensaje"), this.mensaje.mensaje, 0);
               }
             },
             error => {}
