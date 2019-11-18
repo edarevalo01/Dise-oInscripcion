@@ -1,27 +1,21 @@
+.container-grid-style {
+  box-shadow: 0 4px 8px 0 #00000033, 0 6px 20px 0 #00000030;
+}
+
 .div-complete {
   height: 663px;
-  box-shadow: 0 4px 8px 0 #00000033, 0 6px 20px 0 #00000030;
+  width: 100%;
 }
 
 .div-reducido {
-  box-shadow: 0 4px 8px 0 #00000033, 0 6px 20px 0 #00000030;
   width: 100%;
-  margin: auto;
   height: 860px;
 }
 
-@media screen and (max-width: 540px) {
-  .div-complete {
-    width: 98%;
-    margin: auto;
-    margin-top: 5%;
-  }
+.grid-styles-complete {
+  margin-top: 6%;
 }
 
-@media screen and (min-width: 540px) {
-  .div-complete {
-    width: 1150px; /*Cambiar esto por porcentaje*/
-    margin: auto;
-    margin-top: 7%;
-  }
+.grid-styles-reducido {
+  margin-top: 0%;
 }
