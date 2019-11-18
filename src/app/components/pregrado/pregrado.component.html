@@ -20,29 +20,34 @@
           <div class="inscripcion-form">
             <form class="estilo-formulario" [formGroup]="registrarInscripcionForm">
               <mat-form-field class="campoTexto"> 
-                <input matInput placeholder="Primer nombre *" formControlName="primerNombre">
+                <mat-label style="color: #0000008a;">Primer nombre *</mat-label>
+                <input matInput formControlName="primerNombre">
                 <mat-icon matSuffix class="style-icons">person_outline</mat-icon>
                 <mat-error *ngIf="registrarInscripcionForm.controls.primerNombre.hasError('required')">
                   {{lblRequerido}}
                 </mat-error>
               </mat-form-field>
               <mat-form-field class="campoTexto">
-                <input matInput placeholder="Segundo nombre" formControlName="segundoNombre">
+                <mat-label>Segundo nombre</mat-label>
+                <input matInput formControlName="segundoNombre">
                 <mat-icon matSuffix class="style-icons">person_outline</mat-icon>
               </mat-form-field>
               <mat-form-field class="campoTexto">
-                <input matInput placeholder="Primer apellido *" formControlName="primerApellido">
+                  <mat-label style="color: #0000008a;">Primer apellido *</mat-label>
+                <input matInput formControlName="primerApellido">
                 <mat-icon matSuffix>person_outline</mat-icon>
                 <mat-error *ngIf="registrarInscripcionForm.controls.primerApellido.hasError('required')">
                   {{lblRequerido}}
                 </mat-error>
               </mat-form-field>
               <mat-form-field class="campoTexto">
-                <input matInput placeholder="Segundo apellido" formControlName="segundoApellido">
+                  <mat-label>Segundo apellido</mat-label>
+                <input matInput formControlName="segundoApellido">
                 <mat-icon matSuffix class="style-icons">person_outline</mat-icon>
               </mat-form-field>
               <mat-form-field class="campoTexto">
-                <mat-select matInput formControlName="tipoDocumentoSelected" placeholder="Tipo de documento">
+                  <mat-label style="color: #0000008a;">Tipo de documento</mat-label>
+                <mat-select matInput formControlName="tipoDocumentoSelected">
                   <mat-option *ngFor="let tipoDoc of tiposDocumento" [value]="tipoDoc.codigo">
                     {{tipoDoc.nombre}}
                   </mat-option>
@@ -50,7 +55,8 @@
                 <mat-icon matSuffix class="style-icons">keyboard_arrow_right</mat-icon>
               </mat-form-field>
               <mat-form-field class="campoTexto">
-                <input matInput formControlName="documento" placeholder="Número de Documento">
+                  <mat-label style="color: #0000008a;">Número de Documento</mat-label>
+                <input matInput formControlName="documento">
                 <mat-icon matSuffix class="style-icons">account_box</mat-icon>
                 <mat-error *ngIf="registrarInscripcionForm.controls.documento.hasError('required')">
                   {{lblRequerido}}
@@ -60,7 +66,8 @@
                 </mat-error>
               </mat-form-field>
               <mat-form-field class="campoTexto">
-                <input matInput placeholder="Correo electrónico *" formControlName="correo">
+                  <mat-label style="color: #0000008a;">Correo electrónico *</mat-label>
+                <input matInput formControlName="correo">
                 <mat-icon matSuffix class="style-icons">mail_outline</mat-icon>
                 <mat-error *ngIf="registrarInscripcionForm.controls.correo.hasError('required')">
                   {{lblRequerido}}
@@ -70,7 +77,8 @@
                 </mat-error>
               </mat-form-field>
               <mat-form-field class="campoTexto">
-                <input matInput placeholder="Número de celular *" formControlName="celular"> 
+                  <mat-label style="color: #0000008a;">Número de celular *</mat-label>
+                <input matInput formControlName="celular"> 
                 <mat-icon matSuffix class="style-icons">smartphone</mat-icon>
                 <mat-error *ngIf="registrarInscripcionForm.controls.celular.hasError('required')">
                   {{lblRequerido}}
@@ -80,7 +88,8 @@
                 </mat-error>
               </mat-form-field>
               <mat-form-field  class="campoTexto"> 
-                <mat-select matInput formControlName="tipoSelected" placeholder="Oferta académica" [value]='tipSelected'>
+                  <mat-label style="color: #0000008a;">Oferta académica</mat-label>
+                <mat-select matInput formControlName="tipoSelected" [value]='tipSelected'>
                   <mat-option *ngFor="let tipoProg of tiposPrograma" [value]="tipoProg.codigo" (click)="getProgramas()">
                     {{tipoProg.nombre}}
                   </mat-option>
@@ -88,7 +97,8 @@
                 <mat-icon matSuffix class="style-icons">keyboard_arrow_right</mat-icon>
               </mat-form-field>
               <mat-form-field class="campoTexto">
-                <mat-select matInput formControlName="programaSelected" placeholder="Selecccione programa académico" [value]='progSelected'>
+                  <mat-label style="color: #0000008a;">Seleccione programa académico</mat-label>
+                <mat-select matInput formControlName="programaSelected" [value]='progSelected'>
                   <mat-option *ngFor="let prog of programs" [value]="prog.codigo + prog.jornada">
                     {{prog.nombre}} ({{prog.jornada=='D'?'Diurno':'Nocturno'}})
                   </mat-option>
@@ -116,7 +126,7 @@
               </div>
             </form>
             <button [style.width]="formReducido? '100%' : ''" mat-raised-button (click)="captchaRef.execute()" class="btn-inscribir" [disabled]="registrarInscripcionForm.invalid">{{lblInscribirme}}</button>
-            <div style="width: 100%; text-align: center; color: #ffc107; margin-top: 30px; float: right; cursor: pointer;" *ngIf='formReducido'>
+            <div style="width: 100%; text-align: center; color: #f19100; margin-top: 5px; float: right; cursor: pointer;" *ngIf='formReducido'>
               <span (click)='cambiarPantalla()'>CONTINUAR PROCESO DE ADMISIÓN</span>
             </div>
           </div>

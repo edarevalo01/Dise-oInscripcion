@@ -21,7 +21,7 @@
   font-size: 14px;
   float: right;
   border-radius: 0px;
-  margin-top: 6%;
+  margin-top: 3%;
   background-color: #000000de;
   color: #ffc107;
   font-weight: 400;
@@ -72,9 +72,9 @@
 
   .parte-izquierda {
     width: 100%;
-    height: calc(100% - 8px);
+    height: calc(100% - 16px);
     border: 0px solid black;
-    padding: 5.71% 5.55% 0% 5.55%;
+    padding: 5.71% 5.55% 5.71% 5.55%;
     border-radius: 0px !important;
   }
 
@@ -97,9 +97,9 @@
 
   .parte-izquierda {
     width: 100%;
-    height: calc(100% - 34px);
+    height: calc(100% - 68px);
     border: 0px solid black;
-    padding: 5.71% 13.04% 0% 13.04%;
+    padding: 5.71% 13.04% 5.71% 13.04%;
     border-radius: 0px !important;
   }
 
@@ -235,7 +235,7 @@
   letter-spacing: 0.15px;
   color: #000000de;
   font-weight: 500;
-  margin-top: 15px;
+  /* margin-top: 15px; */
 }
 
 .style-icons {
