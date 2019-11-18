@@ -5,11 +5,11 @@
         <img src="assets/logousalle.png" alt="Logo Salle" width="35%" />
       </div>
       <mat-card-title class="titulo-izquierda">
-        {{ titContinuar }} 
+        {{ stringHelper.getResource("titContinuar") }}
       </mat-card-title>
       <mat-card-subtitle class="subtitulo-izquierda">
-        {{ lblContinuar2 }}
-        <!-- ( <b>{{ls}}</b> ) -->
+        {{ stringHelper.getResource("lblContinuar2") }}
+        ( <b>{{ ls }}</b> )
       </mat-card-subtitle>
       <mat-card-content [style.overflow]="'auto'" class="form-content-izquierda">
         <div class="inscripcion-form">
@@ -18,10 +18,10 @@
               <input matInput formControlName="documento" placeholder="Número de Documento" />
               <mat-icon matSuffix class="style-icons">account_box</mat-icon>
               <mat-error *ngIf="continuarInscripcionForm.controls.documento.hasError('required')">
-                {{ lblRequerido }}
+                {{ stringHelper.getResource("lblRequerido") }}
               </mat-error>
               <mat-error *ngIf="continuarInscripcionForm.controls.documento.hasError('pattern')">
-                {{ lblSoloNumeros }}
+                {{ stringHelper.getResource("lblSoloNumeros") }}
               </mat-error>
             </mat-form-field>
             <mat-form-field class="campoTexto">
@@ -47,7 +47,7 @@
             class="btn-inscribir"
             [disabled]="continuarInscripcionForm.invalid"
           >
-            {{ lblContinuarr }}
+            {{ stringHelper.getResource("lblContinuarr") }}
           </button>
         </div>
       </mat-card-content>
@@ -66,11 +66,11 @@
       <mat-card-content>
         <div style="width: 100%;">
           <div class="text-right">
-            <h2 class="titulo-procAdmin">{{ titInscribete2 }}</h2>
+            <h2 class="titulo-procAdmin">{{ stringHelper.getResource("titInscribete2") }}</h2>
             <p class="content-procAdmin">
-              {{ lblDerecha }}
+              {{ stringHelper.getResource("lblDerecha") }}
             </p>
-            <button mat-raised-button (click)="inscribir()" class="btn-continuar">{{ lblInscribirme }}</button>
+            <button mat-raised-button (click)="inscribir()" class="btn-continuar">{{ stringHelper.getResource("lblInscribirme") }}</button>
           </div>
         </div>
       </mat-card-content>

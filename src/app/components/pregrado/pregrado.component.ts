@@ -11,6 +11,7 @@ import { environment } from "src/environments/environment";
 import { Mensaje } from "src/app/models/Mensaje";
 import { CookieService } from "ngx-cookie-service";
 import { DOCUMENT } from "@angular/common";
+import { StringResourceHelper } from "src/app/models/string-resource-helper";
 
 export class MyErrorStateMatcher implements ErrorStateMatcher {
   isErrorState(control: FormControl | null, form: FormGroupDirective | NgForm | null): boolean {
@@ -19,7 +20,11 @@ export class MyErrorStateMatcher implements ErrorStateMatcher {
   }
 }
 
-export interface DialogData {}
+export interface DialogData {
+  mensaje: string;
+  titulo: string;
+  opcion: number;
+}
 
 @Component({
   selector: "app-pregrado",
@@ -27,43 +32,33 @@ export interface DialogData {}
   styleUrls: ["./pregrado.component.css"]
 })
 export class PregradoComponent implements OnInit {
-  private tipoDocumentoSelected: string;
-  private tiposDocumento: TipoDocumento[] = [
+  public stringHelper: StringResourceHelper;
+  public tipoDocumentoSelected: string;
+  public tiposDocumento: TipoDocumento[] = [
     { codigo: "T", nombre: "TARJETA DE IDENTIDAD" },
     { codigo: "C", nombre: "CÉDULA DE CIUDADANÍA" },
     { codigo: "P", nombre: "PASAPORTE" }
   ];
-  private tiposPrograma: TipoPrograma[] = [
+  public tiposPrograma: TipoPrograma[] = [
     { codigo: "1", nombre: "PREGRADO" },
     { codigo: "2", nombre: "POSGRADO" },
     { codigo: "3", nombre: "DOCTORADO" }
   ];
-  private pantalla: number;
-  private registrarInscripcionForm: FormGroup;
-  private captchaForm: FormGroup;
-  private siteKey: string;
-  private programs: Programa[] = [];
-  private titInscribite: string = environment.titInscribete;
-  private lblInscribete: string = environment.lblInscribete;
-  private titContinuar: string = environment.titContinuar;
-  private lblContinuar: string = environment.lblContinuar;
-  private lblRequerido: string = environment.lblRequerido;
-  private lblSoloNumeros: string = environment.lblSoloNumeros;
-  private lblCorreo: string = environment.lblCorreo;
-  private lblTerminos: string = environment.lblTerminos;
-  private lblTermCond: string = environment.lblTermCond;
-  private lblInscribirme: string = environment.lblInscribirme;
-  private lblContinuarr: string = environment.lblContinuarr;
-  private msgHabeasData: string = environment.msgHabeasData;
-  private programaSelected: Programa;
-  private mensaje: Mensaje = new Mensaje();
-  private loading: boolean = false;
-  private dialogRef: any;
-  private progSelected: any;
-  private tipSelected: string = "";
+  public pantalla: number;
+  public registrarInscripcionForm: FormGroup;
+  public captchaForm: FormGroup;
+  public siteKey: string;
+  public programs: Programa[] = [];
+  public msgHabeasData: string = environment.msgHabeasData;
+  public programaSelected: Programa;
+  public mensaje: Mensaje = new Mensaje();
+  public loading: boolean = false;
+  public dialogRef: any;
+  public progSelected: any;
+  public tipSelected: string = "";
 
-  private formReducido: boolean = false;
-  // private ls: string = "";
+  public formReducido: boolean = false;
+  public ls: string = "";
 
   constructor(
     private pregradoServ: PregradoService,
@@ -73,6 +68,7 @@ export class PregradoComponent implements OnInit {
     private cookieService: CookieService,
     @Inject(DOCUMENT) private document: Document
   ) {
+    this.stringHelper = new StringResourceHelper("titulos-mensajes");
     this.registrarInscripcionForm = this.formBuilder.group({
       primerNombre: ["", Validators.required],
       segundoNombre: [""],
@@ -93,26 +89,13 @@ export class PregradoComponent implements OnInit {
       this.pantalla = 1;
       this.getProgramaParam(paramUrlPrograma);
     }
-    // this.ls = this.obtenerParametro("lead_source") != 0 ? String(this.obtenerParametro("lead_source")) : "sepRebr5";
+    this.ls = this.obtenerParametro("lead_source") != 0 ? String(this.obtenerParametro("lead_source")) : "sepRebr5";
   }
 
   getProgramaParam(param): any {
     this.pregradoServ.getProgramasByTipo("1").subscribe(
       tiposObs => {
-        tiposObs.forEach(program => {
-          program.jornadas.forEach(jornad => {
-            this.programs.push({
-              nombre: program.nombre,
-              jornada: jornad.jornada,
-              codigo: program.codigo,
-              inscripcion: jornad.inscripcion,
-              jornadas: [],
-              contacto: program.contacto,
-              fa: program.fa,
-              correo: program.correo
-            });
-          });
-        });
+        this.setProgramasService(tiposObs);
         var res = this.programs.filter(prog => prog.codigo == param.substring(0, 2) && prog.jornada == param.substring(2, 3));
         this.programaSelected = res[0];
         if (this.programaSelected != undefined) {
@@ -128,20 +111,7 @@ export class PregradoComponent implements OnInit {
           this.programs = [];
           this.pregradoServ.getProgramasByTipo("2").subscribe(
             tiposObs => {
-              tiposObs.forEach(program => {
-                program.jornadas.forEach(jornad => {
-                  this.programs.push({
-                    nombre: program.nombre,
-                    jornada: jornad.jornada,
-                    codigo: program.codigo,
-                    inscripcion: jornad.inscripcion,
-                    jornadas: [],
-                    contacto: program.contacto,
-                    fa: program.fa,
-                    correo: program.correo
-                  });
-                });
-              });
+              this.setProgramasService(tiposObs);
               var res = this.programs.filter(prog => prog.codigo == param.substring(0, 2) && prog.jornada == param.substring(2, 3));
               this.programaSelected = res[0];
               if (this.programaSelected != undefined) {
@@ -154,31 +124,10 @@ export class PregradoComponent implements OnInit {
             error => {},
             () => {
               if (this.tipSelected == "") {
-                this.programs = [
-                  {
-                    codigo: "1",
-                    nombre: "DOCTORADO EN AGROCIENCIAS",
-                    jornada: "N",
-                    inscripcion: "S",
-                    jornadas: [],
-                    contacto: null,
-                    fa: null,
-                    correo: null
-                  },
-                  {
-                    codigo: "2",
-                    nombre: "DOCTORADO EN EDUCACIÓN",
-                    jornada: "N",
-                    inscripcion: "S",
-                    jornadas: [],
-                    contacto: null,
-                    fa: null,
-                    correo: null
-                  }
-                ];
+                this.setDoctorados();
                 if (param.substring(0, 2) == "DA") {
                   this.registrarInscripcionForm.controls.programaSelected.setValue("1N");
-                } else {
+                } else if (param.substring(0, 2) == "DE") {
                   this.registrarInscripcionForm.controls.programaSelected.setValue("2N");
                 }
                 this.tipSelected = "3";
@@ -187,6 +136,16 @@ export class PregradoComponent implements OnInit {
             }
           );
         }
+        this.programs.sort((n1, n2) => {
+          var comp = (n1.nombre + n1.jornada).localeCompare(n2.nombre + n2.jornada);
+          if (comp > 1) {
+            return 1;
+          }
+          if (comp < 1) {
+            return -1;
+          }
+          return 0;
+        });
       }
     );
   }
@@ -207,33 +166,20 @@ export class PregradoComponent implements OnInit {
       this.cookieService.set(environment.cookieLeadSource, ls, 15 / 1440, "/", environment.dominio);
     }
   }
+
   public onResize(event) {
     if (!this.formReducido) {
       this.pantalla = event.target.innerWidth <= 540 ? 1 : 2;
     }
   }
-  //programas
+
   public getProgramas() {
     var tipo = this.registrarInscripcionForm.controls.tipoSelected.value;
     if ("3" != tipo) {
       this.programs = [];
       this.pregradoServ.getProgramasByTipo(tipo).subscribe(
         tiposObs => {
-          tiposObs.forEach(program => {
-            program.jornadas.forEach(jornad => {
-              this.programs.push({
-                nombre: program.nombre,
-                jornada: jornad.jornada,
-                codigo: program.codigo,
-                inscripcion: jornad.inscripcion,
-                jornadas: [],
-                contacto: program.contacto,
-                fa: program.fa,
-                correo: program.correo
-              });
-            });
-          });
-          //ordenar por nombre de programa
+          this.setProgramasService(tiposObs);
           this.programs.sort((n1, n2) => {
             var comp = (n1.nombre + n1.jornada).localeCompare(n2.nombre + n2.jornada);
             if (comp > 1) {
@@ -248,32 +194,52 @@ export class PregradoComponent implements OnInit {
         error => {}
       );
     } else {
-      //doctorados
-      this.programs = [
-        {
-          codigo: "1",
-          nombre: "DOCTORADO EN AGROCIENCIAS",
-          jornada: "N",
-          inscripcion: "S",
-          jornadas: [],
-          contacto: null,
-          fa: null,
-          correo: null
-        },
-        {
-          codigo: "2",
-          nombre: "DOCTORADO EN EDUCACIÓN",
-          jornada: "N",
-          inscripcion: "S",
-          jornadas: [],
-          contacto: null,
-          fa: null,
-          correo: null
-        }
-      ];
+      this.setDoctorados();
     }
   }
-  //inscripciÓn
+
+  setDoctorados() {
+    this.programs = [
+      {
+        codigo: "1",
+        nombre: "DOCTORADO EN AGROCIENCIAS",
+        jornada: "N",
+        inscripcion: "S",
+        jornadas: [],
+        contacto: null,
+        fa: null,
+        correo: null
+      },
+      {
+        codigo: "2",
+        nombre: "DOCTORADO EN EDUCACIÓN",
+        jornada: "N",
+        inscripcion: "S",
+        jornadas: [],
+        contacto: null,
+        fa: null,
+        correo: null
+      }
+    ];
+  }
+
+  setProgramasService(tiposObs) {
+    tiposObs.forEach(program => {
+      program.jornadas.forEach(jornad => {
+        this.programs.push({
+          nombre: program.nombre,
+          jornada: jornad.jornada,
+          codigo: program.codigo,
+          inscripcion: jornad.inscripcion,
+          jornadas: [],
+          contacto: program.contacto,
+          fa: program.fa,
+          correo: program.correo
+        });
+      });
+    });
+  }
+
   public enviarDatosInscripcion(captchaCode) {
     this.loading = true;
     var respCaptcha = captchaCode;
@@ -292,7 +258,7 @@ export class PregradoComponent implements OnInit {
             var tipDoc = this.registrarInscripcionForm.controls.tipoDocumentoSelected.value;
             this.openGracias(tipDoc);
           } else {
-            this.openMensajes(environment.titMensaje, this.mensaje.mensaje, 0);
+            this.openMensajes(this.stringHelper.getResource("titMensaje"), this.mensaje.mensaje, 0);
           }
         },
         error => {}
@@ -300,20 +266,18 @@ export class PregradoComponent implements OnInit {
     }
     this.loading = false;
   }
-  //continuar
+
   public continuarProceso() {
-    // this.router.navigateByUrl("/continuar?lead_source=" + this.obtenerParametro('lead_source'));
     this.router.navigate(["/continuar"], { queryParams: { lead_source: this.obtenerParametro("lead_source") } });
   }
 
   public cambiarPantalla() {
-    //href='/continuar?lead_source=sepRebr5' target="_blank"
     window.open(
       "/#/continuar?lead_source=" + (this.obtenerParametro("lead_source") != 0 ? String(this.obtenerParametro("lead_source")) : "sepRebr5"),
       "_blank"
     );
   }
-  //programa seleccionado
+
   public getProgramaSeleccionado(progSelected: string): void {
     this.programaSelected = new Programa();
     for (let prog of this.programs) {
@@ -323,7 +287,7 @@ export class PregradoComponent implements OnInit {
       }
     }
   }
-  //ventana mensajes
+
   public openMensajes(titulo: string, mensaje: string, opcion: number): void {
     this.dialogRef = this.dialog.open(VentanaDialogoMensajesPreg, {
       width: "35%",
@@ -333,11 +297,11 @@ export class PregradoComponent implements OnInit {
 
     this.dialogRef.afterClosed().subscribe(result => {});
   }
-  //ventana habeas data
+
   public openHabeasData(): void {
     this.openMensajes(environment.titHabeasData, this.msgHabeasData, 0);
   }
-  //ventana gracias
+
   public openGracias(tipoDoc: string): void {
     if ("P" == tipoDoc) {
       this.openMensajes(environment.titGracias, environment.msgGraciasExt, 2);
@@ -401,7 +365,7 @@ export class PregradoComponent implements OnInit {
       }
     }
   }
-  //parametros
+
   public obtenerParametro(name: string) {
     const results = new RegExp("[?&]" + name + "=([^&#]*)").exec(window.location.href);
     if (!results) {
@@ -410,7 +374,7 @@ export class PregradoComponent implements OnInit {
     return results[1] || 0;
   }
 }
-//mensajes
+
 @Component({
   selector: "ventanaDialogo",
   templateUrl: "ventanaMensajes.html",

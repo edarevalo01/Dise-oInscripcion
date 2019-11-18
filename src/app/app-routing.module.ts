@@ -21,6 +21,7 @@ const routes: Routes = [
 
 @NgModule({
   imports: [RouterModule.forRoot(routes, { useHash: true })], //Produccion
+  // ng build --prod --output-hashing=none
   //imports: [RouterModule.forRoot(routes)],
   exports: [RouterModule]
 })

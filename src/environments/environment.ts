@@ -3,8 +3,8 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
-  production: false,
-  siteKey: "6LcLgzEUAAAAAEW_qzzLErRbf_6CicDG7ExEjzQc", 
+  production: true,
+  siteKey: "6LcLgzEUAAAAAEW_qzzLErRbf_6CicDG7ExEjzQc",
   urlBackend: "http://estctimrua.lasalle.edu.co:8080/admisiones-backend/oar/",
   //urlBackend: "http://vili.lasalle.edu.co:8082/admisiones-backend/oar/",
   getProgramas: "facultades.json",
@@ -12,7 +12,7 @@ export const environment = {
   urlPregrado: "https://www.lasalle.edu.co/inscripciones2/index.html#!/timeline",
   urlPosgrado: "http://zeus.lasalle.edu.co/oar/postgrado/?v=1.2",
   cookiePregrado: "9iewoetrlUswou3i",
-  cookiePosgrado:"ik80fmj37t7elhbb",
+  cookiePosgrado: "ik80fmj37t7elhbb",
   cookieLeadSource: "stouh0eph5umoa1h",
   leadSource: "sepRebr5",
   validarContinuar: "?1/?2/?3/continuar.json",
