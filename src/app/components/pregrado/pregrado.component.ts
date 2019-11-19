@@ -29,7 +29,7 @@ export interface DialogData {
 @Component({
   selector: "app-pregrado",
   templateUrl: "./pregrado.component.html",
-  styleUrls: ["./pregrado.component.css"]
+  styleUrls: ["./pregrado.component.scss"]
 })
 export class PregradoComponent implements OnInit {
   public stringHelper: StringResourceHelper;
@@ -393,7 +393,7 @@ export class PregradoComponent implements OnInit {
 @Component({
   selector: "ventanaDialogo",
   templateUrl: "ventanaMensajes.html",
-  styleUrls: ["./pregrado.component.css"]
+  styleUrls: ["./pregrado.component.scss"]
 })
 export class VentanaDialogoMensajesPreg {
   constructor(public dialogRef: MatDialogRef<VentanaDialogoMensajesPreg>, @Inject(MAT_DIALOG_DATA) public data: DialogData) {}

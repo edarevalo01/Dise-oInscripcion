@@ -21,7 +21,7 @@
           <div class="inscripcion-form">
             <form class="estilo-formulario" [formGroup]="registrarInscripcionForm">
 
-              <mat-form-field class="campoTexto"> <!---------->
+              <mat-form-field [ngClass]="darkMode? 'campoTexto-dark' : 'campoTexto'"> <!---------->
                 <mat-label [ngClass]="darkMode? 'mat-label-style-dark' : 'mat-label-style-ligth'">Primer nombre *</mat-label>
                 <input [ngClass]="darkMode? 'input-style-dark' : ''" matInput formControlName="primerNombre">
                 <mat-icon matSuffix [ngClass]="darkMode? 'style-icons-dark' : 'style-icons'">person_outline</mat-icon>
@@ -30,13 +30,13 @@
                 </mat-error>
               </mat-form-field>
 
-              <mat-form-field class="campoTexto">
+              <mat-form-field [ngClass]="darkMode? 'campoTexto-dark' : 'campoTexto'">
                 <mat-label [ngClass]="darkMode? 'mat-label-style-dark' : 'mat-label-style-ligth'">Segundo nombre</mat-label>
                 <input [ngClass]="darkMode? 'input-style-dark' : ''" matInput formControlName="segundoNombre">
                 <mat-icon matSuffix [ngClass]="darkMode? 'style-icons-dark' : 'style-icons'">person_outline</mat-icon>
               </mat-form-field>
 
-              <mat-form-field class="campoTexto">
+              <mat-form-field [ngClass]="darkMode? 'campoTexto-dark' : 'campoTexto'">
                 <mat-label [ngClass]="darkMode? 'mat-label-style-dark' : 'mat-label-style-ligth'">Primer apellido *</mat-label>
                 <input [ngClass]="darkMode? 'input-style-dark' : ''" matInput formControlName="primerApellido">
                 <mat-icon matSuffix [ngClass]="darkMode? 'style-icons-dark' : 'style-icons'">person_outline</mat-icon>
@@ -45,13 +45,13 @@
                 </mat-error>
               </mat-form-field>
 
-              <mat-form-field class="campoTexto">
+              <mat-form-field [ngClass]="darkMode? 'campoTexto-dark' : 'campoTexto'">
                 <mat-label [ngClass]="darkMode? 'mat-label-style-dark' : 'mat-label-style-ligth'">Segundo apellido</mat-label>
                 <input [ngClass]="darkMode? 'input-style-dark' : ''" matInput formControlName="segundoApellido">
                 <mat-icon matSuffix [ngClass]="darkMode? 'style-icons-dark' : 'style-icons'">person_outline</mat-icon>
               </mat-form-field>
 
-              <mat-form-field class="campoTexto">
+              <mat-form-field [ngClass]="darkMode? 'campoTexto-dark' : 'campoTexto'">
                 <mat-label [ngClass]="darkMode? 'mat-label-style-dark' : 'mat-label-style-ligth'">Tipo de documento</mat-label>
                 <mat-select [ngClass]="darkMode? 'input-style-dark' : ''" matInput formControlName="tipoDocumentoSelected">
                   <mat-option *ngFor="let tipoDoc of tiposDocumento" [value]="tipoDoc.codigo">
@@ -61,7 +61,7 @@
                 <mat-icon matSuffix [ngClass]="darkMode? 'style-icons-dark' : 'style-icons'">keyboard_arrow_right</mat-icon>
               </mat-form-field>
 
-              <mat-form-field class="campoTexto">
+              <mat-form-field [ngClass]="darkMode? 'campoTexto-dark' : 'campoTexto'">
                 <mat-label [ngClass]="darkMode? 'mat-label-style-dark' : 'mat-label-style-ligth'">Número de Documento</mat-label>
                 <input [ngClass]="darkMode? 'input-style-dark' : ''" matInput formControlName="documento">
                 <mat-icon matSuffix [ngClass]="darkMode? 'style-icons-dark' : 'style-icons'">account_box</mat-icon>
@@ -73,7 +73,7 @@
                 </mat-error>
               </mat-form-field>
 
-              <mat-form-field class="campoTexto">
+              <mat-form-field [ngClass]="darkMode? 'campoTexto-dark' : 'campoTexto'">
                 <mat-label [ngClass]="darkMode? 'mat-label-style-dark' : 'mat-label-style-ligth'">Correo electrónico *</mat-label>
                 <input [ngClass]="darkMode? 'input-style-dark' : ''" matInput formControlName="correo">
                 <mat-icon matSuffix [ngClass]="darkMode? 'style-icons-dark' : 'style-icons'">mail_outline</mat-icon>
@@ -85,7 +85,7 @@
                 </mat-error>
               </mat-form-field>
 
-              <mat-form-field class="campoTexto">
+              <mat-form-field [ngClass]="darkMode? 'campoTexto-dark' : 'campoTexto'">
                 <mat-label [ngClass]="darkMode? 'mat-label-style-dark' : 'mat-label-style-ligth'">Número de celular *</mat-label>
                 <input [ngClass]="darkMode? 'input-style-dark' : ''" matInput formControlName="celular"> 
                 <mat-icon matSuffix [ngClass]="darkMode? 'style-icons-dark' : 'style-icons'">smartphone</mat-icon>
@@ -97,7 +97,7 @@
                 </mat-error>
               </mat-form-field>
 
-              <mat-form-field  class="campoTexto"> 
+              <mat-form-field  [ngClass]="darkMode? 'campoTexto-dark' : 'campoTexto'"> 
                 <mat-label [ngClass]="darkMode? 'mat-label-style-dark' : 'mat-label-style-ligth'">Oferta académica</mat-label>
                 <mat-select [ngClass]="darkMode? 'input-style-dark' : ''" matInput formControlName="tipoSelected" [value]='tipSelected'>
                   <mat-option *ngFor="let tipoProg of tiposPrograma" [value]="tipoProg.codigo" (click)="getProgramas()">
@@ -107,7 +107,7 @@
                 <mat-icon matSuffix [ngClass]="darkMode? 'style-icons-dark' : 'style-icons'">keyboard_arrow_right</mat-icon>
               </mat-form-field>
 
-              <mat-form-field class="campoTexto">
+              <mat-form-field [ngClass]="darkMode? 'campoTexto-dark' : 'campoTexto'">
                 <mat-label [ngClass]="darkMode? 'mat-label-style-dark' : 'mat-label-style-ligth'">Seleccione programa académico</mat-label>
                 <mat-select [ngClass]="darkMode? 'input-style-dark' : ''" matInput formControlName="programaSelected" [value]='progSelected'>
                   <mat-option *ngFor="let prog of programs" [value]="prog.codigo + prog.jornada">

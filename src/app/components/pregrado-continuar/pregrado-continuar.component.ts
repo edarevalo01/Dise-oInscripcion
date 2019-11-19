@@ -23,7 +23,7 @@ export class MyErrorStateMatcher implements ErrorStateMatcher {
 @Component({
   selector: "app-pregrado-continuar",
   templateUrl: "./pregrado-continuar.component.html",
-  styleUrls: ["../pregrado/pregrado.component.css"]
+  styleUrls: ["../pregrado/pregrado.component.scss"]
 })
 export class PregradoContinuarComponent implements OnInit {
   public stringHelper: StringResourceHelper;
