@@ -12,7 +12,7 @@ export const environment = {
   cookieLeadSource: "stouh0eph5umoa1h",
   leadSource: "sepRebr5",
   validarContinuar: "?1/?2/?3/continuar.json", //
-  guardarParte1: "salvarp1.json" //
+  guardarParte1: "salvarp1.json", //
   //mensajes y titulos
   // titInscribete: "Inscríbete",
   // titInscribete2: "Proceso de admisión!",
@@ -39,6 +39,6 @@ export const environment = {
   // msgGracias:
   //   "Ya estás registrado en la Universidad de La Salle, pronto te contactaremos. En contados segundos podrás iniciar tu proceso de admisión",
   // msgGraciasExt: "Usted será contactado por la Universidad para brindarle la orientación respectiva.",
-  // urlPaginaUniver: "https://www.lasalle.edu.co/",
-  // dominio: ".lasalle.edu.co"
+  urlPaginaUniver: "https://www.lasalle.edu.co/",
+  dominio: ".lasalle.edu.co"
 };

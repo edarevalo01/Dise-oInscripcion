@@ -32,6 +32,7 @@ export class PregradoContinuarComponent implements OnInit {
     { codigo: "2", nombre: "POSGRADO" },
     { codigo: "3", nombre: "DOCTORADO" }
   ];
+  public parametrosCookie: any;
   public continuarInscripcionForm: FormGroup;
   public pantalla: Number;
   public programs: Programa[] = [];
@@ -50,7 +51,18 @@ export class PregradoContinuarComponent implements OnInit {
     private router: Router
   ) {
     this.stringHelper = new StringResourceHelper("titulos-mensajes");
-    this.ls = this.obtenerParametro("lead_source") != 0 ? String(this.obtenerParametro("lead_source")) : "sepRebr5";
+    this.parametrosCookie = this.cookieService.get("dOdYDja");
+    if (this.parametrosCookie) {
+      this.parametrosCookie = JSON.parse(this.parametrosCookie);
+    } else {
+      this.parametrosCookie = {
+        lead_source: "sepRebr5",
+        programa: "",
+        dark_mode: 0 //0 no, 1 si
+      };
+    }
+
+    this.ls = this.parametrosCookie.lead_source;
   }
 
   ngOnInit() {
@@ -184,13 +196,13 @@ export class PregradoContinuarComponent implements OnInit {
     this.loading = false;
   }
 
-  public obtenerParametro(name: string) {
-    const results = new RegExp("[?&]" + name + "=([^&#]*)").exec(window.location.href);
-    if (!results) {
-      return 0;
-    }
-    return results[1] || 0;
-  }
+  // public obtenerParametro(name: string) {
+  //   const results = new RegExp("[?&]" + name + "=([^&#]*)").exec(window.location.href);
+  //   if (!results) {
+  //     return 0;
+  //   }
+  //   return results[1] || 0;
+  // }
 
   public openMensajes(titulo: string, mensaje: string, opcion: number): void {
     const dialogRef = this.dialog.open(VentanaDialogoMensajes, {
@@ -202,7 +214,8 @@ export class PregradoContinuarComponent implements OnInit {
   }
 
   public inscribir() {
-    this.router.navigate(["/inscripcion"], { queryParams: { lead_source: this.obtenerParametro("lead_source") } });
+    //this.router.navigate(["/inscripcion"], { queryParams: { lead_source: this.parametrosCookie.lead_source } });
+    this.router.navigate(["/inscripcion"]);
   }
 
   public getProgramaSeleccionado(progSelected: string): void {

@@ -44,6 +44,8 @@ export class PregradoComponent implements OnInit {
     { codigo: "2", nombre: "POSGRADO" },
     { codigo: "3", nombre: "DOCTORADO" }
   ];
+  public parametrosCookie: any;
+  public darkMode: boolean = false;
   public pantalla: number;
   public registrarInscripcionForm: FormGroup;
   public captchaForm: FormGroup;
@@ -83,14 +85,32 @@ export class PregradoComponent implements OnInit {
       programaSelected: ["", Validators.required],
       terminos: [false, Validators.requiredTrue]
     });
+    // var prms = {
+    //   lead_source: "sepRebr5",
+    //   programa: "",
+    //   dark_mode: 0 //0 no, 1 si
+    // };
+    // this.cookieService.set("dOdYDja", JSON.stringify(prms));
 
-    var paramUrlPrograma = this.obtenerParametro("programa");
-    if (paramUrlPrograma != 0) {
+    this.parametrosCookie = this.cookieService.get("dOdYDja");
+    if (this.parametrosCookie) {
+      this.parametrosCookie = JSON.parse(this.parametrosCookie);
+    } else {
+      this.parametrosCookie = {
+        lead_source: "sepRebr5",
+        programa: "",
+        dark_mode: 0 //0 no, 1 si
+      };
+    }
+    this.darkMode = this.parametrosCookie.dark_mode == 1;
+    this.cookieService.set(environment.cookieLeadSource, this.parametrosCookie.lead_source, 15 / 1440, "/", environment.dominio);
+
+    if (this.parametrosCookie.programa != "") {
       this.formReducido = true;
       this.pantalla = 1;
-      this.getProgramaParam(paramUrlPrograma);
+      this.getProgramaParam(this.parametrosCookie.programa);
     }
-    this.ls = this.obtenerParametro("lead_source") != 0 ? String(this.obtenerParametro("lead_source")) : "sepRebr5";
+    this.ls = this.parametrosCookie.lead_source;
   }
 
   getProgramaParam(param): any {
@@ -155,16 +175,6 @@ export class PregradoComponent implements OnInit {
     this.siteKey = environment.siteKey;
     if (!this.formReducido) {
       this.pantalla = window.innerWidth <= 540 ? 1 : 2;
-    }
-
-    if (!this.cookieService.get(environment.cookieLeadSource)) {
-      var ls = "";
-      if ("0" != this.obtenerParametro("lead_source")) {
-        ls = this.obtenerParametro("lead_source").toString();
-      } else {
-        ls = environment.leadSource;
-      }
-      this.cookieService.set(environment.cookieLeadSource, ls, 15 / 1440, "/", environment.dominio);
     }
   }
 
@@ -269,14 +279,18 @@ export class PregradoComponent implements OnInit {
   }
 
   public continuarProceso() {
-    this.router.navigate(["/continuar"], { queryParams: { lead_source: this.obtenerParametro("lead_source") } });
+    //this.router.navigate(["/continuar"], { queryParams: { lead_source: this.parametrosCookie.lead_source } });
+    this.router.navigate(["/continuar"]);
   }
 
   public cambiarPantalla() {
-    window.open(
-      "/#/continuar?lead_source=" + (this.obtenerParametro("lead_source") != 0 ? String(this.obtenerParametro("lead_source")) : "sepRebr5"),
-      "_blank"
-    );
+    var prms = {
+      lead_source: this.parametrosCookie.lead_source,
+      programa: "",
+      dark_mode: this.parametrosCookie.dark_mode
+    };
+    this.cookieService.set("dOdYDja", JSON.stringify(prms));
+    window.open("/#/continuar", "_blank");
   }
 
   public getProgramaSeleccionado(progSelected: string): void {
@@ -367,13 +381,13 @@ export class PregradoComponent implements OnInit {
     }
   }
 
-  public obtenerParametro(name: string) {
-    const results = new RegExp("[?&]" + name + "=([^&#]*)").exec(window.location.href);
-    if (!results) {
-      return 0;
-    }
-    return results[1] || 0;
-  }
+  // public obtenerParametro(name: string) {
+  //   const results = new RegExp("[?&]" + name + "=([^&#]*)").exec(window.location.href);
+  //   if (!results) {
+  //     return 0;
+  //   }
+  //   return results[1] || 0;
+  // }
 }
 
 @Component({
