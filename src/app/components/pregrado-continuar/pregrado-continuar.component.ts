@@ -33,6 +33,7 @@ export class PregradoContinuarComponent implements OnInit {
     { codigo: "3", nombre: "DOCTORADO" }
   ];
   public parametrosCookie: any;
+  public darkMode: boolean = false;
   public continuarInscripcionForm: FormGroup;
   public pantalla: Number;
   public programs: Programa[] = [];
@@ -61,7 +62,7 @@ export class PregradoContinuarComponent implements OnInit {
         dark_mode: 0 //0 no, 1 si
       };
     }
-
+    this.darkMode = this.parametrosCookie.dark_mode == 1;
     this.ls = this.parametrosCookie.lead_source;
   }
 
@@ -195,14 +196,6 @@ export class PregradoContinuarComponent implements OnInit {
     }
     this.loading = false;
   }
-
-  // public obtenerParametro(name: string) {
-  //   const results = new RegExp("[?&]" + name + "=([^&#]*)").exec(window.location.href);
-  //   if (!results) {
-  //     return 0;
-  //   }
-  //   return results[1] || 0;
-  // }
 
   public openMensajes(titulo: string, mensaje: string, opcion: number): void {
     const dialogRef = this.dialog.open(VentanaDialogoMensajes, {

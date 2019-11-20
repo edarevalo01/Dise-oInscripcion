@@ -85,6 +85,7 @@ export class PregradoComponent implements OnInit {
       programaSelected: ["", Validators.required],
       terminos: [false, Validators.requiredTrue]
     });
+    /* Formato parámetros por cookie */
     // var prms = {
     //   lead_source: "sepRebr5",
     //   programa: "",
@@ -380,14 +381,6 @@ export class PregradoComponent implements OnInit {
       }
     }
   }
-
-  // public obtenerParametro(name: string) {
-  //   const results = new RegExp("[?&]" + name + "=([^&#]*)").exec(window.location.href);
-  //   if (!results) {
-  //     return 0;
-  //   }
-  //   return results[1] || 0;
-  // }
 }
 
 @Component({

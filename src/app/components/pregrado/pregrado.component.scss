@@ -2,11 +2,8 @@
   background: none !important;
   border: none;
   padding: 0 !important;
-  /*optional*/
   font-family: arial, sans-serif;
-  /*input has OS specific font-family*/
   color: #069;
-  /*text-decoration: underline;*/
   cursor: pointer;
 }
 
@@ -33,12 +30,10 @@
   flex-direction: column;
 }
 
-/* width */
 ::-webkit-scrollbar {
   width: 4px;
 }
 
-/* Track */
 ::-webkit-scrollbar-track {
   background: #ffffff00;
 }
@@ -47,15 +42,14 @@
   input:-webkit-autofill {
     -webkit-box-shadow: 0 0 0px 1000px #2c2c2c inset;
     -webkit-text-fill-color: #ffc107;
+    box-shadow: 0 0 0px 1000px #2c2c2c inset;
   }
 }
 
-/* Handle */
 ::-webkit-scrollbar-thumb {
   background: #00000036;
 }
 
-/* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
   background: #00000061;
 }
@@ -239,14 +233,12 @@
 
 .terminos-cond {
   font-size: 12px !important;
-  /* line-height: 0px !important; */
   color: #00000099;
   letter-spacing: 0.4px;
 }
 
 .terminos-cond-dark {
   font-size: 12px !important;
-  /* line-height: 0px !important; */
   color: #ffffff99;
   letter-spacing: 0.4px;
 }
@@ -255,7 +247,6 @@
   line-height: 14px !important;
 }
 
-/* Nuevo */
 .estilo-formulario {
   width: 100%;
 }
@@ -276,7 +267,6 @@
   letter-spacing: 0.15px;
   color: #000000de;
   font-weight: 500;
-  /* margin-top: 15px; */
 }
 
 .campoTexto-dark {
@@ -285,7 +275,6 @@
   letter-spacing: 0.15px;
   color: #ffffff99;
   font-weight: 500;
-  /* margin-top: 15px; */
 }
 
 .mat-label-style-ligth {
@@ -341,26 +330,22 @@
 .mat-accent .mat-pseudo-checkbox-indeterminate,
 .mat-pseudo-checkbox-checked,
 .mat-pseudo-checkbox-indeterminate {
-  background-color: #449bff !important; /* Red background for example */
+  background-color: #449bff !important;
 }
 
 ::ng-deep .mat-focused .mat-form-field-label {
-  /*change color of label*/
   color: #00000086 !important;
 }
 
 ::ng-deep.mat-form-field-ripple {
-  /*change color of underline when focused*/
   background-color: #000000c5 !important;
 }
 
 ::ng-deep .campoTexto-dark .mat-focused .mat-form-field-label {
-  /*change color of label*/
   color: #ffffff99 !important;
 }
 
-::ng-deep .campoTexto-dark .mat-form-field-ripple {
-  /*change color of underline when focused #b00020*/
+::ng-deep .campoTexto-dark .mat-form-field-underline .mat-form-field-ripple {
   background-color: #ffc107 !important;
 }
 

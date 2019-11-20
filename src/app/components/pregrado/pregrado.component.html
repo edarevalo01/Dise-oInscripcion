@@ -21,7 +21,7 @@
           <div class="inscripcion-form">
             <form class="estilo-formulario" [formGroup]="registrarInscripcionForm">
 
-              <mat-form-field [ngClass]="darkMode? 'campoTexto-dark' : 'campoTexto'"> <!---------->
+              <mat-form-field [ngClass]="darkMode? 'campoTexto-dark' : 'campoTexto'">
                 <mat-label [ngClass]="darkMode? 'mat-label-style-dark' : 'mat-label-style-ligth'">Primer nombre *</mat-label>
                 <input [ngClass]="darkMode? 'input-style-dark' : ''" matInput formControlName="primerNombre">
                 <mat-icon matSuffix [ngClass]="darkMode? 'style-icons-dark' : 'style-icons'">person_outline</mat-icon>
