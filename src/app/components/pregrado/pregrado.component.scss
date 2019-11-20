@@ -24,6 +24,26 @@
   font-weight: 400;
 }
 
+.btn-inscribir-dark {
+  padding: 5px 27px;
+  font: Roboto, Condensed, Regular;
+  font-size: 14px;
+  float: right;
+  border-radius: 0px;
+  margin-top: 3%;
+  background-color: #03a9f4;
+  color: #ffffff;
+  font-weight: 400;
+}
+
+::ng-deep .mat-raised-button[disabled].btn-inscribir-dark {
+  color: #ffffff8c !important;
+}
+
+::ng-deep .mat-raised-button[disabled] {
+  color: rgba(0, 0, 0, 0.38) !important;
+}
+
 .mat-card.scrollable-content {
   overflow: hidden;
   display: flex;

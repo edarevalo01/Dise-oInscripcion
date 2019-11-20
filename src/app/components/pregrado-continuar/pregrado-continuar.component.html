@@ -50,7 +50,7 @@
           <button
             mat-raised-button
             (click)="enviarDatosInscripcionContinuar()"
-            class="btn-inscribir"
+            [ngClass]="darkMode? 'btn-inscribir-dark' : 'btn-inscribir'"
             [disabled]="continuarInscripcionForm.invalid"
           >
             {{ stringHelper.getResource("lblContinuarr") }}

@@ -1,8 +1,15 @@
-import { Component, OnInit, Inject } from "@angular/core";
+import { Component, OnInit, Inject, DoCheck } from "@angular/core";
 import { PregradoService } from "src/app/services/pregrado.service";
 import { TipoPrograma } from "src/app/models/TipoPrograma";
 import { Programa } from "src/app/models/Programa";
-import { FormGroup, FormBuilder, Validators, FormGroupDirective, FormControl, NgForm } from "@angular/forms";
+import {
+  FormGroup,
+  FormBuilder,
+  Validators,
+  FormGroupDirective,
+  FormControl,
+  NgForm
+} from "@angular/forms";
 import { ErrorStateMatcher } from "@angular/material/core";
 import { DOCUMENT } from "@angular/common";
 import { environment } from "src/environments/environment";
@@ -14,9 +21,16 @@ import { Router } from "@angular/router";
 import { StringResourceHelper } from "src/app/models/string-resource-helper";
 
 export class MyErrorStateMatcher implements ErrorStateMatcher {
-  isErrorState(control: FormControl | null, form: FormGroupDirective | NgForm | null): boolean {
+  isErrorState(
+    control: FormControl | null,
+    form: FormGroupDirective | NgForm | null
+  ): boolean {
     const isSubmitted = form && form.submitted;
-    return !!(control && control.invalid && (control.dirty || control.touched || isSubmitted));
+    return !!(
+      control &&
+      control.invalid &&
+      (control.dirty || control.touched || isSubmitted)
+    );
   }
 }
 
@@ -25,7 +39,7 @@ export class MyErrorStateMatcher implements ErrorStateMatcher {
   templateUrl: "./pregrado-continuar.component.html",
   styleUrls: ["../pregrado/pregrado.component.scss"]
 })
-export class PregradoContinuarComponent implements OnInit {
+export class PregradoContinuarComponent implements OnInit, DoCheck {
   public stringHelper: StringResourceHelper;
   public tiposPrograma: TipoPrograma[] = [
     { codigo: "1", nombre: "PREGRADO" },
@@ -100,7 +114,9 @@ export class PregradoContinuarComponent implements OnInit {
             });
           });
           this.programs.sort((n1, n2) => {
-            var comp = (n1.nombre + n1.jornada).localeCompare(n2.nombre + n2.jornada);
+            var comp = (n1.nombre + n1.jornada).localeCompare(
+              n2.nombre + n2.jornada
+            );
             if (comp > 1) {
               return 1;
             }
@@ -141,7 +157,8 @@ export class PregradoContinuarComponent implements OnInit {
   public enviarDatosInscripcionContinuar() {
     this.loading = true;
     var tipo = this.continuarInscripcionForm.controls.tipoSelected.value;
-    var programa = this.continuarInscripcionForm.controls.programaSelected.value;
+    var programa = this.continuarInscripcionForm.controls.programaSelected
+      .value;
     var documento = this.continuarInscripcionForm.controls.documento.value;
     if (this.continuarInscripcionForm.invalid) {
       this.continuarInscripcionForm.markAllAsTouched();
@@ -151,47 +168,74 @@ export class PregradoContinuarComponent implements OnInit {
       this.getProgramaSeleccionado(programa);
       if ("3" != tipo) {
         if ("1" == tipo || "2" == tipo) {
-          this.pregradoServ.validarContinuar(documento, programa.substring(0, 2), programa.substring(2, 3)).subscribe(
-            tiposObs => {
-              this.mensaje = tiposObs;
-              if ("fail" != this.mensaje.status && "go" == this.mensaje.status) {
-                if ("1" == tipo) {
-                  if (!this.cookieService.get(environment.cookiePregrado)) {
-                    var datos = {
-                      doc: documento,
-                      fac: {
-                        codigo: programa,
-                        inscripcion: this.programaSelected.inscripcion,
-                        contacto: this.programaSelected.contacto,
-                        correo: this.programaSelected.correo,
-                        nombre: this.programaSelected.nombre,
-                        fa: this.programaSelected.fa
-                      }
-                    };
-                    this.cookieService.set(environment.cookiePregrado, JSON.stringify(datos), 15 / 1440, "/", environment.dominio);
+          this.pregradoServ
+            .validarContinuar(
+              documento,
+              programa.substring(0, 2),
+              programa.substring(2, 3)
+            )
+            .subscribe(
+              tiposObs => {
+                this.mensaje = tiposObs;
+                if (
+                  "fail" != this.mensaje.status &&
+                  "go" == this.mensaje.status
+                ) {
+                  if ("1" == tipo) {
+                    if (!this.cookieService.get(environment.cookiePregrado)) {
+                      var datos = {
+                        doc: documento,
+                        fac: {
+                          codigo: programa,
+                          inscripcion: this.programaSelected.inscripcion,
+                          contacto: this.programaSelected.contacto,
+                          correo: this.programaSelected.correo,
+                          nombre: this.programaSelected.nombre,
+                          fa: this.programaSelected.fa
+                        }
+                      };
+                      this.cookieService.set(
+                        environment.cookiePregrado,
+                        JSON.stringify(datos),
+                        15 / 1440,
+                        "/",
+                        environment.dominio
+                      );
+                    }
+                    this.document.location.href = environment.urlPregrado;
                   }
-                  this.document.location.href = environment.urlPregrado;
-                }
-                if ("2" == tipo) {
-                  if (!this.cookieService.get(environment.cookiePosgrado)) {
-                    var datosPos = {
-                      doc: documento,
-                      fac: programa.substring(0, 2),
-                      jor: programa.substring(2, 3)
-                    };
-                    this.cookieService.set(environment.cookiePosgrado, JSON.stringify(datosPos), 15 / 1440, "/", environment.dominio);
+                  if ("2" == tipo) {
+                    if (!this.cookieService.get(environment.cookiePosgrado)) {
+                      var datosPos = {
+                        doc: documento,
+                        fac: programa.substring(0, 2),
+                        jor: programa.substring(2, 3)
+                      };
+                      this.cookieService.set(
+                        environment.cookiePosgrado,
+                        JSON.stringify(datosPos),
+                        15 / 1440,
+                        "/",
+                        environment.dominio
+                      );
+                    }
+                    this.document.location.href = environment.urlPosgrado;
                   }
-                  this.document.location.href = environment.urlPosgrado;
+                } else {
+                  this.openMensajes(
+                    this.stringHelper.getResource("titMensaje"),
+                    this.mensaje.mensaje,
+                    0
+                  );
                 }
-              } else {
-                this.openMensajes(this.stringHelper.getResource("titMensaje"), this.mensaje.mensaje, 0);
-              }
-            },
-            error => {}
-          );
+              },
+              error => {}
+            );
         }
       } else {
-        this.document.location.href = environment.urlDoctorados.replace("?1", programa.substring(0, 1)).replace("?2", documento);
+        this.document.location.href = environment.urlDoctorados
+          .replace("?1", programa.substring(0, 1))
+          .replace("?2", documento);
       }
     }
     this.loading = false;
@@ -200,7 +244,12 @@ export class PregradoContinuarComponent implements OnInit {
   public openMensajes(titulo: string, mensaje: string, opcion: number): void {
     const dialogRef = this.dialog.open(VentanaDialogoMensajes, {
       width: "35%",
-      data: { titulo: titulo, mensaje: mensaje, opcion: opcion, disableClose: true }
+      data: {
+        titulo: titulo,
+        mensaje: mensaje,
+        opcion: opcion,
+        disableClose: true
+      }
     });
 
     dialogRef.afterClosed().subscribe(result => {});
@@ -220,6 +269,14 @@ export class PregradoContinuarComponent implements OnInit {
       }
     }
   }
+
+  ngDoCheck(): void {
+    this.parametrosCookie = this.cookieService.get("dOdYDja");
+    if (this.parametrosCookie) {
+      this.parametrosCookie = JSON.parse(this.parametrosCookie);
+      this.darkMode = this.parametrosCookie.dark_mode == 1;
+    }
+  }
 }
 
 @Component({
@@ -227,7 +284,10 @@ export class PregradoContinuarComponent implements OnInit {
   templateUrl: "../pregrado/ventanaMensajes.html"
 })
 export class VentanaDialogoMensajes {
-  constructor(public dialogRef: MatDialogRef<VentanaDialogoMensajes>, @Inject(MAT_DIALOG_DATA) public data: DialogData) {}
+  constructor(
+    public dialogRef: MatDialogRef<VentanaDialogoMensajes>,
+    @Inject(MAT_DIALOG_DATA) public data: DialogData
+  ) {}
 
   onNoClick(): void {
     this.dialogRef.close();

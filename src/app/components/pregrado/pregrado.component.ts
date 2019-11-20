@@ -1,11 +1,28 @@
-import { Component, OnInit, Inject, ViewChild } from "@angular/core";
+import {
+  Component,
+  OnInit,
+  Inject,
+  DoCheck,
+  HostListener
+} from "@angular/core";
 import { TipoDocumento } from "src/app/models/TipoDocumento";
 import { TipoPrograma } from "src/app/models/TipoPrograma";
 import { Programa } from "src/app/models/Programa";
 import { PregradoService } from "src/app/services/pregrado.service";
-import { FormGroup, FormBuilder, Validators, FormControl, FormGroupDirective, NgForm } from "@angular/forms";
+import {
+  FormGroup,
+  FormBuilder,
+  Validators,
+  FormControl,
+  FormGroupDirective,
+  NgForm
+} from "@angular/forms";
 import { ErrorStateMatcher } from "@angular/material";
-import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from "@angular/material/dialog";
+import {
+  MatDialog,
+  MatDialogRef,
+  MAT_DIALOG_DATA
+} from "@angular/material/dialog";
 import { Router } from "@angular/router";
 import { environment } from "src/environments/environment";
 import { Mensaje } from "src/app/models/Mensaje";
@@ -14,9 +31,16 @@ import { DOCUMENT } from "@angular/common";
 import { StringResourceHelper } from "src/app/models/string-resource-helper";
 
 export class MyErrorStateMatcher implements ErrorStateMatcher {
-  isErrorState(control: FormControl | null, form: FormGroupDirective | NgForm | null): boolean {
+  isErrorState(
+    control: FormControl | null,
+    form: FormGroupDirective | NgForm | null
+  ): boolean {
     const isSubmitted = form && form.submitted;
-    return !!(control && control.invalid && (control.dirty || control.touched || isSubmitted));
+    return !!(
+      control &&
+      control.invalid &&
+      (control.dirty || control.touched || isSubmitted)
+    );
   }
 }
 
@@ -31,7 +55,7 @@ export interface DialogData {
   templateUrl: "./pregrado.component.html",
   styleUrls: ["./pregrado.component.scss"]
 })
-export class PregradoComponent implements OnInit {
+export class PregradoComponent implements OnInit, DoCheck {
   public stringHelper: StringResourceHelper;
   public tipoDocumentoSelected: string;
   public tiposDocumento: TipoDocumento[] = [
@@ -104,7 +128,13 @@ export class PregradoComponent implements OnInit {
       };
     }
     this.darkMode = this.parametrosCookie.dark_mode == 1;
-    this.cookieService.set(environment.cookieLeadSource, this.parametrosCookie.lead_source, 15 / 1440, "/", environment.dominio);
+    this.cookieService.set(
+      environment.cookieLeadSource,
+      this.parametrosCookie.lead_source,
+      15 / 1440,
+      "/",
+      environment.dominio
+    );
 
     if (this.parametrosCookie.programa != "") {
       this.formReducido = true;
@@ -118,11 +148,18 @@ export class PregradoComponent implements OnInit {
     this.pregradoServ.getProgramasByTipo("1").subscribe(
       tiposObs => {
         this.setProgramasService(tiposObs);
-        var res = this.programs.filter(prog => prog.codigo == param.substring(0, 2) && prog.jornada == param.substring(2, 3));
+        var res = this.programs.filter(
+          prog =>
+            prog.codigo == param.substring(0, 2) &&
+            prog.jornada == param.substring(2, 3)
+        );
         this.programaSelected = res[0];
         if (this.programaSelected != undefined) {
-          this.progSelected = this.programaSelected.codigo + this.programaSelected.jornada;
-          this.registrarInscripcionForm.controls.programaSelected.setValue(this.progSelected);
+          this.progSelected =
+            this.programaSelected.codigo + this.programaSelected.jornada;
+          this.registrarInscripcionForm.controls.programaSelected.setValue(
+            this.progSelected
+          );
           this.registrarInscripcionForm.controls.tipoSelected.setValue("1");
           this.tipSelected = "1";
         }
@@ -134,12 +171,21 @@ export class PregradoComponent implements OnInit {
           this.pregradoServ.getProgramasByTipo("2").subscribe(
             tiposObs => {
               this.setProgramasService(tiposObs);
-              var res = this.programs.filter(prog => prog.codigo == param.substring(0, 2) && prog.jornada == param.substring(2, 3));
+              var res = this.programs.filter(
+                prog =>
+                  prog.codigo == param.substring(0, 2) &&
+                  prog.jornada == param.substring(2, 3)
+              );
               this.programaSelected = res[0];
               if (this.programaSelected != undefined) {
-                this.progSelected = this.programaSelected.codigo + this.programaSelected.jornada;
-                this.registrarInscripcionForm.controls.tipoSelected.setValue("2");
-                this.registrarInscripcionForm.controls.programaSelected.setValue(this.progSelected);
+                this.progSelected =
+                  this.programaSelected.codigo + this.programaSelected.jornada;
+                this.registrarInscripcionForm.controls.tipoSelected.setValue(
+                  "2"
+                );
+                this.registrarInscripcionForm.controls.programaSelected.setValue(
+                  this.progSelected
+                );
                 this.tipSelected = "2";
               }
             },
@@ -148,18 +194,26 @@ export class PregradoComponent implements OnInit {
               if (this.tipSelected == "") {
                 this.setDoctorados();
                 if (param.substring(0, 2) == "DA") {
-                  this.registrarInscripcionForm.controls.programaSelected.setValue("1N");
+                  this.registrarInscripcionForm.controls.programaSelected.setValue(
+                    "1N"
+                  );
                 } else if (param.substring(0, 2) == "DE") {
-                  this.registrarInscripcionForm.controls.programaSelected.setValue("2N");
+                  this.registrarInscripcionForm.controls.programaSelected.setValue(
+                    "2N"
+                  );
                 }
                 this.tipSelected = "3";
-                this.registrarInscripcionForm.controls.tipoSelected.setValue("3");
+                this.registrarInscripcionForm.controls.tipoSelected.setValue(
+                  "3"
+                );
               }
             }
           );
         }
         this.programs.sort((n1, n2) => {
-          var comp = (n1.nombre + n1.jornada).localeCompare(n2.nombre + n2.jornada);
+          var comp = (n1.nombre + n1.jornada).localeCompare(
+            n2.nombre + n2.jornada
+          );
           if (comp > 1) {
             return 1;
           }
@@ -193,7 +247,9 @@ export class PregradoComponent implements OnInit {
         tiposObs => {
           this.setProgramasService(tiposObs);
           this.programs.sort((n1, n2) => {
-            var comp = (n1.nombre + n1.jornada).localeCompare(n2.nombre + n2.jornada);
+            var comp = (n1.nombre + n1.jornada).localeCompare(
+              n2.nombre + n2.jornada
+            );
             if (comp > 1) {
               return 1;
             }
@@ -262,19 +318,33 @@ export class PregradoComponent implements OnInit {
     } else {
       var prog = this.registrarInscripcionForm.controls.programaSelected.value;
       this.getProgramaSeleccionado(prog);
-      var cookieLs = this.cookieService.get(environment.cookieLeadSource).toString();
-      this.pregradoServ.guardarParte1(this.registrarInscripcionForm, this.programaSelected, respCaptcha, cookieLs).subscribe(
-        tiposObs => {
-          this.mensaje = tiposObs;
-          if ("fail" != this.mensaje.status) {
-            var tipDoc = this.registrarInscripcionForm.controls.tipoDocumentoSelected.value;
-            this.openGracias(tipDoc);
-          } else {
-            this.openMensajes(this.stringHelper.getResource("titMensaje"), this.mensaje.mensaje, 0);
-          }
-        },
-        error => {}
-      );
+      var cookieLs = this.cookieService
+        .get(environment.cookieLeadSource)
+        .toString();
+      this.pregradoServ
+        .guardarParte1(
+          this.registrarInscripcionForm,
+          this.programaSelected,
+          respCaptcha,
+          cookieLs
+        )
+        .subscribe(
+          tiposObs => {
+            this.mensaje = tiposObs;
+            if ("fail" != this.mensaje.status) {
+              var tipDoc = this.registrarInscripcionForm.controls
+                .tipoDocumentoSelected.value;
+              this.openGracias(tipDoc);
+            } else {
+              this.openMensajes(
+                this.stringHelper.getResource("titMensaje"),
+                this.mensaje.mensaje,
+                0
+              );
+            }
+          },
+          error => {}
+        );
     }
     this.loading = false;
   }
@@ -315,70 +385,127 @@ export class PregradoComponent implements OnInit {
   }
 
   public openHabeasData(): void {
-    this.openMensajes(this.stringHelper.getResource("titHabeasData"), this.msgHabeasData, 0);
+    this.openMensajes(
+      this.stringHelper.getResource("titHabeasData"),
+      this.msgHabeasData,
+      0
+    );
   }
 
   public openGracias(tipoDoc: string): void {
     if ("P" == tipoDoc) {
-      this.openMensajes(this.stringHelper.getResource("titGracias"), this.stringHelper.getResource("msgGraciasExt"), 2);
+      this.openMensajes(
+        this.stringHelper.getResource("titGracias"),
+        this.stringHelper.getResource("msgGraciasExt"),
+        2
+      );
       setTimeout(function() {
         this.document.location.href = environment.urlPaginaUniver;
       }, 5000);
     } else {
-      this.openMensajes(this.stringHelper.getResource("titGracias"), this.stringHelper.getResource("msgGracias"), 1);
+      this.openMensajes(
+        this.stringHelper.getResource("titGracias"),
+        this.stringHelper.getResource("msgGracias"),
+        1
+      );
       var tipo = this.registrarInscripcionForm.controls.tipoSelected.value;
-      var programa = this.registrarInscripcionForm.controls.programaSelected.value;
+      var programa = this.registrarInscripcionForm.controls.programaSelected
+        .value;
       var documento = this.registrarInscripcionForm.controls.documento.value;
       if ("3" != tipo) {
         if ("1" == tipo || "2" == tipo) {
-          this.pregradoServ.validarContinuar(documento, programa.substring(0, 2), programa.substring(2, 3)).subscribe(
-            tiposObs => {
-              this.mensaje = tiposObs;
-              if ("fail" != this.mensaje.status && "go" == this.mensaje.status) {
-                if ("1" == tipo) {
-                  if (!this.cookieService.get(environment.cookiePregrado)) {
-                    var datos = {
-                      doc: documento,
-                      fac: {
-                        codigo: programa,
-                        inscripcion: this.programaSelected.inscripcion,
-                        contacto: this.programaSelected.contacto,
-                        correo: this.programaSelected.correo,
-                        nombre: this.programaSelected.nombre,
-                        fa: this.programaSelected.fa
-                      }
-                    };
-                    this.cookieService.set(environment.cookiePregrado, JSON.stringify(datos), 15 / 1440, "/", environment.dominio);
+          this.pregradoServ
+            .validarContinuar(
+              documento,
+              programa.substring(0, 2),
+              programa.substring(2, 3)
+            )
+            .subscribe(
+              tiposObs => {
+                this.mensaje = tiposObs;
+                if (
+                  "fail" != this.mensaje.status &&
+                  "go" == this.mensaje.status
+                ) {
+                  if ("1" == tipo) {
+                    if (!this.cookieService.get(environment.cookiePregrado)) {
+                      var datos = {
+                        doc: documento,
+                        fac: {
+                          codigo: programa,
+                          inscripcion: this.programaSelected.inscripcion,
+                          contacto: this.programaSelected.contacto,
+                          correo: this.programaSelected.correo,
+                          nombre: this.programaSelected.nombre,
+                          fa: this.programaSelected.fa
+                        }
+                      };
+                      this.cookieService.set(
+                        environment.cookiePregrado,
+                        JSON.stringify(datos),
+                        15 / 1440,
+                        "/",
+                        environment.dominio
+                      );
+                    }
+                    setTimeout(function() {
+                      this.document.location.href = environment.urlPregrado;
+                    }, 5000);
                   }
-                  setTimeout(function() {
-                    this.document.location.href = environment.urlPregrado;
-                  }, 5000);
-                }
-                if ("2" == tipo) {
-                  if (!this.cookieService.get(environment.cookiePosgrado)) {
-                    var datosPos = {
-                      doc: documento,
-                      fac: programa.substring(0, 2),
-                      jor: programa.substring(2, 3)
-                    };
-                    this.cookieService.set(environment.cookiePosgrado, JSON.stringify(datosPos), 15 / 1440, "/", environment.dominio);
+                  if ("2" == tipo) {
+                    if (!this.cookieService.get(environment.cookiePosgrado)) {
+                      var datosPos = {
+                        doc: documento,
+                        fac: programa.substring(0, 2),
+                        jor: programa.substring(2, 3)
+                      };
+                      this.cookieService.set(
+                        environment.cookiePosgrado,
+                        JSON.stringify(datosPos),
+                        15 / 1440,
+                        "/",
+                        environment.dominio
+                      );
+                    }
+                    setTimeout(function() {
+                      this.document.location.href = environment.urlPosgrado;
+                    }, 5000);
                   }
-                  setTimeout(function() {
-                    this.document.location.href = environment.urlPosgrado;
-                  }, 5000);
+                } else {
+                  this.openMensajes(
+                    this.stringHelper.getResource("titMensaje"),
+                    this.mensaje.mensaje,
+                    0
+                  );
                 }
-              } else {
-                this.openMensajes(this.stringHelper.getResource("titMensaje"), this.mensaje.mensaje, 0);
-              }
-            },
-            error => {}
-          );
+              },
+              error => {}
+            );
         }
       } else {
         setTimeout(function() {
-          this.document.location.href = environment.urlDoctorados.replace("?1", programa.substring(0, 1)).replace("?2", documento);
+          this.document.location.href = environment.urlDoctorados
+            .replace("?1", programa.substring(0, 1))
+            .replace("?2", documento);
         }, 5000);
       }
+    }
+  }
+
+  ngDoCheck(): void {
+    this.parametrosCookie = this.cookieService.get("dOdYDja");
+    if (this.parametrosCookie) {
+      this.parametrosCookie = JSON.parse(this.parametrosCookie);
+      this.darkMode = this.parametrosCookie.dark_mode == 1;
+    }
+  }
+
+  @HostListener("document:mousemove", ["$event"])
+  onMouseMove(e) {
+    this.parametrosCookie = this.cookieService.get("dOdYDja");
+    if (this.parametrosCookie) {
+      this.parametrosCookie = JSON.parse(this.parametrosCookie);
+      this.darkMode = this.parametrosCookie.dark_mode == 1;
     }
   }
 }
@@ -389,7 +516,10 @@ export class PregradoComponent implements OnInit {
   styleUrls: ["./pregrado.component.scss"]
 })
 export class VentanaDialogoMensajesPreg {
-  constructor(public dialogRef: MatDialogRef<VentanaDialogoMensajesPreg>, @Inject(MAT_DIALOG_DATA) public data: DialogData) {}
+  constructor(
+    public dialogRef: MatDialogRef<VentanaDialogoMensajesPreg>,
+    @Inject(MAT_DIALOG_DATA) public data: DialogData
+  ) {}
 
   onNoClick(): void {
     this.dialogRef.close();

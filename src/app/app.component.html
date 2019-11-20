@@ -1,4 +1,5 @@
 <body [ngClass]="darkMode ? 'body-complete-dark' : 'body-complete'">
+  <button mat-button color="primary" (click)="changeColor()">Dark side</button>
   <div class="div-fullscreen" *ngIf="!formReducido">
     <div class="div-complete">
       <router-outlet></router-outlet>
