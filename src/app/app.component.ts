@@ -14,7 +14,7 @@ export class AppComponent implements DoCheck {
   public darkMode: boolean = false;
 
   constructor(private router: Router, private cookieService: CookieService) {
-    this.parametrosCookie = this.cookieService.get("dOdYDja");
+    this.parametrosCookie = this.cookieService.get("dOdY5Dj1a");
     if (this.parametrosCookie) {
       this.parametrosCookie = JSON.parse(this.parametrosCookie);
     } else {
@@ -36,12 +36,12 @@ export class AppComponent implements DoCheck {
       programa: this.parametrosCookie.programa,
       dark_mode: this.parametrosCookie.dark_mode == 0 ? 1 : 0 //0 no, 1 si
     };
-    this.cookieService.set("dOdYDja", JSON.stringify(prms));
+    this.cookieService.set("dOdY5Dj1a", JSON.stringify(prms));
     console.log(prms);
   }
 
   ngDoCheck(): void {
-    this.parametrosCookie = this.cookieService.get("dOdYDja");
+    this.parametrosCookie = this.cookieService.get("dOdY5Dj1a");
     if (this.parametrosCookie) {
       this.parametrosCookie = JSON.parse(this.parametrosCookie);
       this.darkMode = this.parametrosCookie.dark_mode == 1;

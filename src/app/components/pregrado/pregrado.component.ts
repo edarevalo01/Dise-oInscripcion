@@ -110,14 +110,14 @@ export class PregradoComponent implements OnInit, DoCheck {
       terminos: [false, Validators.requiredTrue]
     });
     /* Formato parámetros por cookie */
-    // var prms = {
+    // var params = {
     //   lead_source: "sepRebr5",
     //   programa: "",
     //   dark_mode: 0 //0 no, 1 si
     // };
-    // this.cookieService.set("dOdYDja", JSON.stringify(prms));
+    // this.cookieService.set("dOdY5Dj1a", JSON.stringify(params));
 
-    this.parametrosCookie = this.cookieService.get("dOdYDja");
+    this.parametrosCookie = this.cookieService.get("dOdY5Dj1a");
     if (this.parametrosCookie) {
       this.parametrosCookie = JSON.parse(this.parametrosCookie);
     } else {
@@ -360,7 +360,7 @@ export class PregradoComponent implements OnInit, DoCheck {
       programa: "",
       dark_mode: this.parametrosCookie.dark_mode
     };
-    this.cookieService.set("dOdYDja", JSON.stringify(prms));
+    this.cookieService.set("dOdY5Dj1a", JSON.stringify(prms));
     window.open("/#/continuar", "_blank");
   }
 
@@ -493,7 +493,7 @@ export class PregradoComponent implements OnInit, DoCheck {
   }
 
   ngDoCheck(): void {
-    this.parametrosCookie = this.cookieService.get("dOdYDja");
+    this.parametrosCookie = this.cookieService.get("dOdY5Dj1a");
     if (this.parametrosCookie) {
       this.parametrosCookie = JSON.parse(this.parametrosCookie);
       this.darkMode = this.parametrosCookie.dark_mode == 1;
@@ -502,7 +502,7 @@ export class PregradoComponent implements OnInit, DoCheck {
 
   @HostListener("document:mousemove", ["$event"])
   onMouseMove(e) {
-    this.parametrosCookie = this.cookieService.get("dOdYDja");
+    this.parametrosCookie = this.cookieService.get("dOdY5Dj1a");
     if (this.parametrosCookie) {
       this.parametrosCookie = JSON.parse(this.parametrosCookie);
       this.darkMode = this.parametrosCookie.dark_mode == 1;

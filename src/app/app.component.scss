@@ -1,28 +1,14 @@
 body {
   margin: 0;
   font-family: Roboto, "Helvetica Neue", sans-serif;
-  height: 100%;
 }
 
 .body-complete {
-  background-color: #e7eff1;
-  background-image: url("../assets/fondogris.svg");
-  background-size: 80%;
-  background-repeat: repeat;
-  background-position: right;
+  background: #e7eff1 url("../assets/fondogris.svg") no-repeat center;
 }
 
 .body-complete-dark {
-  background-color: #121212;
-  background-image: url("../assets/fondogris.svg");
-  background-size: 80%;
-  background-repeat: repeat;
-  background-position: right;
-}
-
-.div-complete {
-  height: 663px;
-  box-shadow: 0 4px 8px 0 #00000033, 0 6px 20px 0 #00000030;
+  background: #121212 url("../assets/fondogris.svg") no-repeat center;
 }
 
 .div-reducido {
@@ -33,23 +19,62 @@ body {
 }
 
 @media screen and (max-width: 540px) {
+  /*pequeño*/
   .div-fullscreen {
-    padding-top: 5%;
+    padding-top: 3%;
+    padding-bottom: 3%;
   }
 
   .div-complete {
-    width: 98%;
+    box-shadow: 0 4px 8px 0 #00000033, 0 6px 20px 0 #00000030;
+    height: 80.2%;
+    width: 88.88%;
     margin: auto;
+  }
+
+  .btn-dark {
+    color: #ffc107;
+    font-size: 16px;
+    margin-top: 10px;
+    margin-left: 5.5%;
+    padding-left: 8px;
+  }
+
+  .btn-close {
+    color: #ffc107;
+    font-size: 16px;
+    float: right;
+    margin-right: calc(5.5% - 12px);
+    margin-top: 10px;
   }
 }
 
 @media screen and (min-width: 540px) {
   .div-fullscreen {
     padding-top: 7%;
+    padding-bottom: 3%;
   }
 
   .div-complete {
+    box-shadow: 0 4px 8px 0 #00000033, 0 6px 20px 0 #00000030;
+    height: 663px;
     width: 1150px;
     margin: auto;
+  }
+
+  .btn-dark {
+    color: #ffc107;
+    font-size: 16px;
+    margin-top: 5px;
+    margin-left: 5px;
+    padding-left: 8px;
+  }
+
+  .btn-close {
+    color: #ffc107;
+    font-size: 16px;
+    float: right;
+    margin-right: 5px;
+    margin-top: 5px;
   }
 }

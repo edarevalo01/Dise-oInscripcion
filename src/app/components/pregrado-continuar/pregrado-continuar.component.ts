@@ -66,7 +66,7 @@ export class PregradoContinuarComponent implements OnInit, DoCheck {
     private router: Router
   ) {
     this.stringHelper = new StringResourceHelper("titulos-mensajes");
-    this.parametrosCookie = this.cookieService.get("dOdYDja");
+    this.parametrosCookie = this.cookieService.get("dOdY5Dj1a");
     if (this.parametrosCookie) {
       this.parametrosCookie = JSON.parse(this.parametrosCookie);
     } else {
@@ -271,7 +271,7 @@ export class PregradoContinuarComponent implements OnInit, DoCheck {
   }
 
   ngDoCheck(): void {
-    this.parametrosCookie = this.cookieService.get("dOdYDja");
+    this.parametrosCookie = this.cookieService.get("dOdY5Dj1a");
     if (this.parametrosCookie) {
       this.parametrosCookie = JSON.parse(this.parametrosCookie);
       this.darkMode = this.parametrosCookie.dark_mode == 1;
