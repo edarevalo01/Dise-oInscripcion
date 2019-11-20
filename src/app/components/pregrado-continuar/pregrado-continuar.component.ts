@@ -11,6 +11,7 @@ import { Mensaje } from "src/app/models/Mensaje";
 import { MAT_DIALOG_DATA, MatDialogRef, MatDialog } from "@angular/material";
 import { DialogData } from "../pregrado/pregrado.component";
 import { Router } from "@angular/router";
+import { StringResourceHelper } from "src/app/models/string-resource-helper";
 
 export class MyErrorStateMatcher implements ErrorStateMatcher {
   isErrorState(control: FormControl | null, form: FormGroupDirective | NgForm | null): boolean {
@@ -22,31 +23,25 @@ export class MyErrorStateMatcher implements ErrorStateMatcher {
 @Component({
   selector: "app-pregrado-continuar",
   templateUrl: "./pregrado-continuar.component.html",
-  styleUrls: ["../pregrado/pregrado.component.css"]
+  styleUrls: ["../pregrado/pregrado.component.scss"]
 })
 export class PregradoContinuarComponent implements OnInit {
-  private tiposPrograma: TipoPrograma[] = [
+  public stringHelper: StringResourceHelper;
+  public tiposPrograma: TipoPrograma[] = [
     { codigo: "1", nombre: "PREGRADO" },
     { codigo: "2", nombre: "POSGRADO" },
     { codigo: "3", nombre: "DOCTORADO" }
   ];
-  private continuarInscripcionForm: FormGroup;
-  private pantalla: Number;
-  private programs: Programa[] = [];
-  private mensaje: Mensaje = new Mensaje();
-  private lblRequerido: string = environment.lblRequerido;
-  private lblSoloNumeros: string = environment.lblSoloNumeros;
-  private lblContinuar2: string = environment.lblContinuar2;
-  private titInscribete2: string = environment.titInscribete2;
-  private lblInscribete: string = environment.lblInscribete;
-  private lblInscribirme: string = environment.lblInscribirme;
-  private lblContinuarr: string = environment.lblContinuarr;
-  private lblDerecha: string = environment.lblDerecha;
-  private titContinuar: string = environment.titContinuar;
-  private programaSelected: Programa;
-  private loading: boolean = false;
+  public parametrosCookie: any;
+  public darkMode: boolean = false;
+  public continuarInscripcionForm: FormGroup;
+  public pantalla: Number;
+  public programs: Programa[] = [];
+  public mensaje: Mensaje = new Mensaje();
+  public programaSelected: Programa;
+  public loading: boolean = false;
 
-  // private ls: string = "";
+  public ls: string = "";
 
   constructor(
     private pregradoServ: PregradoService,
@@ -56,7 +51,19 @@ export class PregradoContinuarComponent implements OnInit {
     private dialog: MatDialog,
     private router: Router
   ) {
-    // this.ls = this.obtenerParametro("lead_source") != 0 ? String(this.obtenerParametro("lead_source")) : "sepRebr5";
+    this.stringHelper = new StringResourceHelper("titulos-mensajes");
+    this.parametrosCookie = this.cookieService.get("dOdYDja");
+    if (this.parametrosCookie) {
+      this.parametrosCookie = JSON.parse(this.parametrosCookie);
+    } else {
+      this.parametrosCookie = {
+        lead_source: "sepRebr5",
+        programa: "",
+        dark_mode: 0 //0 no, 1 si
+      };
+    }
+    this.darkMode = this.parametrosCookie.dark_mode == 1;
+    this.ls = this.parametrosCookie.lead_source;
   }
 
   ngOnInit() {
@@ -71,7 +78,7 @@ export class PregradoContinuarComponent implements OnInit {
   public onResize(event) {
     this.pantalla = event.target.innerWidth <= 540 ? 1 : 2;
   }
-  //programas
+
   public getProgramas() {
     var tipo = this.continuarInscripcionForm.controls.tipoSelected.value;
     if ("3" != tipo) {
@@ -106,7 +113,6 @@ export class PregradoContinuarComponent implements OnInit {
         error => {}
       );
     } else {
-      //doctorados
       this.programs = [
         {
           codigo: "1",
@@ -131,7 +137,7 @@ export class PregradoContinuarComponent implements OnInit {
       ];
     }
   }
-  //continuar
+
   public enviarDatosInscripcionContinuar() {
     this.loading = true;
     var tipo = this.continuarInscripcionForm.controls.tipoSelected.value;
@@ -144,14 +150,14 @@ export class PregradoContinuarComponent implements OnInit {
     } else {
       this.getProgramaSeleccionado(programa);
       if ("3" != tipo) {
-        if ("1" ==  tipo || "2"== tipo) {
+        if ("1" == tipo || "2" == tipo) {
           this.pregradoServ.validarContinuar(documento, programa.substring(0, 2), programa.substring(2, 3)).subscribe(
             tiposObs => {
               this.mensaje = tiposObs;
               if ("fail" != this.mensaje.status && "go" == this.mensaje.status) {
-                if ("1"==tipo) {
-                   if(!this.cookieService.get(environment.cookiePregrado)){
-                     var datos = {
+                if ("1" == tipo) {
+                  if (!this.cookieService.get(environment.cookiePregrado)) {
+                    var datos = {
                       doc: documento,
                       fac: {
                         codigo: programa,
@@ -161,62 +167,50 @@ export class PregradoContinuarComponent implements OnInit {
                         nombre: this.programaSelected.nombre,
                         fa: this.programaSelected.fa
                       }
-                     };
-                     this.cookieService.set(environment.cookiePregrado, JSON.stringify(datos), 15 / 1440, "/", environment.dominio);
-                   }
-                   this.document.location.href = environment.urlPregrado;
+                    };
+                    this.cookieService.set(environment.cookiePregrado, JSON.stringify(datos), 15 / 1440, "/", environment.dominio);
+                  }
+                  this.document.location.href = environment.urlPregrado;
                 }
-                if("2"==tipo){
-                    if(!this.cookieService.get(environment.cookiePosgrado)){
-                      var datosPos = {
-                        doc:documento,
-                        fac:programa.substring(0, 2),
-                        jor:programa.substring(2, 3)
-                      };
-                      this.cookieService.set(environment.cookiePosgrado, JSON.stringify(datosPos), 15 / 1440, "/", environment.dominio);
-                    }
-                    this.document.location.href = environment.urlPosgrado;
+                if ("2" == tipo) {
+                  if (!this.cookieService.get(environment.cookiePosgrado)) {
+                    var datosPos = {
+                      doc: documento,
+                      fac: programa.substring(0, 2),
+                      jor: programa.substring(2, 3)
+                    };
+                    this.cookieService.set(environment.cookiePosgrado, JSON.stringify(datosPos), 15 / 1440, "/", environment.dominio);
+                  }
+                  this.document.location.href = environment.urlPosgrado;
                 }
               } else {
-                this.openMensajes(environment.titMensaje, this.mensaje.mensaje, 0);
+                this.openMensajes(this.stringHelper.getResource("titMensaje"), this.mensaje.mensaje, 0);
               }
             },
             error => {}
           );
         }
       } else {
-          this.document.location.href = environment.urlDoctorados.replace("?1", programa.substring(0, 1)).replace("?2", documento);
+        this.document.location.href = environment.urlDoctorados.replace("?1", programa.substring(0, 1)).replace("?2", documento);
       }
     }
     this.loading = false;
   }
-  //parametros
-  public obtenerParametro(name: string) {
-    const results = new RegExp("[?&]" + name + "=([^&#]*)").exec(window.location.href);
-    if (!results) {
-      return 0;
-    }
-    return results[1] || 0;
-  }
-  //ventana mensajes
+
   public openMensajes(titulo: string, mensaje: string, opcion: number): void {
     const dialogRef = this.dialog.open(VentanaDialogoMensajes, {
-      width: '35%',
-      data: {titulo:titulo,
-             mensaje: mensaje,
-             opcion:opcion,
-             disableClose: true}
+      width: "35%",
+      data: { titulo: titulo, mensaje: mensaje, opcion: opcion, disableClose: true }
     });
 
-    dialogRef.afterClosed().subscribe(result => {
-    });
+    dialogRef.afterClosed().subscribe(result => {});
   }
-  //inscribirse
+
   public inscribir() {
-    this.router.navigate(["/inscripcion"], { queryParams: { lead_source: this.obtenerParametro("lead_source") } });
-    // this.router.navigateByUrl("/inscripcion?lead_source=" + this.obtenerParametro("lead_source"));
+    //this.router.navigate(["/inscripcion"], { queryParams: { lead_source: this.parametrosCookie.lead_source } });
+    this.router.navigate(["/inscripcion"]);
   }
-  //programa seleccionado
+
   public getProgramaSeleccionado(progSelected: string): void {
     this.programaSelected = new Programa();
     for (let prog of this.programs) {
@@ -227,7 +221,7 @@ export class PregradoContinuarComponent implements OnInit {
     }
   }
 }
-//mensajes
+
 @Component({
   selector: "ventanaDialogo",
   templateUrl: "../pregrado/ventanaMensajes.html"

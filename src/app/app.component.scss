@@ -1,3 +1,25 @@
+body {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+  height: 100%;
+}
+
+.body-complete {
+  background-color: #e7eff1;
+  background-image: url("../assets/fondogris.svg");
+  background-size: 80%;
+  background-repeat: repeat;
+  background-position: right;
+}
+
+.body-complete-dark {
+  background-color: #121212;
+  background-image: url("../assets/fondogris.svg");
+  background-size: 80%;
+  background-repeat: repeat;
+  background-position: right;
+}
+
 .div-complete {
   height: 663px;
   box-shadow: 0 4px 8px 0 #00000033, 0 6px 20px 0 #00000030;
@@ -7,21 +29,27 @@
   box-shadow: 0 4px 8px 0 #00000033, 0 6px 20px 0 #00000030;
   width: 100%;
   margin: auto;
-  height: 1100px;
+  height: 860px;
 }
 
 @media screen and (max-width: 540px) {
+  .div-fullscreen {
+    padding-top: 5%;
+  }
+
   .div-complete {
     width: 98%;
     margin: auto;
-    margin-top: 5%;
   }
 }
 
 @media screen and (min-width: 540px) {
+  .div-fullscreen {
+    padding-top: 7%;
+  }
+
   .div-complete {
-    width: 1150px; /*Cambiar esto por porcentaje*/
+    width: 1150px;
     margin: auto;
-    margin-top: 7%;
   }
 }
