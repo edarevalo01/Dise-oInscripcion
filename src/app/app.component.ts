@@ -37,7 +37,6 @@ export class AppComponent implements DoCheck {
       dark_mode: this.parametrosCookie.dark_mode == 0 ? 1 : 0 //0 no, 1 si
     };
     this.cookieService.set("dOdY5Dj1a", JSON.stringify(prms));
-    console.log(prms);
   }
 
   ngDoCheck(): void {

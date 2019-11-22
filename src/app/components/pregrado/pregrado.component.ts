@@ -85,6 +85,7 @@ export class PregradoComponent implements OnInit, DoCheck {
 
   public formReducido: boolean = false;
   public ls: string = "";
+  public responsive: boolean = false;
 
   constructor(
     private pregradoServ: PregradoService,
@@ -231,12 +232,18 @@ export class PregradoComponent implements OnInit, DoCheck {
     if (!this.formReducido) {
       this.pantalla = window.innerWidth <= 540 ? 1 : 2;
     }
+    if (this.pantalla == 1) {
+      this.responsive = true;
+    } else this.responsive = false;
   }
 
   public onResize(event) {
     if (!this.formReducido) {
       this.pantalla = event.target.innerWidth <= 540 ? 1 : 2;
     }
+    if (this.pantalla == 1) {
+      this.responsive = true;
+    } else this.responsive = false;
   }
 
   public getProgramas() {

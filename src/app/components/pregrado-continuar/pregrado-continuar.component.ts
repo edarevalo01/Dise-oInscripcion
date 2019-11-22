@@ -56,6 +56,7 @@ export class PregradoContinuarComponent implements OnInit, DoCheck {
   public loading: boolean = false;
 
   public ls: string = "";
+  public responsive: boolean = false;
 
   constructor(
     private pregradoServ: PregradoService,
@@ -82,6 +83,9 @@ export class PregradoContinuarComponent implements OnInit, DoCheck {
 
   ngOnInit() {
     this.pantalla = window.innerWidth <= 540 ? 1 : 2;
+    if (this.pantalla == 1) {
+      this.responsive = true;
+    } else this.responsive = false;
     this.continuarInscripcionForm = this.formBuilder.group({
       documento: ["", [Validators.required, Validators.pattern("^[0-9]*$")]],
       tipoSelected: ["", Validators.required],
@@ -91,6 +95,9 @@ export class PregradoContinuarComponent implements OnInit, DoCheck {
 
   public onResize(event) {
     this.pantalla = event.target.innerWidth <= 540 ? 1 : 2;
+    if (this.pantalla == 1) {
+      this.responsive = true;
+    } else this.responsive = false;
   }
 
   public getProgramas() {
