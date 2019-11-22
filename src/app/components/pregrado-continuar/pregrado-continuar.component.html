@@ -9,7 +9,8 @@
       [ngClass]="{
         'scrollable-content': darkMode || !darkMode,
         'parte-izquierda-dark': darkMode,
-        'parte-izquierda': !darkMode
+        'parte-izquierda': !darkMode,
+        'padding-parte-izquierda': true
       }"
     >
       <div style="width: 100%; margin-bottom: 5%;">
@@ -157,7 +158,7 @@
     </mat-card>
   </mat-grid-tile>
   <div class="position-button">
-    <button mat-fab class="style-button"(click)="inscribir()" >
+    <button mat-fab class="style-button" (click)="inscribir()">
       <img src="assets/flechas.svg" />
     </button>
   </div>

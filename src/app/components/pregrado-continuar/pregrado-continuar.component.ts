@@ -55,6 +55,7 @@ export class PregradoContinuarComponent implements OnInit, DoCheck {
   public programaSelected: Programa;
   public loading: boolean = false;
 
+  public formReducido: boolean = false;
   public ls: string = "";
   public responsive: boolean = false;
 

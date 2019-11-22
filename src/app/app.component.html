@@ -1,9 +1,14 @@
 <body [ngClass]="darkMode ? 'body-complete-dark' : 'body-complete'">
-  <button mat-button (click)="changeColor()" class="btn-dark">
+  <button
+    mat-button
+    (click)="changeColor()"
+    class="btn-dark"
+    *ngIf="!formReducido"
+  >
     <mat-icon style="margin-right: 10px;">brightness_3</mat-icon>
     Modo Nocturno
   </button>
-  <button mat-icon-button class="btn-close">
+  <button mat-icon-button class="btn-close" *ngIf="!formReducido">
     <mat-icon>clear</mat-icon>
   </button>
   <div class="div-fullscreen" *ngIf="!formReducido">
