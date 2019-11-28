@@ -504,6 +504,12 @@ export class PregradoComponent implements OnInit, DoCheck {
     if (this.parametrosCookie) {
       this.parametrosCookie = JSON.parse(this.parametrosCookie);
       this.darkMode = this.parametrosCookie.dark_mode == 1;
+      if(this.parametrosCookie.programa == ''){
+        this.formReducido = false;
+      }
+      else{
+        this.formReducido = true;
+      }
     }
   }
 

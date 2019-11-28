@@ -17,13 +17,13 @@
         <img
           src="assets/logo_salle.svg"
           alt="Logo Salle"
-          width="35%"
+          class="img-logo-salle"
           *ngIf="!darkMode"
         />
         <img
           src="assets/logo_salle_blanco.svg"
           alt="Logo Salle"
-          width="35%"
+          class="img-logo-salle"
           *ngIf="darkMode"
         />
       </div>
@@ -54,8 +54,9 @@
                 [ngClass]="
                   darkMode ? 'mat-label-style-dark' : 'mat-label-style-ligth'
                 "
-                >Número de Documento</mat-label
               >
+                Número de Documento
+              </mat-label>
               <input
                 [ngClass]="darkMode ? 'input-style-dark' : ''"
                 matInput
@@ -93,8 +94,9 @@
                 [ngClass]="
                   darkMode ? 'mat-label-style-dark' : 'mat-label-style-ligth'
                 "
-                >Oferta académica</mat-label
               >
+                Oferta académica
+              </mat-label>
               <mat-select
                 [ngClass]="darkMode ? 'input-style-dark' : ''"
                 matInput
@@ -122,8 +124,9 @@
                 [ngClass]="
                   darkMode ? 'mat-label-style-dark' : 'mat-label-style-ligth'
                 "
-                >Seleccione programa académico</mat-label
               >
+                Seleccione programa académico
+              </mat-label>
               <mat-select
                 [ngClass]="darkMode ? 'input-style-dark' : ''"
                 matInput

@@ -76,15 +76,23 @@
 
 .mat-grid-styles {
   min-height: 100% !important;
-  height: 100% !important;
+  height: 100vh !important;
   max-height: 100% !important;
+}
+
+::ng-deep .mat-grid-tile .mat-figur {
+  align-items: normal;
 }
 
 @media screen and (max-width: 540px) {
   /* Pequeño */
+  .img-logo-salle {
+    width: 46.5%;
+  }
+
   .position-button {
     position: absolute;
-    top: calc(100% - 35px) !important;
+    top: 100% !important;
     right: calc(50% - 35px) !important;
     width: 70px;
     height: 70px;
@@ -117,16 +125,31 @@
   .form-content-izquierda {
     height: 100%;
     padding: 0%;
+    overflow: auto;
   }
 
   .form-content-izquierda-reducido {
     height: 100%;
     padding: 0%;
   }
+
+  .terminos-cond {
+    font-size: 10px !important;
+    color: #00000099;
+    letter-spacing: 0.4px;
+  }
+
+  .vinculo {
+    font-size: 10px;
+  }
 }
 
 @media screen and (min-width: 540px) {
   /* Grande */
+  .img-logo-salle {
+    width: 35%;
+  }
+
   .position-button {
     position: absolute;
     top: calc(50% - 35px) !important;
@@ -162,11 +185,22 @@
   .form-content-izquierda {
     height: 100%;
     padding: 0% 9.21% 12% 9.21%;
+    overflow: auto;
   }
 
   .form-content-izquierda-reducido {
     height: 100%;
     padding: 0% 0% 12% 0%;
+  }
+
+  .terminos-cond {
+    font-size: 12px !important;
+    color: #00000099;
+    letter-spacing: 0.4px;
+  }
+
+  .vinculo {
+    font-size: 12px;
   }
 }
 
@@ -271,12 +305,6 @@
 
 .captcha {
   margin-top: 10px;
-}
-
-.terminos-cond {
-  font-size: 12px !important;
-  color: #00000099;
-  letter-spacing: 0.4px;
 }
 
 .terminos-cond-dark {
