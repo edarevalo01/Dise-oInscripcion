@@ -1,4 +1,4 @@
-<div style="height: 100%;">
+<div style="height: 100%;" class="fontf">
   <div class="titulo-izquierda-reducido" *ngIf='formReducido'>
     Formulario de incripción 
     ( <b>{{ ls }}</b> )
@@ -138,9 +138,9 @@
               </div>
             </form>
             <button [style.width]="formReducido? '100%' : ''" mat-raised-button (click)="captchaRef.execute()" [ngClass]="darkMode? 'btn-inscribir-dark' : 'btn-inscribir'" [disabled]="registrarInscripcionForm.invalid">{{ stringHelper.getResource("lblInscribirme") }}</button>
-            <div style="width: 100%; text-align: center; color: #ffc107; margin-top: 5px; float: right; cursor: pointer;" *ngIf='formReducido'>
+            <!-- <div style="width: 100%; text-align: center; color: #ffc107; margin-top: 5px; float: right; cursor: pointer;" *ngIf='formReducido'>
               <span (click)='cambiarPantalla()'>CONTINUAR PROCESO DE ADMISIÓN</span>
-            </div>
+            </div> -->
           </div>
         </mat-card-content>
       </mat-card>
