@@ -1,4 +1,4 @@
-import { Component, OnInit, Inject, DoCheck, HostListener } from "@angular/core";
+import { Component, OnInit, Inject } from "@angular/core";
 import { TipoDocumento } from "src/app/models/TipoDocumento";
 import { TipoPrograma } from "src/app/models/TipoPrograma";
 import { Programa } from "src/app/models/Programa";
@@ -6,7 +6,7 @@ import { PregradoService } from "src/app/services/pregrado.service";
 import { FormGroup, FormBuilder, Validators, FormControl, FormGroupDirective, NgForm } from "@angular/forms";
 import { ErrorStateMatcher } from "@angular/material";
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from "@angular/material/dialog";
-import { Router } from "@angular/router";
+import { Router, ActivatedRoute } from "@angular/router";
 import { environment } from "src/environments/environment";
 import { Mensaje } from "src/app/models/Mensaje";
 import { CookieService } from "ngx-cookie-service";
@@ -31,7 +31,7 @@ export interface DialogData {
 	templateUrl: "./pregrado.component.html",
 	styleUrls: ["./pregrado.component.scss"]
 })
-export class PregradoComponent implements OnInit, DoCheck {
+export class PregradoComponent implements OnInit {
 	public stringHelper: StringResourceHelper;
 	public tipoDocumentoSelected: string;
 	public tiposDocumento: TipoDocumento[] = [
@@ -44,7 +44,7 @@ export class PregradoComponent implements OnInit, DoCheck {
 		{ codigo: "2", nombre: "POSGRADO" },
 		{ codigo: "3", nombre: "DOCTORADO" }
 	];
-	public parametrosCookie: any;
+	public parametrosUrl: any = null;
 	public darkMode: boolean = false;
 	public pantalla: number;
 	public registrarInscripcionForm: FormGroup;
@@ -68,6 +68,7 @@ export class PregradoComponent implements OnInit, DoCheck {
 		private formBuilder: FormBuilder,
 		private dialog: MatDialog,
 		private router: Router,
+		private route: ActivatedRoute,
 		private cookieService: CookieService,
 		@Inject(DOCUMENT) private document: Document
 	) {
@@ -87,39 +88,43 @@ export class PregradoComponent implements OnInit, DoCheck {
 			terminos: [false, Validators.requiredTrue]
 		});
 		/* Formato parámetros por cookie */
-		 var params = {
-		lead_source: "facebook",
-		programa: "85N",
-		// dark_mode: 0 //0 no, 1 si
-		 };
-		 this.cookieService.set("dOdY5Dj1a", JSON.stringify(params));
+		// var params = {
+		// 	lead_source: "facebook",
+		// 	programa: "85N"
+		// 	// dark_mode: 0 //0 no, 1 si
+		// };
+		// this.cookieService.set("dOdY5Dj1a", JSON.stringify(params));
 
-		this.parametrosCookie = this.cookieService.get("dOdY5Dj1a");
-		if (this.parametrosCookie) {
-			this.parametrosCookie = JSON.parse(this.parametrosCookie);
+		this.parametrosUrl = this.route.snapshot.queryParams;
+		if (this.parametrosUrl.lead_source) {
+			this.cookieService.set(environment.cookieLeadSource, this.parametrosUrl.lead_source, 15 / 1440, "/", environment.dominio);
+			this.ls = this.parametrosUrl.lead_source;
 		} else {
-			this.parametrosCookie = {
-				lead_source: "sepRebr5",
-				programa: "",
-				dark_mode: 0 //0 no, 1 si
-			};
+			this.cookieService.set(environment.cookieLeadSource, "sepRebr5", 15 / 1440, "/", environment.dominio);
+			this.ls = "sepRebr5";
 		}
-		this.darkMode = this.parametrosCookie.dark_mode == 1;
-		this.cookieService.set(environment.cookieLeadSource, this.parametrosCookie.lead_source, 15 / 1440, "/", environment.dominio);
 
-		if (this.parametrosCookie.programa != "") {
+		if (this.parametrosUrl.programa) {
 			this.formReducido = true;
 			this.pantalla = 1;
-			this.getProgramaParam(this.parametrosCookie.programa);
+			this.getProgramaParam(this.parametrosUrl.programa);
+		} else {
+			this.formReducido = false;
+			this.pantalla = 2;
 		}
-		this.ls = this.parametrosCookie.lead_source;
+
+		if (this.parametrosUrl.dark_mode) {
+			this.darkMode = this.parametrosUrl.dark_mode == 1;
+		} else {
+			this.darkMode = false;
+		}
 	}
 
 	getProgramaParam(param): any {
 		this.pregradoServ.getProgramasByTipo("1").subscribe(
-			tiposObs => {
+			(tiposObs) => {
 				this.setProgramasService(tiposObs);
-				var res = this.programs.filter(prog => prog.codigo == param.substring(0, 2) && prog.jornada == param.substring(2, 3));
+				var res = this.programs.filter((prog) => prog.codigo == param.substring(0, 2) && prog.jornada == param.substring(2, 3));
 				this.programaSelected = res[0];
 				if (this.programaSelected != undefined) {
 					this.progSelected = this.programaSelected.codigo + this.programaSelected.jornada;
@@ -128,14 +133,16 @@ export class PregradoComponent implements OnInit, DoCheck {
 					this.tipSelected = "1";
 				}
 			},
-			error => {},
+			(error) => {},
 			() => {
 				if (this.tipSelected == "") {
 					this.programs = [];
 					this.pregradoServ.getProgramasByTipo("2").subscribe(
-						tiposObs => {
+						(tiposObs) => {
 							this.setProgramasService(tiposObs);
-							var res = this.programs.filter(prog => prog.codigo == param.substring(0, 2) && prog.jornada == param.substring(2, 3));
+							var res = this.programs.filter(
+								(prog) => prog.codigo == param.substring(0, 2) && prog.jornada == param.substring(2, 3)
+							);
 							this.programaSelected = res[0];
 							if (this.programaSelected != undefined) {
 								this.progSelected = this.programaSelected.codigo + this.programaSelected.jornada;
@@ -144,7 +151,7 @@ export class PregradoComponent implements OnInit, DoCheck {
 								this.tipSelected = "2";
 							}
 						},
-						error => {},
+						(error) => {},
 						() => {
 							if (this.tipSelected == "") {
 								this.setDoctorados();
@@ -197,7 +204,7 @@ export class PregradoComponent implements OnInit, DoCheck {
 		if ("3" != tipo) {
 			this.programs = [];
 			this.pregradoServ.getProgramasByTipo(tipo).subscribe(
-				tiposObs => {
+				(tiposObs) => {
 					this.setProgramasService(tiposObs);
 					this.programs.sort((n1, n2) => {
 						var comp = (n1.nombre + n1.jornada).localeCompare(n2.nombre + n2.jornada);
@@ -210,7 +217,7 @@ export class PregradoComponent implements OnInit, DoCheck {
 						return 0;
 					});
 				},
-				error => {}
+				(error) => {}
 			);
 		} else {
 			this.setDoctorados();
@@ -243,8 +250,8 @@ export class PregradoComponent implements OnInit, DoCheck {
 	}
 
 	setProgramasService(tiposObs) {
-		tiposObs.forEach(program => {
-			program.jornadas.forEach(jornad => {
+		tiposObs.forEach((program) => {
+			program.jornadas.forEach((jornad) => {
 				this.programs.push({
 					nombre: program.nombre,
 					jornada: jornad.jornada,
@@ -271,7 +278,7 @@ export class PregradoComponent implements OnInit, DoCheck {
 			this.getProgramaSeleccionado(prog);
 			var cookieLs = this.cookieService.get(environment.cookieLeadSource).toString();
 			this.pregradoServ.guardarParte1(this.registrarInscripcionForm, this.programaSelected, respCaptcha, cookieLs).subscribe(
-				tiposObs => {
+				(tiposObs) => {
 					this.mensaje = tiposObs;
 					if ("fail" != this.mensaje.status) {
 						var tipDoc = this.registrarInscripcionForm.controls.tipoDocumentoSelected.value;
@@ -280,27 +287,17 @@ export class PregradoComponent implements OnInit, DoCheck {
 						this.openMensajes(this.stringHelper.getResource("titMensaje"), this.mensaje.mensaje, 0);
 					}
 				},
-				error => {}
+				(error) => {}
 			);
 		}
 		this.loading = false;
 	}
 
 	public continuarProceso() {
-		//this.router.navigate(["/continuar"], { queryParams: { lead_source: this.parametrosCookie.lead_source } });
-		this.router.navigate(["/continuar"]);
-	}
-
-	public cambiarPantalla() {
-		var prms = {
-			lead_source: this.parametrosCookie.lead_source,
-			programa: "",
-			dark_mode: this.parametrosCookie.dark_mode
-		};
-		this.cookieService.set("dOdY5Dj1a", JSON.stringify(prms));
-		// window.open("/#/continuar", "_blank");
-		this.router.navigateByUrl("/continuar");
-		//location.reload();
+		this.router.navigate(["/continuar"], {
+			queryParams: { lead_source: this.parametrosUrl.lead_source, dark_mode: this.parametrosUrl.dark_mode }
+		});
+		//this.router.navigate(["/continuar"]);
 	}
 
 	public getProgramaSeleccionado(progSelected: string): void {
@@ -321,7 +318,7 @@ export class PregradoComponent implements OnInit, DoCheck {
 			disableClose: 1 == opcion || 2 == opcion ? true : false
 		});
 
-		this.dialogRef.afterClosed().subscribe(result => {});
+		this.dialogRef.afterClosed().subscribe((result) => {});
 	}
 
 	public openHabeasData(): void {
@@ -342,7 +339,7 @@ export class PregradoComponent implements OnInit, DoCheck {
 			if ("3" != tipo) {
 				if ("1" == tipo || "2" == tipo) {
 					this.pregradoServ.validarContinuar(documento, programa.substring(0, 2), programa.substring(2, 3)).subscribe(
-						tiposObs => {
+						(tiposObs) => {
 							this.mensaje = tiposObs;
 							if ("fail" != this.mensaje.status && "go" == this.mensaje.status) {
 								if ("1" == tipo) {
@@ -358,7 +355,13 @@ export class PregradoComponent implements OnInit, DoCheck {
 												fa: this.programaSelected.fa
 											}
 										};
-										this.cookieService.set(environment.cookiePregrado, JSON.stringify(datos), 15 / 1440, "/", environment.dominio);
+										this.cookieService.set(
+											environment.cookiePregrado,
+											JSON.stringify(datos),
+											15 / 1440,
+											"/",
+											environment.dominio
+										);
 									}
 									setTimeout(function() {
 										this.document.location.href = environment.urlPregrado;
@@ -371,7 +374,13 @@ export class PregradoComponent implements OnInit, DoCheck {
 											fac: programa.substring(0, 2),
 											jor: programa.substring(2, 3)
 										};
-										this.cookieService.set(environment.cookiePosgrado, JSON.stringify(datosPos), 15 / 1440, "/", environment.dominio);
+										this.cookieService.set(
+											environment.cookiePosgrado,
+											JSON.stringify(datosPos),
+											15 / 1440,
+											"/",
+											environment.dominio
+										);
 									}
 									setTimeout(function() {
 										this.document.location.href = environment.urlPosgrado;
@@ -381,36 +390,16 @@ export class PregradoComponent implements OnInit, DoCheck {
 								this.openMensajes(this.stringHelper.getResource("titMensaje"), this.mensaje.mensaje, 0);
 							}
 						},
-						error => {}
+						(error) => {}
 					);
 				}
 			} else {
 				setTimeout(function() {
-					this.document.location.href = environment.urlDoctorados.replace("?1", programa.substring(0, 1)).replace("?2", documento);
+					this.document.location.href = environment.urlDoctorados
+						.replace("?1", programa.substring(0, 1))
+						.replace("?2", documento);
 				}, 5000);
 			}
-		}
-	}
-
-	ngDoCheck(): void {
-		this.parametrosCookie = this.cookieService.get("dOdY5Dj1a");
-		if (this.parametrosCookie) {
-			this.parametrosCookie = JSON.parse(this.parametrosCookie);
-			this.darkMode = this.parametrosCookie.dark_mode == 1;
-			if (this.parametrosCookie.programa == "") {
-				this.formReducido = false;
-			} else {
-				this.formReducido = true;
-			}
-		}
-	}
-
-	@HostListener("document:mousemove", ["$event"])
-	onMouseMove(e) {
-		this.parametrosCookie = this.cookieService.get("dOdY5Dj1a");
-		if (this.parametrosCookie) {
-			this.parametrosCookie = JSON.parse(this.parametrosCookie);
-			this.darkMode = this.parametrosCookie.dark_mode == 1;
 		}
 	}
 }

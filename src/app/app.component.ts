@@ -1,55 +1,31 @@
-import { Component, DoCheck } from "@angular/core";
-import { UrlTree, Router } from "@angular/router";
-import { CookieService } from "ngx-cookie-service";
+import { Component } from "@angular/core";
+import { ActivatedRoute } from "@angular/router";
 
 @Component({
-  selector: "app-root",
-  templateUrl: "./app.component.html",
-  styleUrls: ["./app.component.scss"]
+	selector: "app-root",
+	templateUrl: "./app.component.html",
+	styleUrls: ["./app.component.scss"]
 })
-export class AppComponent implements DoCheck {
-  title = "InscripcionLasalle";
-  formReducido: boolean = false;
-  public parametrosCookie: any;
-  public darkMode: boolean = false;
+export class AppComponent {
+	title = "InscripcionLasalle";
+	formReducido: boolean = false;
+	public parametrosUrl: any;
+	public darkMode: boolean = false;
 
-  constructor(private router: Router, private cookieService: CookieService) {
-    this.parametrosCookie = this.cookieService.get("dOdY5Dj1a");
-    if (this.parametrosCookie) {
-      this.parametrosCookie = JSON.parse(this.parametrosCookie);
-    } else {
-      this.parametrosCookie = {
-        lead_source: "sepRebr5",
-        programa: "",
-        dark_mode: 0 //0 no, 1 si
-      };
-    }
-    this.darkMode = this.parametrosCookie.dark_mode == 1;
-    if (this.parametrosCookie.programa != "") {
-      this.formReducido = true;
-    }
-  }
+	constructor(private route: ActivatedRoute) {
+		this.parametrosUrl = this.route.snapshot.queryParams;
+		this.route.queryParams.forEach((parametro) => {
+			if (parametro.programa) {
+				this.formReducido = true;
+			} else {
+				this.formReducido = false;
+			}
 
-  changeColor() {
-    var prms = {
-      lead_source: this.parametrosCookie.lead_source,
-      programa: this.parametrosCookie.programa,
-      dark_mode: this.parametrosCookie.dark_mode == 0 ? 1 : 0 //0 no, 1 si
-    };
-    this.cookieService.set("dOdY5Dj1a", JSON.stringify(prms));
-  }
-
-  ngDoCheck(): void {
-    this.parametrosCookie = this.cookieService.get("dOdY5Dj1a");
-    if (this.parametrosCookie) {
-      this.parametrosCookie = JSON.parse(this.parametrosCookie);
-      this.darkMode = this.parametrosCookie.dark_mode == 1;
-      if(this.parametrosCookie.programa == ''){
-        this.formReducido = false;
-      }
-      else{
-        this.formReducido = true;
-      }
-    }
-  }
+			if (parametro.dark_mode) {
+				this.darkMode = parametro.dark_mode == 1;
+			} else {
+				this.darkMode = false;
+			}
+		});
+	}
 }
