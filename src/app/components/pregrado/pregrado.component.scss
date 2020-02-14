@@ -98,8 +98,8 @@
 	.position-button {
 		position: absolute;
 		top: 100% !important;
-		right: calc(50% - 35px) !important;
-		width: 70px;
+		// right: calc(50% - 35px) !important;
+		width: 100%;
 		height: 70px;
 		z-index: 1000;
 	}
@@ -215,6 +215,14 @@
 	background-color: white;
 	border: 5px solid #ff9100;
 	cursor: default;
+}
+
+.style-button-two {
+	width: 100%;
+	background-color: #0066eb;
+	color: white;
+	height: 60px;
+	border-radius: 0px;
 }
 
 .titulo-izquierda {
@@ -364,7 +372,10 @@
 	color: #ffffff99 !important;
 }
 
-::ng-deep .mat-form-field-appearance-legacy.mat-form-field-can-float.mat-form-field-should-float .mat-form-field-label:not(.mat-empty):not(.mat-form-field-empty) .mat-label-style-dark {
+::ng-deep
+	.mat-form-field-appearance-legacy.mat-form-field-can-float.mat-form-field-should-float
+	.mat-form-field-label:not(.mat-empty):not(.mat-form-field-empty)
+	.mat-label-style-dark {
 	color: #ffffff99 !important;
 }
 

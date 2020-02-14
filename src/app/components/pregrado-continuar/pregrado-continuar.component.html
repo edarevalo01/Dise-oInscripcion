@@ -53,22 +53,30 @@
 								Seleccione programa académico
 							</mat-label>
 							<mat-select [ngClass]="darkMode ? 'input-style-dark' : ''" matInput formControlName="programaSelected">
-								<mat-option *ngFor="let prog of programs" [value]="prog.codigo + prog.jornada"> {{ prog.nombre }} ({{ prog.jornada == "D" ? "Diurno" : "Nocturno" }}) </mat-option>
+								<mat-option *ngFor="let prog of programs" [value]="prog.codigo + prog.jornada">
+									{{ prog.nombre }} ({{ prog.jornada == "D" ? "Diurno" : "Nocturno" }})
+								</mat-option>
 							</mat-select>
 							<mat-icon matSuffix [ngClass]="darkMode ? 'style-icons-dark' : 'style-icons'">school</mat-icon>
 						</mat-form-field>
 					</form>
-					<button mat-raised-button (click)="enviarDatosInscripcionContinuar()" [ngClass]="darkMode ? 'btn-inscribir-dark' : 'btn-inscribir'" [disabled]="continuarInscripcionForm.invalid">
+					<button
+						mat-raised-button
+						(click)="enviarDatosInscripcionContinuar()"
+						[ngClass]="darkMode ? 'btn-inscribir-dark' : 'btn-inscribir'"
+						[disabled]="continuarInscripcionForm.invalid"
+					>
 						{{ stringHelper.getResource("lblContinuarr") }}
 					</button>
 				</div>
 			</mat-card-content>
 		</mat-card>
 	</mat-grid-tile>
-	<div class="position-button">
-		<button mat-fab class="style-button" (click)="inscribir()">
+	<div class="position-button" (click)="inscribir()">
+		<button mat-fab class="style-button" *ngIf="!responsive">
 			<img src="assets/flechas.svg" />
 		</button>
+		<button mat-button mat-stroked-button class="style-button-two" *ngIf="responsive">Inscribirme</button>
 	</div>
 	<div class="position-button" *ngIf="loading">
 		<mat-progress-spinner [mode]="'indeterminate'"></mat-progress-spinner>

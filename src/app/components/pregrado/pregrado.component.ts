@@ -107,7 +107,12 @@ export class PregradoComponent implements OnInit {
 		if (this.parametrosUrl.programa) {
 			this.formReducido = true;
 			this.pantalla = 1;
-			this.getProgramaParam(this.parametrosUrl.programa);
+			if (this.parametrosUrl.programa == "-1") {
+				this.progSelected = null;
+				this.tipSelected = null;
+			} else {
+				this.getProgramaParam(this.parametrosUrl.programa);
+			}
 		} else {
 			this.formReducido = false;
 			this.pantalla = 2;
