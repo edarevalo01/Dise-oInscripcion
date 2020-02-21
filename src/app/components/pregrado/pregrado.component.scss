@@ -235,13 +235,13 @@
 
 .titulo-izquierda-reducido {
 	width: calc(100% - 40px);
-	font-weight: 500;
-	font-size: 16px;
+	font-weight: bold;
+	font-size: 20px;
 	letter-spacing: 0.15px;
 	color: #ffc107;
 	font: Roboto, Condensed;
-	background-color: black;
-	padding: 13px 20px;
+	background-color: white;
+	padding: 10px 20px;
 }
 
 .subtitulo-izquierda {
@@ -331,7 +331,7 @@
 }
 
 .estilo-formulario {
-	width: 100%;
+	width: 96%;
 }
 
 ::ng-deep .cdk-overlay-pane {

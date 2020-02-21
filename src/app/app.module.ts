@@ -22,9 +22,10 @@ import { ScrollingModule } from "@angular/cdk/scrolling";
 import { PregradoContinuarComponent, VentanaDialogoMensajes } from "./components/pregrado-continuar/pregrado-continuar.component";
 import { CookieService } from "ngx-cookie-service";
 import { RecaptchaModule } from "ng-recaptcha";
+import { GraciasComponent } from './components/gracias/gracias.component';
 
 @NgModule({
-  declarations: [AppComponent, PregradoComponent, VentanaDialogoMensajes, VentanaDialogoMensajesPreg, PregradoContinuarComponent],
+  declarations: [AppComponent, PregradoComponent, VentanaDialogoMensajes, VentanaDialogoMensajesPreg, PregradoContinuarComponent, GraciasComponent],
   entryComponents: [VentanaDialogoMensajes, VentanaDialogoMensajesPreg],
   imports: [
     BrowserModule,

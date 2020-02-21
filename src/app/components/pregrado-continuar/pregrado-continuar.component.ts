@@ -156,8 +156,8 @@ export class PregradoContinuarComponent implements OnInit {
 		var documento = this.continuarInscripcionForm.controls.documento.value;
 		if (this.continuarInscripcionForm.invalid) {
 			this.continuarInscripcionForm.markAllAsTouched();
-			return;
 			this.loading = false;
+			return;
 		} else {
 			this.getProgramaSeleccionado(programa);
 			if ("3" != tipo) {
@@ -207,6 +207,7 @@ export class PregradoContinuarComponent implements OnInit {
 									this.document.location.href = environment.urlPosgrado;
 								}
 							} else {
+								// this.router.navigateByUrl('gracias')
 								this.openMensajes(this.stringHelper.getResource("titMensaje"), this.mensaje.mensaje, 0);
 							}
 						},

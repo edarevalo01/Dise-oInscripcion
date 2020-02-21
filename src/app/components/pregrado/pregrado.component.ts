@@ -289,6 +289,7 @@ export class PregradoComponent implements OnInit {
 						var tipDoc = this.registrarInscripcionForm.controls.tipoDocumentoSelected.value;
 						this.openGracias(tipDoc);
 					} else {
+						// this.router.navigateByUrl("gracias");
 						this.openMensajes(this.stringHelper.getResource("titMensaje"), this.mensaje.mensaje, 0);
 					}
 				},
