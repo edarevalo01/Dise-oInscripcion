@@ -85,6 +85,10 @@
 	max-height: 100% !important;
 }
 
+::ng-deep .grecaptcha-badge {
+	z-index: 99999 !important;
+}
+
 ::ng-deep .mat-grid-tile .mat-figur {
 	align-items: normal;
 }
@@ -93,6 +97,10 @@
 	/* Pequeño */
 	.img-logo-salle {
 		width: 46.5%;
+	}
+
+	.font-gracias {
+		font-size: 20px;
 	}
 
 	.position-button {
@@ -153,6 +161,10 @@
 	/* Grande */
 	.img-logo-salle {
 		width: 35%;
+	}
+
+	.font-gracias {
+		font-size: 80px;
 	}
 
 	.position-button {

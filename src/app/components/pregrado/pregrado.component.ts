@@ -12,6 +12,7 @@ import { Mensaje } from "src/app/models/Mensaje";
 import { CookieService } from "ngx-cookie-service";
 import { DOCUMENT } from "@angular/common";
 import { StringResourceHelper } from "src/app/models/string-resource-helper";
+import { stringify } from "querystring";
 
 export class MyErrorStateMatcher implements ErrorStateMatcher {
 	isErrorState(control: FormControl | null, form: FormGroupDirective | NgForm | null): boolean {
@@ -289,7 +290,6 @@ export class PregradoComponent implements OnInit {
 						var tipDoc = this.registrarInscripcionForm.controls.tipoDocumentoSelected.value;
 						this.openGracias(tipDoc);
 					} else {
-						// this.router.navigateByUrl("gracias");
 						this.openMensajes(this.stringHelper.getResource("titMensaje"), this.mensaje.mensaje, 0);
 					}
 				},
@@ -333,78 +333,122 @@ export class PregradoComponent implements OnInit {
 
 	public openGracias(tipoDoc: string): void {
 		if ("P" == tipoDoc) {
-			this.openMensajes(this.stringHelper.getResource("titGracias"), this.stringHelper.getResource("msgGraciasExt"), 2);
-			setTimeout(function() {
-				this.document.location.href = environment.urlPaginaUniver;
-			}, 5000);
-		} else {
-			this.openMensajes(this.stringHelper.getResource("titGracias"), this.stringHelper.getResource("msgGracias"), 1);
-			var tipo = this.registrarInscripcionForm.controls.tipoSelected.value;
-			var programa = this.registrarInscripcionForm.controls.programaSelected.value;
-			var documento = this.registrarInscripcionForm.controls.documento.value;
-			if ("3" != tipo) {
-				if ("1" == tipo || "2" == tipo) {
-					this.pregradoServ.validarContinuar(documento, programa.substring(0, 2), programa.substring(2, 3)).subscribe(
-						(tiposObs) => {
-							this.mensaje = tiposObs;
-							if ("fail" != this.mensaje.status && "go" == this.mensaje.status) {
-								if ("1" == tipo) {
-									if (!this.cookieService.get(environment.cookiePregrado)) {
-										var datos = {
-											doc: documento,
-											fac: {
-												codigo: programa,
-												inscripcion: this.programaSelected.inscripcion,
-												contacto: this.programaSelected.contacto,
-												correo: this.programaSelected.correo,
-												nombre: this.programaSelected.nombre,
-												fa: this.programaSelected.fa
-											}
-										};
-										this.cookieService.set(
-											environment.cookiePregrado,
-											JSON.stringify(datos),
-											15 / 1440,
-											"/",
-											environment.dominio
-										);
-									}
-									setTimeout(function() {
-										this.document.location.href = environment.urlPregrado;
-									}, 5000);
-								}
-								if ("2" == tipo) {
-									if (!this.cookieService.get(environment.cookiePosgrado)) {
-										var datosPos = {
-											doc: documento,
-											fac: programa.substring(0, 2),
-											jor: programa.substring(2, 3)
-										};
-										this.cookieService.set(
-											environment.cookiePosgrado,
-											JSON.stringify(datosPos),
-											15 / 1440,
-											"/",
-											environment.dominio
-										);
-									}
-									setTimeout(function() {
-										this.document.location.href = environment.urlPosgrado;
-									}, 5000);
-								}
-							} else {
-								this.openMensajes(this.stringHelper.getResource("titMensaje"), this.mensaje.mensaje, 0);
-							}
-						},
-						(error) => {}
-					);
-				}
+			this.pregradoServ.setMensajeGracias(
+				this.stringHelper.getResource("titGracias"),
+				this.stringHelper.getResource("msgGraciasExt")
+			);
+			if (this.formReducido) {
+				let insForm = {
+					ftitGracias: this.stringHelper.getResource("titGracias"),
+					ftitmsgGracias: this.stringHelper.getResource("msgGraciasExt")
+				};
+				sessionStorage.setItem("gtifmp0t", JSON.stringify(insForm));
+				this.registrarInscripcionForm.reset;
+				window.open("http://" + location.host + "/#/gracias?redirect=2", "_blank");
 			} else {
+				this.router.navigateByUrl("gracias");
 				setTimeout(function() {
-					this.document.location.href = environment.urlDoctorados
-						.replace("?1", programa.substring(0, 1))
-						.replace("?2", documento);
+					this.document.location.href = environment.urlPaginaUniver;
 				}, 5000);
+			}
+			//this.openMensajes(this.stringHelper.getResource("titGracias"), this.stringHelper.getResource("msgGraciasExt"), 2);
+		} else {
+			if (this.formReducido) {
+				let insForm = {
+					ftipo: this.registrarInscripcionForm.controls.tipoSelected.value,
+					fprograma: this.registrarInscripcionForm.controls.programaSelected.value,
+					fdocumento: this.registrarInscripcionForm.controls.documento.value,
+					finscripcion: this.programaSelected.inscripcion,
+					fcontacto: this.programaSelected.contacto,
+					fcorreo: this.programaSelected.correo,
+					fnombre: this.programaSelected.nombre,
+					ffa: this.programaSelected.fa,
+					ftitGracias: this.stringHelper.getResource("titGracias"),
+					ftitmsgGracias: this.stringHelper.getResource("msgGracias")
+				};
+				sessionStorage.setItem("gtifmp0t", JSON.stringify(insForm));
+				this.registrarInscripcionForm.reset();
+				window.open("http://" + location.host + "/#/gracias?redirect=1", "_blank");
+			} else {
+				this.pregradoServ.setMensajeGracias(
+					this.stringHelper.getResource("titGracias"),
+					this.stringHelper.getResource("msgGracias")
+				);
+				this.router.navigateByUrl("gracias");
+				//this.openMensajes(this.stringHelper.getResource("titGracias"), this.stringHelper.getResource("msgGracias"), 1);
+				var tipo = this.registrarInscripcionForm.controls.tipoSelected.value;
+				var programa = this.registrarInscripcionForm.controls.programaSelected.value;
+				var documento = this.registrarInscripcionForm.controls.documento.value;
+				if ("3" != tipo) {
+					if ("1" == tipo || "2" == tipo) {
+						this.pregradoServ.validarContinuar(documento, programa.substring(0, 2), programa.substring(2, 3)).subscribe(
+							(tiposObs) => {
+								this.mensaje = tiposObs;
+								if ("fail" != this.mensaje.status && "go" == this.mensaje.status) {
+									if ("1" == tipo) {
+										if (!this.cookieService.get(environment.cookiePregrado)) {
+											var datos = {
+												doc: documento,
+												fac: {
+													codigo: programa,
+													inscripcion: this.programaSelected.inscripcion,
+													contacto: this.programaSelected.contacto,
+													correo: this.programaSelected.correo,
+													nombre: this.programaSelected.nombre,
+													fa: this.programaSelected.fa
+												}
+											};
+											this.cookieService.set(
+												environment.cookiePregrado,
+												JSON.stringify(datos),
+												15 / 1440,
+												"/",
+												environment.dominio
+											);
+										}
+										setTimeout(function() {
+											this.document.location.href = environment.urlPregrado;
+										}, 5000);
+									}
+									if ("2" == tipo) {
+										if (!this.cookieService.get(environment.cookiePosgrado)) {
+											var datosPos = {
+												doc: documento,
+												fac: programa.substring(0, 2),
+												jor: programa.substring(2, 3)
+											};
+											this.cookieService.set(
+												environment.cookiePosgrado,
+												JSON.stringify(datosPos),
+												15 / 1440,
+												"/",
+												environment.dominio
+											);
+										}
+										setTimeout(function() {
+											this.document.location.href = environment.urlPosgrado;
+										}, 5000);
+									}
+								} else {
+									if (this.formReducido) {
+										window.open("http://" + location.host + "/#/gracias", "_blank");
+									} else {
+										this.router.navigateByUrl("gracias");
+									}
+									this.pregradoServ.setMensajeGracias(this.stringHelper.getResource("titMensaje"), this.mensaje.mensaje);
+									//this.openMensajes(this.stringHelper.getResource("titMensaje"), this.mensaje.mensaje, 0);
+								}
+							},
+							(error) => {}
+						);
+					}
+				} else {
+					setTimeout(function() {
+						this.document.location.href = environment.urlDoctorados
+							.replace("?1", programa.substring(0, 1))
+							.replace("?2", documento);
+					}, 5000);
+				}
 			}
 		}
 	}
