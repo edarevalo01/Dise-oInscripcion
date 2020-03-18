@@ -1,7 +1,6 @@
 <div style="height: 100%;" class="fontf">
 	<div class="titulo-izquierda-reducido" *ngIf="formReducido">
 		Inscríbete
-		<!--( <b>{{ ls }}</b> )-->
 	</div>
 	<mat-grid-list [cols]="pantalla" rowHeight="100%" (window:resize)="onResize($event)" class="mat-grid-styles">
 		<mat-grid-tile colspan="1" rowspan="1">
@@ -155,7 +154,6 @@
 									[siteKey]="siteKey"
 									size="invisible"
 									(resolved)="$event && enviarDatosInscripcion($event)"
-									style="z-index: 99999999; !important"
 								></re-captcha>
 							</div>
 						</form>

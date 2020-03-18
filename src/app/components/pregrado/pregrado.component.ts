@@ -344,7 +344,7 @@ export class PregradoComponent implements OnInit {
 				};
 				sessionStorage.setItem("gtifmp0t", JSON.stringify(insForm));
 				this.registrarInscripcionForm.reset;
-				window.open("http://" + location.host + "/#/gracias?redirect=2", "_blank");
+				window.open("https://" + location.host + "/#/gracias?redirect=2", "_blank");
 			} else {
 				this.router.navigateByUrl("gracias");
 				setTimeout(function() {
@@ -368,12 +368,26 @@ export class PregradoComponent implements OnInit {
 				};
 				sessionStorage.setItem("gtifmp0t", JSON.stringify(insForm));
 				this.registrarInscripcionForm.reset();
-				window.open("http://" + location.host + "/#/gracias?redirect=1", "_blank");
+				window.open("https://" + location.host + "/#/gracias?redirect=1", "_blank");
 			} else {
 				this.pregradoServ.setMensajeGracias(
 					this.stringHelper.getResource("titGracias"),
 					this.stringHelper.getResource("msgGracias")
 				);
+				let insForm = {
+					ftipo: this.registrarInscripcionForm.controls.tipoSelected.value,
+					fprograma: this.registrarInscripcionForm.controls.programaSelected.value,
+					fdocumento: this.registrarInscripcionForm.controls.documento.value,
+					finscripcion: this.programaSelected.inscripcion,
+					fcontacto: this.programaSelected.contacto,
+					fcorreo: this.programaSelected.correo,
+					fnombre: this.programaSelected.nombre,
+					ffa: this.programaSelected.fa,
+					ftitGracias: this.stringHelper.getResource("titGracias"),
+					ftitmsgGracias: this.stringHelper.getResource("msgGracias")
+				};
+				sessionStorage.setItem("gtifmp0t", JSON.stringify(insForm));
+				this.registrarInscripcionForm.reset();
 				this.router.navigateByUrl("gracias");
 				//this.openMensajes(this.stringHelper.getResource("titGracias"), this.stringHelper.getResource("msgGracias"), 1);
 				var tipo = this.registrarInscripcionForm.controls.tipoSelected.value;
