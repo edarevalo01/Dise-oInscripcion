@@ -79,12 +79,6 @@
 	background: #00000061;
 }
 
-.mat-grid-styles {
-	min-height: 100% !important;
-	height: 100vh !important;
-	max-height: 100% !important;
-}
-
 ::ng-deep .grecaptcha-badge {
 	z-index: 99999 !important;
 }
@@ -93,14 +87,29 @@
 	align-items: normal;
 }
 
-@media screen and (max-width: 540px) {
+::ng-deep .mat-card:not([class*="mat-elevation-z"]) {
+	box-shadow: 0 0px 0px -0px rgba(0, 0, 0, 0), 0 0px 0px 0 rgba(0, 0, 0, 0), 0 0px 0px 0 rgba(12, 12, 12, 0) !important;
+}
+
+@media screen and (max-width: 600px) {
 	/* Pequeño */
 	.img-logo-salle {
+		margin-top: 25px;
 		width: 46.5%;
 	}
 
 	.font-gracias {
 		font-size: 20px;
+	}
+
+	.mat-grid-styles {
+		min-height: calc(100% - 43px) !important;
+		height: calc(100% - 43px) !important;
+		max-height: calc(100% - 43px) !important;
+	}
+
+	.btn-inscribir {
+		margin-bottom: 70px;
 	}
 
 	.position-button {
@@ -114,7 +123,7 @@
 
 	.parte-izquierda {
 		width: 100%;
-		height: calc(100% - 40px);
+		height: 100%;
 		border: 0px solid black;
 		border-radius: 0px !important;
 	}
@@ -132,7 +141,7 @@
 	}
 
 	.padding-parte-izquierda-reducido {
-		padding: 5.71% 5.55% 5.71% 5.55%;
+		padding: 0px;
 	}
 
 	.form-content-izquierda {
@@ -147,17 +156,18 @@
 	}
 
 	.terminos-cond {
-		font-size: 10px !important;
+		font-size: 12px !important;
 		color: #00000099;
 		letter-spacing: 0.4px;
 	}
 
 	.vinculo {
 		font-size: 10px;
+		width: 100%;
 	}
 }
 
-@media screen and (min-width: 540px) {
+@media screen and (min-width: 600px) {
 	/* Grande */
 	.img-logo-salle {
 		width: 35%;
@@ -165,6 +175,12 @@
 
 	.font-gracias {
 		font-size: 80px;
+	}
+
+	.mat-grid-styles {
+		min-height: 100% !important;
+		height: 100% !important;
+		max-height: 100% !important;
 	}
 
 	.position-button {
@@ -178,7 +194,7 @@
 
 	.parte-izquierda {
 		width: 100%;
-		height: calc(100% - 68px);
+		height: 88.58%;
 		border: 0px solid black;
 		border-radius: 0px !important;
 	}
@@ -196,7 +212,7 @@
 	}
 
 	.padding-parte-izquierda-reducido {
-		padding: 5.71% 5.55% 5.71% 5.55%;
+		padding: 0px;
 	}
 
 	.form-content-izquierda {

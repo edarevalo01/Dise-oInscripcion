@@ -1,7 +1,7 @@
 <div style="height: 100%;" class="fontf">
-	<div class="titulo-izquierda-reducido" *ngIf="formReducido">
+	<!-- <div class="titulo-izquierda-reducido" *ngIf="formReducido">
 		Inscríbete
-	</div>
+	</div> -->
 	<mat-grid-list [cols]="pantalla" rowHeight="100%" (window:resize)="onResize($event)" class="mat-grid-styles">
 		<mat-grid-tile colspan="1" rowspan="1">
 			<mat-card
@@ -140,12 +140,12 @@
 							<mat-checkbox matInput formControlName="terminos">
 								<span [ngClass]="darkMode ? 'terminos-cond-dark' : 'terminos-cond'">
 									He le&iacute;do y acepto los
-									<button (click)="openHabeasData()" class="vinculo">{{ stringHelper.getResource("lblTermCond") }}</button>
+									<span (click)="openHabeasData()" class="vinculo">Términos</span>
 									<br />
-									(Habeas data)
+									y condiciones (Habeas data)
 								</span>
 							</mat-checkbox>
-							<mat-error *ngIf="registrarInscripcionForm.hasError('required', 'terminos')">
+							<mat-error *ngIf="registrarInscripcionForm.hasError('required', 'terminos')" style="color: #ffa600;">
 								{{ stringHelper.getResource("lblTerminos") }}
 							</mat-error>
 							<div class="captcha">

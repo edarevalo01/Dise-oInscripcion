@@ -34,12 +34,14 @@ export interface DialogData {
 })
 export class PregradoComponent implements OnInit {
 	public stringHelper: StringResourceHelper;
-	public tipoDocumentoSelected: string;
+
 	public tiposDocumento: TipoDocumento[] = [
 		{ codigo: "T", nombre: "TARJETA DE IDENTIDAD" },
 		{ codigo: "C", nombre: "CÉDULA DE CIUDADANÍA" },
 		{ codigo: "P", nombre: "PASAPORTE" }
 	];
+	public tipoDocumentoSelected: string;
+
 	public tiposPrograma: TipoPrograma[] = [
 		{ codigo: "1", nombre: "PREGRADO" },
 		{ codigo: "2", nombre: "POSGRADO" },
@@ -48,8 +50,10 @@ export class PregradoComponent implements OnInit {
 	public parametrosUrl: any = null;
 	public darkMode: boolean = false;
 	public pantalla: number;
+
 	public registrarInscripcionForm: FormGroup;
 	public captchaForm: FormGroup;
+
 	public siteKey: string;
 	public programs: Programa[] = [];
 	public msgHabeasData: string = "";
@@ -189,7 +193,7 @@ export class PregradoComponent implements OnInit {
 	ngOnInit() {
 		this.siteKey = environment.siteKey;
 		if (!this.formReducido) {
-			this.pantalla = window.innerWidth <= 540 ? 1 : 2;
+			this.pantalla = window.innerWidth <= 600 ? 1 : 2;
 		}
 		if (this.pantalla == 1) {
 			this.responsive = true;
@@ -198,7 +202,7 @@ export class PregradoComponent implements OnInit {
 
 	public onResize(event) {
 		if (!this.formReducido) {
-			this.pantalla = event.target.innerWidth <= 540 ? 1 : 2;
+			this.pantalla = event.target.innerWidth <= 600 ? 1 : 2;
 		}
 		if (this.pantalla == 1) {
 			this.responsive = true;
@@ -317,7 +321,7 @@ export class PregradoComponent implements OnInit {
 	}
 
 	public openMensajes(titulo: string, mensaje: string, opcion: number): void {
-		var sizeWindow = window.innerWidth <= 540 ? "85%" : "35%";
+		var sizeWindow = window.innerWidth <= 600 ? "85%" : "35%";
 		this.dialogRef = this.dialog.open(VentanaDialogoMensajesPreg, {
 			width: sizeWindow,
 			data: { titulo: titulo, mensaje: mensaje, opcion: opcion },
@@ -344,7 +348,7 @@ export class PregradoComponent implements OnInit {
 				};
 				sessionStorage.setItem("gtifmp0t", JSON.stringify(insForm));
 				this.registrarInscripcionForm.reset;
-				window.open("https://" + location.host + "/#/gracias?redirect=2", "_blank");
+				window.open("https://" + location.host + "/oar/sia/inscripciones/#/gracias?redirect=2", "_blank");
 			} else {
 				this.router.navigateByUrl("gracias");
 				setTimeout(function() {
@@ -368,7 +372,7 @@ export class PregradoComponent implements OnInit {
 				};
 				sessionStorage.setItem("gtifmp0t", JSON.stringify(insForm));
 				this.registrarInscripcionForm.reset();
-				window.open("https://" + location.host + "/#/gracias?redirect=1", "_blank");
+				window.open("https://" + location.host + "/oar/sia/inscripciones/#/gracias?redirect=1", "_blank");
 			} else {
 				this.pregradoServ.setMensajeGracias(
 					this.stringHelper.getResource("titGracias"),
@@ -445,7 +449,7 @@ export class PregradoComponent implements OnInit {
 									}
 								} else {
 									if (this.formReducido) {
-										window.open("http://" + location.host + "/#/gracias", "_blank");
+										window.open("http://" + location.host + "/oar/sia/inscripciones/#/gracias", "_blank");
 									} else {
 										this.router.navigateByUrl("gracias");
 									}
