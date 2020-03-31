@@ -1,4 +1,4 @@
-export class TipoPrograma{
-    codigo : string;
-    nombre: string;
+export class TipoPrograma {
+	public codigo: string;
+	public nombre: string;
 }

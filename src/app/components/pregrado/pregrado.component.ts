@@ -59,13 +59,13 @@ export class PregradoComponent implements OnInit {
 	public msgHabeasData: string = "";
 	public programaSelected: Programa;
 	public mensaje: Mensaje = new Mensaje();
-	public loading: boolean = false;
 	public dialogRef: any;
 	public progSelected: any;
 	public tipSelected: string = "";
+	public loading: boolean = false;
 
 	public formReducido: boolean = false;
-	public ls: string = "";
+	public leadSource: string = "";
 	public responsive: boolean = false;
 
 	constructor(
@@ -78,6 +78,7 @@ export class PregradoComponent implements OnInit {
 		@Inject(DOCUMENT) private document: Document
 	) {
 		this.stringHelper = new StringResourceHelper("titulos-mensajes");
+
 		this.msgHabeasData = this.stringHelper.getResource("msgHabeasData");
 		this.registrarInscripcionForm = this.formBuilder.group({
 			primerNombre: ["", Validators.required],
@@ -92,21 +93,21 @@ export class PregradoComponent implements OnInit {
 			programaSelected: ["", Validators.required],
 			terminos: [false, Validators.requiredTrue]
 		});
+
 		/* Formato parámetros por cookie */
 		// var params = {
 		// 	lead_source: "facebook",
 		// 	programa: "85N"
 		// 	// dark_mode: 0 //0 no, 1 si
 		// };
-		// this.cookieService.set("dOdY5Dj1a", JSON.stringify(params));
 
 		this.parametrosUrl = this.route.snapshot.queryParams;
 		if (this.parametrosUrl.lead_source) {
 			this.cookieService.set(environment.cookieLeadSource, this.parametrosUrl.lead_source, 15 / 1440, "/", environment.dominio);
-			this.ls = this.parametrosUrl.lead_source;
+			this.leadSource = this.parametrosUrl.lead_source;
 		} else {
-			this.cookieService.set(environment.cookieLeadSource, "sepRebr5", 15 / 1440, "/", environment.dominio);
-			this.ls = "sepRebr5";
+			this.cookieService.set(environment.cookieLeadSource, environment.leadSourceDefecto, 15 / 1440, "/", environment.dominio);
+			this.leadSource = environment.leadSourceDefecto;
 		}
 
 		if (this.parametrosUrl.programa) {
@@ -131,63 +132,94 @@ export class PregradoComponent implements OnInit {
 	}
 
 	getProgramaParam(param): any {
+		this.getProgramaPregrado(param.substring(0, 2), param.substring(2, 3));
+	}
+
+	getProgramaPregrado(programa: string, jornada: string) {
 		this.pregradoServ.getProgramasByTipo("1").subscribe(
-			(tiposObs) => {
-				this.setProgramasService(tiposObs);
-				var res = this.programs.filter((prog) => prog.codigo == param.substring(0, 2) && prog.jornada == param.substring(2, 3));
-				this.programaSelected = res[0];
+			(resp) => {
+				this.setProgramasService(resp);
+			},
+			(error) => {
+				console.log("error pregrado");
+			},
+			() => {
+				var programaSearch = this.programs.filter((prog) => prog.codigo == programa && prog.jornada == jornada);
+				this.programaSelected = programaSearch[0];
 				if (this.programaSelected != undefined) {
 					this.progSelected = this.programaSelected.codigo + this.programaSelected.jornada;
 					this.registrarInscripcionForm.controls.programaSelected.setValue(this.progSelected);
 					this.registrarInscripcionForm.controls.tipoSelected.setValue("1");
 					this.tipSelected = "1";
+					this.sortProgramas();
+				} else {
+					this.getProgramaPosgrado(programa, jornada);
 				}
-			},
-			(error) => {},
-			() => {
-				if (this.tipSelected == "") {
-					this.programs = [];
-					this.pregradoServ.getProgramasByTipo("2").subscribe(
-						(tiposObs) => {
-							this.setProgramasService(tiposObs);
-							var res = this.programs.filter(
-								(prog) => prog.codigo == param.substring(0, 2) && prog.jornada == param.substring(2, 3)
-							);
-							this.programaSelected = res[0];
-							if (this.programaSelected != undefined) {
-								this.progSelected = this.programaSelected.codigo + this.programaSelected.jornada;
-								this.registrarInscripcionForm.controls.tipoSelected.setValue("2");
-								this.registrarInscripcionForm.controls.programaSelected.setValue(this.progSelected);
-								this.tipSelected = "2";
-							}
-						},
-						(error) => {},
-						() => {
-							if (this.tipSelected == "") {
-								this.setDoctorados();
-								if (param.substring(0, 2) == "DA") {
-									this.registrarInscripcionForm.controls.programaSelected.setValue("1N");
-								} else if (param.substring(0, 2) == "DE") {
-									this.registrarInscripcionForm.controls.programaSelected.setValue("2N");
-								}
-								this.tipSelected = "3";
-								this.registrarInscripcionForm.controls.tipoSelected.setValue("3");
-							}
-						}
-					);
-				}
-				this.programs.sort((n1, n2) => {
-					var comp = (n1.nombre + n1.jornada).localeCompare(n2.nombre + n2.jornada);
-					if (comp > 1) {
-						return 1;
-					}
-					if (comp < 1) {
-						return -1;
-					}
-					return 0;
-				});
 			}
 		);
+	}
+
+	getProgramaPosgrado(programa: string, jornada: string) {
+		this.tipSelected = "";
+		this.programs = [];
+
+		this.pregradoServ.getProgramasByTipo("2").subscribe(
+			(resp) => {
+				this.setProgramasService(resp);
+			},
+			(error) => {
+				console.log("Error Posgrados");
+			},
+			() => {
+				var programaSearch = this.programs.filter((prog) => prog.codigo == programa && prog.jornada == jornada);
+				this.programaSelected = programaSearch[0];
+				if (this.programaSelected != undefined) {
+					this.progSelected = this.programaSelected.codigo + this.programaSelected.jornada;
+					this.registrarInscripcionForm.controls.programaSelected.setValue(this.progSelected);
+					this.registrarInscripcionForm.controls.tipoSelected.setValue("2");
+					this.tipSelected = "2";
+					this.sortProgramas();
+				} else {
+					this.getProgramaDoctorado(programa, jornada);
+				}
+			}
+		);
+	}
+
+	getProgramaDoctorado(programa: string, jornada: string) {
+		this.tipSelected = "";
+		this.programs = [];
+
+		this.setDoctorados();
+		if (programa == "DA") {
+			this.registrarInscripcionForm.controls.programaSelected.setValue("1N");
+			this.registrarInscripcionForm.controls.tipoSelected.setValue("3");
+			this.progSelected = "DAN";
+			this.tipSelected = "3";
+		} else if (programa == "DE") {
+			this.registrarInscripcionForm.controls.programaSelected.setValue("2N");
+			this.registrarInscripcionForm.controls.tipoSelected.setValue("3");
+			this.progSelected = "DAN";
+			this.tipSelected = "3";
+		} else {
+			this.progSelected = null;
+			this.tipSelected = null;
+			this.programs = [];
+		}
+		this.sortProgramas();
+	}
+
+	sortProgramas() {
+		this.programs.sort((n1, n2) => {
+			var comp = (n1.nombre + n1.jornada).localeCompare(n2.nombre + n2.jornada);
+			if (comp > 1) {
+				return 1;
+			}
+			if (comp < 1) {
+				return -1;
+			}
+			return 0;
+		});
 	}
 
 	ngOnInit() {

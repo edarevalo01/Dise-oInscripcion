@@ -11,7 +11,7 @@ export const environment = {
 	cookiePregrado: "9iewoetrlUswou3i",
 	cookiePosgrado: "ik80fmj37t7elhbb",
 	cookieLeadSource: "stouh0eph5umoa1h",
-	leadSource: "sepRebr5",
+	leadSourceDefecto: "sepRebr5",
 	validarContinuar: "?1/?2/?3/continuar.json",
 	guardarParte1: "salvarp1.json",
 	urlPaginaUniver: "https://www.lasalle.edu.co/",

@@ -8,12 +8,14 @@ import { ActivatedRoute } from "@angular/router";
 })
 export class AppComponent {
 	title = "InscripcionLasalle";
-	formReducido: boolean = false;
+
+	public formReducido: boolean = false;
 	public parametrosUrl: any;
 	public darkMode: boolean = false;
 
 	constructor(private route: ActivatedRoute) {
 		this.parametrosUrl = this.route.snapshot.queryParams;
+
 		this.route.queryParams.forEach((parametro) => {
 			if (parametro.programa) {
 				this.formReducido = true;

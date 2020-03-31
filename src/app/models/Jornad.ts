@@ -1,4 +1,4 @@
-export class jornad{
-    jornada : string;
-    inscripcion : string;
+export class jornad {
+	public jornada: string;
+	public inscripcion: string;
 }

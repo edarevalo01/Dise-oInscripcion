@@ -1,7 +1,7 @@
-import { StringResourceHelper } from './string-resource-helper';
+import { StringResourceHelper } from "./string-resource-helper";
 
-describe('StringResourceHelper', () => {
-  it('should create an instance', () => {
-    expect(new StringResourceHelper()).toBeTruthy();
-  });
+describe("StringResourceHelper", () => {
+	it("should create an instance", () => {
+		expect(new StringResourceHelper("")).toBeTruthy();
+	});
 });
