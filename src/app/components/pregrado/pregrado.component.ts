@@ -358,15 +358,14 @@ export class PregradoComponent implements OnInit {
 
 		this.pregradoServ.validarContinuar(documento, programa.substring(0, 2), programa.substring(2, 3)).subscribe(
 			(resp) => {
-				console.log(resp);
-			},
-			(error) => {
-				if (error.status == 200) {
+				if (resp.status == "fail") {
+					this.openMensajes("Mensaje", resp.mensaje, 0);
+				} else if (resp.status == "go") {
 					this.finalRedireccion(tipo, documento, programa);
 				}
 			},
-			() => {
-				this.finalRedireccion(tipo, documento, programa);
+			(error) => {
+				console.log(error);
 			}
 		);
 	}
@@ -434,10 +433,9 @@ export class PregradoComponent implements OnInit {
 		if ("P" == tipoDoc) {
 			this.graciasExtranjero();
 		} else {
+			let insForm = this.fillObjectOfStorage();
+			sessionStorage.setItem("gtifmp0t", JSON.stringify(insForm));
 			if (this.formReducido) {
-				let insForm = this.fillObjectOfStorage();
-				sessionStorage.setItem("gtifmp0t", JSON.stringify(insForm));
-
 				this.registrarInscripcionForm.reset();
 				window.open("https://" + location.host + "/oar/sia/inscripciones/#/gracias?redirect=1", "_blank");
 			} else {
@@ -445,9 +443,6 @@ export class PregradoComponent implements OnInit {
 					this.stringHelper.getResource("titGracias"),
 					this.stringHelper.getResource("msgGracias")
 				);
-				let insForm = this.fillObjectOfStorage();
-				sessionStorage.setItem("gtifmp0t", JSON.stringify(insForm));
-
 				this.registrarInscripcionForm.reset();
 				this.router.navigateByUrl("gracias");
 			}
@@ -455,12 +450,21 @@ export class PregradoComponent implements OnInit {
 	}
 
 	graciasExtranjero() {
+		let insForm = {
+			ftipo: this.registrarInscripcionForm.controls.tipoSelected.value,
+			fprograma: this.registrarInscripcionForm.controls.programaSelected.value,
+			fdocumento: this.registrarInscripcionForm.controls.documento.value,
+			finscripcion: this.programaSelected.inscripcion,
+			fcontacto: this.programaSelected.contacto,
+			fcorreo: this.programaSelected.correo,
+			fnombre: this.programaSelected.nombre,
+			ffa: this.programaSelected.fa,
+			ftitGracias: this.stringHelper.getResource("titGracias"),
+			ftitmsgGracias: this.stringHelper.getResource("msgGraciasExt"),
+			fgrado: "e"
+		};
+		sessionStorage.setItem("gtifmp0t", JSON.stringify(insForm));
 		if (this.formReducido) {
-			let insForm = {
-				ftitGracias: this.stringHelper.getResource("titGracias"),
-				ftitmsgGracias: this.stringHelper.getResource("msgGraciasExt")
-			};
-			sessionStorage.setItem("gtifmp0t", JSON.stringify(insForm));
 			this.registrarInscripcionForm.reset;
 			window.open("https://" + location.host + "/oar/sia/inscripciones/#/gracias?redirect=2", "_blank");
 		} else {
@@ -483,7 +487,8 @@ export class PregradoComponent implements OnInit {
 			fnombre: this.programaSelected.nombre,
 			ffa: this.programaSelected.fa,
 			ftitGracias: this.stringHelper.getResource("titGracias"),
-			ftitmsgGracias: this.stringHelper.getResource("msgGracias")
+			ftitmsgGracias: this.stringHelper.getResource("msgGracias"),
+			fgrado: "n"
 		};
 	}
 

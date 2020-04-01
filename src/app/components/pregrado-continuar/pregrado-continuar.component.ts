@@ -41,7 +41,6 @@ export class PregradoContinuarComponent implements OnInit {
 	public programaSelected: Programa;
 	public loading: boolean = false;
 
-	public formReducido: boolean = false;
 	public ls: string = "";
 	public responsive: boolean = false;
 
@@ -55,9 +54,13 @@ export class PregradoContinuarComponent implements OnInit {
 		private route: ActivatedRoute
 	) {
 		this.stringHelper = new StringResourceHelper("titulos-mensajes");
+		this.continuarInscripcionForm = this.formBuilder.group({
+			documento: ["", [Validators.required, Validators.pattern("^[0-9]*$")]],
+			tipoSelected: ["", Validators.required],
+			programaSelected: ["", Validators.required]
+		});
 
 		this.parametrosUrl = this.route.snapshot.queryParams;
-
 		if (this.parametrosUrl.dark_mode) {
 			this.darkMode = this.parametrosUrl.dark_mode == 1;
 		} else {
@@ -72,158 +75,168 @@ export class PregradoContinuarComponent implements OnInit {
 	}
 
 	ngOnInit() {
-		this.pantalla = window.innerWidth <= 540 ? 1 : 2;
-		if (this.pantalla == 1) {
-			this.responsive = true;
-		} else this.responsive = false;
-		this.continuarInscripcionForm = this.formBuilder.group({
-			documento: ["", [Validators.required, Validators.pattern("^[0-9]*$")]],
-			tipoSelected: ["", Validators.required],
-			programaSelected: ["", Validators.required]
-		});
+		this.pantalla = window.innerWidth <= 600 ? 1 : 2;
+		this.responsive = this.pantalla == 1;
 	}
 
 	public onResize(event) {
-		this.pantalla = event.target.innerWidth <= 540 ? 1 : 2;
-		if (this.pantalla == 1) {
-			this.responsive = true;
-		} else this.responsive = false;
+		this.pantalla = event.target.innerWidth <= 600 ? 1 : 2;
+		this.responsive = this.pantalla == 1;
 	}
 
 	public getProgramas() {
-		var tipo = this.continuarInscripcionForm.controls.tipoSelected.value;
-		if ("3" != tipo) {
+		var tipoPrograma = this.continuarInscripcionForm.controls.tipoSelected.value;
+		if (tipoPrograma != "3") {
 			this.programs = [];
-			this.pregradoServ.getProgramasByTipo(tipo).subscribe(
+			this.pregradoServ.getProgramasByTipo(tipoPrograma).subscribe(
 				(tiposObs) => {
-					tiposObs.forEach((program) => {
-						program.jornadas.forEach((jornad) => {
-							this.programs.push({
-								nombre: program.nombre,
-								jornada: jornad.jornada,
-								codigo: program.codigo,
-								inscripcion: jornad.inscripcion,
-								jornadas: [],
-								contacto: program.contacto,
-								fa: program.fa,
-								correo: program.correo
-							});
-						});
-					});
-					this.programs.sort((n1, n2) => {
-						var comp = (n1.nombre + n1.jornada).localeCompare(n2.nombre + n2.jornada);
-						if (comp > 1) {
-							return 1;
-						}
-						if (comp < 1) {
-							return -1;
-						}
-						return 0;
-					});
+					this.setProgramasService(tiposObs);
 				},
-				(error) => {}
+				(error) => {
+					console.log("ERROR PROGRAMAS");
+				},
+				() => {
+					this.sortProgramas();
+				}
 			);
 		} else {
-			this.programs = [
-				{
-					codigo: "1",
-					nombre: "DOCTORADO EN AGROCIENCIAS",
-					jornada: "N",
-					inscripcion: "S",
-					jornadas: [],
-					contacto: null,
-					fa: null,
-					correo: null
-				},
-				{
-					codigo: "2",
-					nombre: "DOCTORADO EN EDUCACIÓN",
-					jornada: "N",
-					inscripcion: "S",
-					jornadas: [],
-					contacto: null,
-					fa: null,
-					correo: null
-				}
-			];
+			this.setDoctorados();
+			this.sortProgramas();
 		}
+	}
+
+	setProgramasService(programasPeticion) {
+		programasPeticion.forEach((program) => {
+			program.jornadas.forEach((jornad) => {
+				this.programs.push({
+					nombre: program.nombre,
+					jornada: jornad.jornada,
+					codigo: program.codigo,
+					inscripcion: jornad.inscripcion,
+					jornadas: [],
+					contacto: program.contacto,
+					fa: program.fa,
+					correo: program.correo
+				});
+			});
+		});
+	}
+
+	setDoctorados() {
+		this.programs = [
+			{
+				codigo: "1",
+				nombre: "DOCTORADO EN AGROCIENCIAS",
+				jornada: "N",
+				inscripcion: "S",
+				jornadas: [],
+				contacto: null,
+				fa: null,
+				correo: null
+			},
+			{
+				codigo: "2",
+				nombre: "DOCTORADO EN EDUCACIÓN",
+				jornada: "N",
+				inscripcion: "S",
+				jornadas: [],
+				contacto: null,
+				fa: null,
+				correo: null
+			}
+		];
+	}
+
+	sortProgramas() {
+		this.programs.sort((n1, n2) => {
+			var comp = (n1.nombre + n1.jornada).localeCompare(n2.nombre + n2.jornada);
+			if (comp > 1) {
+				return 1;
+			}
+			if (comp < 1) {
+				return -1;
+			}
+			return 0;
+		});
 	}
 
 	public enviarDatosInscripcionContinuar() {
-		this.loading = true;
+		if (this.continuarInscripcionForm.invalid) {
+			this.continuarInscripcionForm.markAllAsTouched();
+			this.openMensajes("Fallo en inscripción", "Por favor revise sus datos.", 0);
+			return;
+		} else {
+			this.redireccionarLineaTiempo();
+		}
+	}
+
+	////////////////////////////////////////////////////////7
+
+	redireccionarLineaTiempo() {
 		var tipo = this.continuarInscripcionForm.controls.tipoSelected.value;
 		var programa = this.continuarInscripcionForm.controls.programaSelected.value;
 		var documento = this.continuarInscripcionForm.controls.documento.value;
-		if (this.continuarInscripcionForm.invalid) {
-			this.continuarInscripcionForm.markAllAsTouched();
-			this.loading = false;
-			return;
-		} else {
-			this.getProgramaSeleccionado(programa);
-			if ("3" != tipo) {
-				if ("1" == tipo || "2" == tipo) {
-					this.pregradoServ.validarContinuar(documento, programa.substring(0, 2), programa.substring(2, 3)).subscribe(
-						(tiposObs) => {
-							this.mensaje = tiposObs;
-							if ("fail" != this.mensaje.status && "go" == this.mensaje.status) {
-								if ("1" == tipo) {
-									if (!this.cookieService.get(environment.cookiePregrado)) {
-										var datos = {
-											doc: documento,
-											fac: {
-												codigo: programa,
-												inscripcion: this.programaSelected.inscripcion,
-												contacto: this.programaSelected.contacto,
-												correo: this.programaSelected.correo,
-												nombre: this.programaSelected.nombre,
-												fa: this.programaSelected.fa
-											}
-										};
-										this.cookieService.set(
-											environment.cookiePregrado,
-											JSON.stringify(datos),
-											15 / 1440,
-											"/",
-											environment.dominio
-										);
-									}
-									this.document.location.href = environment.urlPregrado;
-								}
-								if ("2" == tipo) {
-									if (!this.cookieService.get(environment.cookiePosgrado)) {
-										var datosPos = {
-											doc: documento,
-											fac: programa.substring(0, 2),
-											jor: programa.substring(2, 3)
-										};
-										this.cookieService.set(
-											environment.cookiePosgrado,
-											JSON.stringify(datosPos),
-											15 / 1440,
-											"/",
-											environment.dominio
-										);
-									}
-									this.document.location.href = environment.urlPosgrado;
-								}
-							} else {
-								// this.router.navigateByUrl('gracias')
-								this.openMensajes(this.stringHelper.getResource("titMensaje"), this.mensaje.mensaje, 0);
-							}
-						},
-						(error) => {}
-					);
+		this.getProgramaSeleccionado(programa);
+
+		this.pregradoServ.validarContinuar(documento, programa.substring(0, 2), programa.substring(2, 3)).subscribe(
+			(resp) => {
+				if (resp.status == "fail") {
+					this.openMensajes("Mensaje", resp.mensaje, 0);
+				} else if (resp.status == "go") {
+					this.finalRedireccion(tipo, documento, programa);
 				}
-			} else {
-				this.document.location.href = environment.urlDoctorados.replace("?1", programa.substring(0, 1)).replace("?2", documento);
+			},
+			(error) => {
+				console.log(error);
 			}
-		}
-		this.loading = false;
+		);
 	}
 
+	finalRedireccion(tipo: string, documento: string, programa: string) {
+		this.cookieService.delete(environment.cookiePregrado);
+		this.cookieService.delete(environment.cookiePosgrado);
+		if (tipo == "1") {
+			var datos = {
+				doc: documento,
+				fac: {
+					codigo: programa,
+					inscripcion: this.programaSelected.inscripcion,
+					contacto: this.programaSelected.contacto,
+					correo: this.programaSelected.correo,
+					nombre: this.programaSelected.nombre,
+					fa: this.programaSelected.fa
+				}
+			};
+			this.cookieService.set(environment.cookiePregrado, JSON.stringify(datos), 15 / 1440, "/", environment.dominio);
+
+			setTimeout(function() {
+				this.document.location.href = environment.urlPregrado;
+			}, 100);
+		} else if (tipo == "2") {
+			var datosPos = {
+				doc: documento,
+				fac: programa.substring(0, 2),
+				jor: programa.substring(2, 3)
+			};
+			this.cookieService.set(environment.cookiePosgrado, JSON.stringify(datosPos), 15 / 1440, "/", environment.dominio);
+
+			setTimeout(function() {
+				this.document.location.href = environment.urlPosgrado;
+			}, 100);
+		} else if (tipo == "3") {
+			setTimeout(function() {
+				this.document.location.href = environment.urlDoctorados.replace("?1", programa.substring(0, 1)).replace("?2", documento);
+			}, 100);
+		}
+		this.continuarInscripcionForm.reset();
+	}
+
+	////////////////////////////////////////////////////////////////////////////////////////
+
 	public openMensajes(titulo: string, mensaje: string, opcion: number): void {
+		var sizeWindow = window.innerWidth <= 600 ? "99%" : "35%";
 		const dialogRef = this.dialog.open(VentanaDialogoMensajes, {
-			width: "35%",
+			width: sizeWindow,
 			data: {
 				titulo: titulo,
 				mensaje: mensaje,
@@ -245,7 +258,7 @@ export class PregradoContinuarComponent implements OnInit {
 	public getProgramaSeleccionado(progSelected: string): void {
 		this.programaSelected = new Programa();
 		for (let prog of this.programs) {
-			if (prog.codigo || prog.jornada == progSelected) {
+			if (prog.codigo + "" + prog.jornada == progSelected) {
 				this.programaSelected = prog;
 				break;
 			}
@@ -255,7 +268,8 @@ export class PregradoContinuarComponent implements OnInit {
 
 @Component({
 	selector: "ventanaDialogo",
-	templateUrl: "../pregrado/ventanaMensajes.html"
+	templateUrl: "../pregrado/ventanaMensajes.html",
+	styleUrls: ["../pregrado/pregrado.component.scss"]
 })
 export class VentanaDialogoMensajes {
 	constructor(public dialogRef: MatDialogRef<VentanaDialogoMensajes>, @Inject(MAT_DIALOG_DATA) public data: DialogData) {}
