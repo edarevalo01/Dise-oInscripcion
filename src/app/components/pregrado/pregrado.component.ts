@@ -110,6 +110,30 @@ export class PregradoComponent implements OnInit {
 			this.leadSource = environment.leadSourceDefecto;
 		}
 
+		this.setProgramaByParams();
+		if (this.parametrosUrl.dark_mode) {
+			this.darkMode = this.parametrosUrl.dark_mode == 1;
+		} else {
+			this.darkMode = false;
+		}
+	}
+
+	ngOnInit() {
+		this.siteKey = environment.siteKey;
+		if (!this.formReducido) {
+			this.pantalla = window.innerWidth <= 600 ? 1 : 2;
+		}
+		this.responsive = this.pantalla == 1;
+	}
+
+	public onResize(event) {
+		if (!this.formReducido) {
+			this.pantalla = event.target.innerWidth <= 600 ? 1 : 2;
+		}
+		this.responsive = this.pantalla == 1;
+	}
+
+	setProgramaByParams() {
 		if (this.parametrosUrl.programa) {
 			this.formReducido = true;
 			this.pantalla = 1;
@@ -123,11 +147,26 @@ export class PregradoComponent implements OnInit {
 			this.formReducido = false;
 			this.pantalla = 2;
 		}
+	}
 
-		if (this.parametrosUrl.dark_mode) {
-			this.darkMode = this.parametrosUrl.dark_mode == 1;
+	public getProgramas() {
+		var tipoPrograma = this.registrarInscripcionForm.controls.tipoSelected.value;
+		if (tipoPrograma != "3") {
+			this.programs = [];
+			this.pregradoServ.getProgramasByTipo(tipoPrograma).subscribe(
+				(tiposObs) => {
+					this.setProgramasService(tiposObs);
+				},
+				(error) => {
+					console.log("ERROR PROGRAMAS");
+				},
+				() => {
+					this.sortProgramas();
+				}
+			);
 		} else {
-			this.darkMode = false;
+			this.setDoctorados();
+			this.sortProgramas();
 		}
 	}
 
@@ -222,50 +261,6 @@ export class PregradoComponent implements OnInit {
 		});
 	}
 
-	ngOnInit() {
-		this.siteKey = environment.siteKey;
-		if (!this.formReducido) {
-			this.pantalla = window.innerWidth <= 600 ? 1 : 2;
-		}
-		if (this.pantalla == 1) {
-			this.responsive = true;
-		} else this.responsive = false;
-	}
-
-	public onResize(event) {
-		if (!this.formReducido) {
-			this.pantalla = event.target.innerWidth <= 600 ? 1 : 2;
-		}
-		if (this.pantalla == 1) {
-			this.responsive = true;
-		} else this.responsive = false;
-	}
-
-	public getProgramas() {
-		var tipo = this.registrarInscripcionForm.controls.tipoSelected.value;
-		if ("3" != tipo) {
-			this.programs = [];
-			this.pregradoServ.getProgramasByTipo(tipo).subscribe(
-				(tiposObs) => {
-					this.setProgramasService(tiposObs);
-					this.programs.sort((n1, n2) => {
-						var comp = (n1.nombre + n1.jornada).localeCompare(n2.nombre + n2.jornada);
-						if (comp > 1) {
-							return 1;
-						}
-						if (comp < 1) {
-							return -1;
-						}
-						return 0;
-					});
-				},
-				(error) => {}
-			);
-		} else {
-			this.setDoctorados();
-		}
-	}
-
 	setDoctorados() {
 		this.programs = [
 			{
@@ -291,8 +286,8 @@ export class PregradoComponent implements OnInit {
 		];
 	}
 
-	setProgramasService(tiposObs) {
-		tiposObs.forEach((program) => {
+	setProgramasService(programasPeticion) {
+		programasPeticion.forEach((program) => {
 			program.jornadas.forEach((jornad) => {
 				this.programs.push({
 					nombre: program.nombre,
@@ -308,12 +303,17 @@ export class PregradoComponent implements OnInit {
 		});
 	}
 
+	public continuarProceso() {
+		this.router.navigate(["/continuar"], {
+			queryParams: { lead_source: this.parametrosUrl.lead_source, dark_mode: this.parametrosUrl.dark_mode }
+		});
+	}
+
 	public enviarDatosInscripcion(captchaCode) {
-		this.loading = true;
 		var respCaptcha = captchaCode;
 		if (this.registrarInscripcionForm.invalid) {
 			this.registrarInscripcionForm.markAllAsTouched();
-			this.loading = false;
+			this.openMensajes("Fallo en inscripción", "Por favor revise sus datos.", 0);
 			return;
 		} else {
 			var prog = this.registrarInscripcionForm.controls.programaSelected.value;
@@ -322,87 +322,122 @@ export class PregradoComponent implements OnInit {
 			this.pregradoServ.guardarParte1(this.registrarInscripcionForm, this.programaSelected, respCaptcha, cookieLs).subscribe(
 				(tiposObs) => {
 					this.mensaje = tiposObs;
-					if ("fail" != this.mensaje.status) {
+				},
+				(error) => {},
+				() => {
+					if (this.mensaje.status == "ok") {
 						var tipDoc = this.registrarInscripcionForm.controls.tipoDocumentoSelected.value;
 						this.openGracias(tipDoc);
+					} else if (this.mensaje.status == "go") {
+						this.openMensajes("Un momento por favor...", this.mensaje.mensaje, 0);
+						this.redireccionarLineaTiempo();
+					} else if (this.mensaje.status == "fail") {
+						this.openMensajes("Mensaje importante", this.mensaje.mensaje, 0);
 					} else {
-						this.openMensajes(this.stringHelper.getResource("titMensaje"), this.mensaje.mensaje, 0);
+						this.openMensajes(this.mensaje.status, this.mensaje.mensaje, 0);
 					}
-				},
-				(error) => {}
+				}
 			);
 		}
-		this.loading = false;
-	}
-
-	public continuarProceso() {
-		this.router.navigate(["/continuar"], {
-			queryParams: { lead_source: this.parametrosUrl.lead_source, dark_mode: this.parametrosUrl.dark_mode }
-		});
-		//this.router.navigate(["/continuar"]);
 	}
 
 	public getProgramaSeleccionado(progSelected: string): void {
 		this.programaSelected = new Programa();
 		for (let prog of this.programs) {
-			if (prog.codigo || prog.jornada == progSelected) {
+			if (prog.codigo + "" + prog.jornada == progSelected) {
 				this.programaSelected = prog;
 				break;
 			}
 		}
 	}
 
-	public openMensajes(titulo: string, mensaje: string, opcion: number): void {
-		var sizeWindow = window.innerWidth <= 600 ? "85%" : "35%";
-		this.dialogRef = this.dialog.open(VentanaDialogoMensajesPreg, {
-			width: sizeWindow,
-			data: { titulo: titulo, mensaje: mensaje, opcion: opcion },
-			disableClose: 1 == opcion || 2 == opcion ? true : false
-		});
+	redireccionarLineaTiempo() {
+		var programa = this.registrarInscripcionForm.controls.programaSelected.value;
+		var documento = this.registrarInscripcionForm.controls.documento.value;
+		var tipo = this.registrarInscripcionForm.controls.tipoSelected.value;
 
-		this.dialogRef.afterClosed().subscribe((result) => {});
+		this.pregradoServ.validarContinuar(documento, programa.substring(0, 2), programa.substring(2, 3)).subscribe(
+			(resp) => {
+				console.log(resp);
+			},
+			(error) => {
+				if (error.status == 200) {
+					this.finalRedireccion(tipo, documento, programa);
+				}
+			},
+			() => {
+				this.finalRedireccion(tipo, documento, programa);
+			}
+		);
 	}
 
-	public openHabeasData(): void {
-		this.openMensajes(this.stringHelper.getResource("titHabeasData"), this.msgHabeasData, 0);
+	finalRedireccion(tipo: string, documento: string, programa: string) {
+		this.cookieService.delete(environment.cookiePregrado);
+		this.cookieService.delete(environment.cookiePosgrado);
+		if (tipo == "1") {
+			var datos = {
+				doc: documento,
+				fac: {
+					codigo: programa,
+					inscripcion: this.programaSelected.inscripcion,
+					contacto: this.programaSelected.contacto,
+					correo: this.programaSelected.correo,
+					nombre: this.programaSelected.nombre,
+					fa: this.programaSelected.fa
+				}
+			};
+			this.cookieService.set(environment.cookiePregrado, JSON.stringify(datos), 15 / 1440, "/", environment.dominio);
+			if (this.formReducido) {
+				setTimeout(function() {
+					window.open(environment.urlPregrado, "_blank");
+				}, 5000);
+			} else {
+				setTimeout(function() {
+					this.document.location.href = environment.urlPregrado;
+				}, 5000);
+			}
+		} else if (tipo == "2") {
+			var datosPos = {
+				doc: documento,
+				fac: programa.substring(0, 2),
+				jor: programa.substring(2, 3)
+			};
+			this.cookieService.set(environment.cookiePosgrado, JSON.stringify(datosPos), 15 / 1440, "/", environment.dominio);
+			if (this.formReducido) {
+				setTimeout(function() {
+					window.open(environment.urlPosgrado, "_blank");
+				}, 5000);
+			} else {
+				setTimeout(function() {
+					this.document.location.href = environment.urlPosgrado;
+				}, 5000);
+			}
+		} else if (tipo == "3") {
+			if (this.formReducido) {
+				setTimeout(function() {
+					window.open(environment.urlDoctorados.replace("?1", programa.substring(0, 1)).replace("?2", documento), "_blank");
+				}, 5000);
+			} else {
+				setTimeout(function() {
+					this.document.location.href = environment.urlDoctorados
+						.replace("?1", programa.substring(0, 1))
+						.replace("?2", documento);
+				}, 5000);
+			}
+		}
+
+		this.registrarInscripcionForm.reset();
+		this.setProgramaByParams();
 	}
 
 	public openGracias(tipoDoc: string): void {
 		if ("P" == tipoDoc) {
-			this.pregradoServ.setMensajeGracias(
-				this.stringHelper.getResource("titGracias"),
-				this.stringHelper.getResource("msgGraciasExt")
-			);
-			if (this.formReducido) {
-				let insForm = {
-					ftitGracias: this.stringHelper.getResource("titGracias"),
-					ftitmsgGracias: this.stringHelper.getResource("msgGraciasExt")
-				};
-				sessionStorage.setItem("gtifmp0t", JSON.stringify(insForm));
-				this.registrarInscripcionForm.reset;
-				window.open("https://" + location.host + "/oar/sia/inscripciones/#/gracias?redirect=2", "_blank");
-			} else {
-				this.router.navigateByUrl("gracias");
-				setTimeout(function() {
-					this.document.location.href = environment.urlPaginaUniver;
-				}, 5000);
-			}
-			//this.openMensajes(this.stringHelper.getResource("titGracias"), this.stringHelper.getResource("msgGraciasExt"), 2);
+			this.graciasExtranjero();
 		} else {
 			if (this.formReducido) {
-				let insForm = {
-					ftipo: this.registrarInscripcionForm.controls.tipoSelected.value,
-					fprograma: this.registrarInscripcionForm.controls.programaSelected.value,
-					fdocumento: this.registrarInscripcionForm.controls.documento.value,
-					finscripcion: this.programaSelected.inscripcion,
-					fcontacto: this.programaSelected.contacto,
-					fcorreo: this.programaSelected.correo,
-					fnombre: this.programaSelected.nombre,
-					ffa: this.programaSelected.fa,
-					ftitGracias: this.stringHelper.getResource("titGracias"),
-					ftitmsgGracias: this.stringHelper.getResource("msgGracias")
-				};
+				let insForm = this.fillObjectOfStorage();
 				sessionStorage.setItem("gtifmp0t", JSON.stringify(insForm));
+
 				this.registrarInscripcionForm.reset();
 				window.open("https://" + location.host + "/oar/sia/inscripciones/#/gracias?redirect=1", "_blank");
 			} else {
@@ -410,97 +445,66 @@ export class PregradoComponent implements OnInit {
 					this.stringHelper.getResource("titGracias"),
 					this.stringHelper.getResource("msgGracias")
 				);
-				let insForm = {
-					ftipo: this.registrarInscripcionForm.controls.tipoSelected.value,
-					fprograma: this.registrarInscripcionForm.controls.programaSelected.value,
-					fdocumento: this.registrarInscripcionForm.controls.documento.value,
-					finscripcion: this.programaSelected.inscripcion,
-					fcontacto: this.programaSelected.contacto,
-					fcorreo: this.programaSelected.correo,
-					fnombre: this.programaSelected.nombre,
-					ffa: this.programaSelected.fa,
-					ftitGracias: this.stringHelper.getResource("titGracias"),
-					ftitmsgGracias: this.stringHelper.getResource("msgGracias")
-				};
+				let insForm = this.fillObjectOfStorage();
 				sessionStorage.setItem("gtifmp0t", JSON.stringify(insForm));
+
 				this.registrarInscripcionForm.reset();
 				this.router.navigateByUrl("gracias");
-				//this.openMensajes(this.stringHelper.getResource("titGracias"), this.stringHelper.getResource("msgGracias"), 1);
-				var tipo = this.registrarInscripcionForm.controls.tipoSelected.value;
-				var programa = this.registrarInscripcionForm.controls.programaSelected.value;
-				var documento = this.registrarInscripcionForm.controls.documento.value;
-				if ("3" != tipo) {
-					if ("1" == tipo || "2" == tipo) {
-						this.pregradoServ.validarContinuar(documento, programa.substring(0, 2), programa.substring(2, 3)).subscribe(
-							(tiposObs) => {
-								this.mensaje = tiposObs;
-								if ("fail" != this.mensaje.status && "go" == this.mensaje.status) {
-									if ("1" == tipo) {
-										if (!this.cookieService.get(environment.cookiePregrado)) {
-											var datos = {
-												doc: documento,
-												fac: {
-													codigo: programa,
-													inscripcion: this.programaSelected.inscripcion,
-													contacto: this.programaSelected.contacto,
-													correo: this.programaSelected.correo,
-													nombre: this.programaSelected.nombre,
-													fa: this.programaSelected.fa
-												}
-											};
-											this.cookieService.set(
-												environment.cookiePregrado,
-												JSON.stringify(datos),
-												15 / 1440,
-												"/",
-												environment.dominio
-											);
-										}
-										setTimeout(function() {
-											this.document.location.href = environment.urlPregrado;
-										}, 5000);
-									}
-									if ("2" == tipo) {
-										if (!this.cookieService.get(environment.cookiePosgrado)) {
-											var datosPos = {
-												doc: documento,
-												fac: programa.substring(0, 2),
-												jor: programa.substring(2, 3)
-											};
-											this.cookieService.set(
-												environment.cookiePosgrado,
-												JSON.stringify(datosPos),
-												15 / 1440,
-												"/",
-												environment.dominio
-											);
-										}
-										setTimeout(function() {
-											this.document.location.href = environment.urlPosgrado;
-										}, 5000);
-									}
-								} else {
-									if (this.formReducido) {
-										window.open("http://" + location.host + "/oar/sia/inscripciones/#/gracias", "_blank");
-									} else {
-										this.router.navigateByUrl("gracias");
-									}
-									this.pregradoServ.setMensajeGracias(this.stringHelper.getResource("titMensaje"), this.mensaje.mensaje);
-									//this.openMensajes(this.stringHelper.getResource("titMensaje"), this.mensaje.mensaje, 0);
-								}
-							},
-							(error) => {}
-						);
-					}
-				} else {
-					setTimeout(function() {
-						this.document.location.href = environment.urlDoctorados
-							.replace("?1", programa.substring(0, 1))
-							.replace("?2", documento);
-					}, 5000);
-				}
 			}
 		}
+	}
+
+	graciasExtranjero() {
+		if (this.formReducido) {
+			let insForm = {
+				ftitGracias: this.stringHelper.getResource("titGracias"),
+				ftitmsgGracias: this.stringHelper.getResource("msgGraciasExt")
+			};
+			sessionStorage.setItem("gtifmp0t", JSON.stringify(insForm));
+			this.registrarInscripcionForm.reset;
+			window.open("https://" + location.host + "/oar/sia/inscripciones/#/gracias?redirect=2", "_blank");
+		} else {
+			this.pregradoServ.setMensajeGracias(
+				this.stringHelper.getResource("titGracias"),
+				this.stringHelper.getResource("msgGraciasExt")
+			);
+			this.router.navigateByUrl("gracias");
+		}
+	}
+
+	fillObjectOfStorage(): any {
+		return {
+			ftipo: this.registrarInscripcionForm.controls.tipoSelected.value,
+			fprograma: this.registrarInscripcionForm.controls.programaSelected.value,
+			fdocumento: this.registrarInscripcionForm.controls.documento.value,
+			finscripcion: this.programaSelected.inscripcion,
+			fcontacto: this.programaSelected.contacto,
+			fcorreo: this.programaSelected.correo,
+			fnombre: this.programaSelected.nombre,
+			ffa: this.programaSelected.fa,
+			ftitGracias: this.stringHelper.getResource("titGracias"),
+			ftitmsgGracias: this.stringHelper.getResource("msgGracias")
+		};
+	}
+
+	/**
+	 * @param titulo Titulo del mensaje
+	 * @param mensaje Cuerpo del mensaje
+	 * @param opcion 0: si es con boton de cerrar, 1 || 2: si no tiene boton de cerrar (no se cual es la diferencia entre 1 y 2 ._.)
+	 */
+	public openMensajes(titulo: string, mensaje: string, opcion: number): void {
+		var sizeWindow = window.innerWidth <= 600 ? "99%" : "35%";
+		this.dialogRef = this.dialog.open(VentanaDialogoMensajesPreg, {
+			width: sizeWindow,
+			data: { titulo: titulo, mensaje: mensaje, opcion: opcion },
+			disableClose: opcion == 1 || opcion == 2 ? true : false
+		});
+
+		this.dialogRef.afterClosed().subscribe((result) => {});
+	}
+
+	public openHabeasData(): void {
+		this.openMensajes(this.stringHelper.getResource("titHabeasData"), this.msgHabeasData, 0);
 	}
 }
 

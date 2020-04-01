@@ -22,7 +22,6 @@
 				</mat-card-title>
 				<mat-card-subtitle [ngClass]="darkMode ? 'subtitulo-izquierda-dark' : 'subtitulo-izquierda'" *ngIf="!formReducido">
 					{{ stringHelper.getResource("lblInscribete") }}
-					<!--( <b>{{ ls }}</b> )-->
 				</mat-card-subtitle>
 				<mat-card-content [ngClass]="formReducido ? 'form-content-izquierda-reducido' : 'form-content-izquierda'">
 					<div class="inscripcion-form">
@@ -142,7 +141,7 @@
 									He le&iacute;do y acepto los
 									<span (click)="openHabeasData()" class="vinculo">Términos</span>
 									<br />
-									y condiciones (Habeas data)
+									<span (click)="openHabeasData()" class="vinculo">y condiciones</span> (Habeas data)
 								</span>
 							</mat-checkbox>
 							<mat-error *ngIf="registrarInscripcionForm.hasError('required', 'terminos')" style="color: #ffa600;">

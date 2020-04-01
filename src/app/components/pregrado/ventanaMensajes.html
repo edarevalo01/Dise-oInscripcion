@@ -1,15 +1,19 @@
-<div *ngIf="0 == data.opcion">
-  <h2 mat-dialog-title class="titulo-izquierda">{{ data.titulo }}</h2>
-  <mat-dialog-content class="mat-typography">
-    <p>{{ data.mensaje }}</p>
-  </mat-dialog-content>
-  <mat-dialog-actions align="end">
-    <button mat-button (click)="onNoClick()"><mat-icon matSuffix class="style-icons">cancel</mat-icon>Cerrar</button>
-  </mat-dialog-actions>
+<div *ngIf="data.opcion == 0">
+	<h2 mat-dialog-title class="titulo-izquierda">{{ data.titulo }}</h2>
+
+	<mat-dialog-content class="mat-typography">
+		<p>{{ data.mensaje }}</p>
+	</mat-dialog-content>
+
+	<mat-dialog-actions align="end">
+		<button mat-button (click)="onNoClick()"><mat-icon matSuffix class="style-icons">cancel</mat-icon>Cerrar</button>
+	</mat-dialog-actions>
 </div>
-<div *ngIf="1 == data.opcion || 2 == data.opcion">
-  <h1 mat-dialog-title class="titulo-izquierda">{{ data.titulo }}</h1>
-  <mat-dialog-content class="mat-typography">
-    <p>{{ data.mensaje }}</p>
-  </mat-dialog-content>
+
+<div *ngIf="data.opcion == 1 || data.opcion == 2">
+	<h1 mat-dialog-title class="titulo-izquierda">{{ data.titulo }}</h1>
+
+	<mat-dialog-content class="mat-typography">
+		<p>{{ data.mensaje }}</p>
+	</mat-dialog-content>
 </div>
