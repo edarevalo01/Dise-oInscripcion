@@ -43,6 +43,7 @@ export class PregradoContinuarComponent implements OnInit {
 
 	public ls: string = "";
 	public responsive: boolean = false;
+	public progress: boolean = false;
 
 	constructor(
 		private pregradoServ: PregradoService,
@@ -85,6 +86,7 @@ export class PregradoContinuarComponent implements OnInit {
 	}
 
 	public getProgramas() {
+		this.progress = true;
 		var tipoPrograma = this.continuarInscripcionForm.controls.tipoSelected.value;
 		if (tipoPrograma != "3") {
 			this.programs = [];
@@ -93,6 +95,7 @@ export class PregradoContinuarComponent implements OnInit {
 					this.setProgramasService(tiposObs);
 				},
 				(error) => {
+					this.progress = false;
 					console.log("ERROR PROGRAMAS");
 				},
 				() => {
@@ -158,6 +161,7 @@ export class PregradoContinuarComponent implements OnInit {
 			}
 			return 0;
 		});
+		this.progress = false;
 	}
 
 	public enviarDatosInscripcionContinuar() {
@@ -177,9 +181,10 @@ export class PregradoContinuarComponent implements OnInit {
 		var programa = this.continuarInscripcionForm.controls.programaSelected.value;
 		var documento = this.continuarInscripcionForm.controls.documento.value;
 		this.getProgramaSeleccionado(programa);
-
+		this.progress = true;
 		this.pregradoServ.validarContinuar(documento, programa.substring(0, 2), programa.substring(2, 3)).subscribe(
 			(resp) => {
+				this.progress = false;
 				if (resp.status == "fail") {
 					this.openMensajes("Mensaje", resp.mensaje, 0);
 				} else if (resp.status == "go") {
@@ -187,6 +192,7 @@ export class PregradoContinuarComponent implements OnInit {
 				}
 			},
 			(error) => {
+				this.progress = false;
 				console.log(error);
 			}
 		);

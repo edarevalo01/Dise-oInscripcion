@@ -35,13 +35,15 @@ export class PregradoService {
 
 	//validar continuar
 	public validarContinuar(documento: string, programa: string, jornada: string): Observable<Mensaje> {
-		this.mensaje = this.http.get<Mensaje>(
-			environment.urlBackend +
-				environment.validarContinuar
-					.replace("?1", documento)
-					.replace("?2", programa)
-					.replace("?3", jornada)
-		);
+		var urlC = "";
+		if (!jornada) {
+			var vDoc = programa[0] == "1" ? "DA" : "DE";
+			urlC = environment.urlBackend + documento + "/" + vDoc + "/" + programa[1] + "/continuar.json";
+		} else {
+			urlC = environment.urlBackend + documento + "/" + programa + "/" + jornada + "/continuar.json";
+		}
+		console.log(urlC);
+		this.mensaje = this.http.get<Mensaje>(urlC);
 		return this.mensaje;
 	}
 

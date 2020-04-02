@@ -1,3 +1,6 @@
+<div class="progress-bar-form" *ngIf="progress">
+	<mat-progress-bar mode="indeterminate"></mat-progress-bar>
+</div>
 <mat-grid-list [cols]="pantalla" rowHeight="100%" (window:resize)="onResize($event)" class="mat-grid-styles fontf">
 	<mat-grid-tile colspan="1" rowspan="1">
 		<mat-card

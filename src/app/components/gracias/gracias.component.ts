@@ -30,9 +30,9 @@ export class GraciasComponent implements OnInit {
 		this.mensajeService = services.getMensajeGracias();
 
 		this.parametrosUrl = this.route.snapshot.queryParams;
-		if (!this.tituloGracias && !this.mensajeGracias && !this.parametrosUrl.redirect) {
-			document.location.href = "https://www.lasalle.edu.co/";
-		}
+		// if (!this.tituloGracias && !this.mensajeGracias && !this.parametrosUrl.redirect) {
+		// 	document.location.href = "https://www.lasalle.edu.co/";
+		// }
 
 		if (this.parametrosUrl.redirect) {
 			this.registrarInscripcionForm = JSON.parse(sessionStorage.getItem("gtifmp0t"));

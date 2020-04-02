@@ -475,3 +475,12 @@ a:link:active,
 a:visited:active {
 	color: #ffc107;
 }
+
+.progress-bar-form {
+	overflow: hidden;
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	z-index: 99999;
+}

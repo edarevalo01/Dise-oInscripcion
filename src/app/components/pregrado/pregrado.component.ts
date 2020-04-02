@@ -67,6 +67,7 @@ export class PregradoComponent implements OnInit {
 	public formReducido: boolean = false;
 	public leadSource: string = "";
 	public responsive: boolean = false;
+	public progress: boolean = false;
 
 	constructor(
 		private pregradoServ: PregradoService,
@@ -78,6 +79,7 @@ export class PregradoComponent implements OnInit {
 		@Inject(DOCUMENT) private document: Document
 	) {
 		this.stringHelper = new StringResourceHelper("titulos-mensajes");
+		sessionStorage.clear();
 
 		this.msgHabeasData = this.stringHelper.getResource("msgHabeasData");
 		this.registrarInscripcionForm = this.formBuilder.group({
@@ -171,6 +173,7 @@ export class PregradoComponent implements OnInit {
 	}
 
 	getProgramaParam(param): any {
+		this.progress = true;
 		this.getProgramaPregrado(param.substring(0, 2), param.substring(2, 3));
 	}
 
@@ -180,6 +183,7 @@ export class PregradoComponent implements OnInit {
 				this.setProgramasService(resp);
 			},
 			(error) => {
+				this.progress = false;
 				console.log("error pregrado");
 			},
 			() => {
@@ -207,6 +211,7 @@ export class PregradoComponent implements OnInit {
 				this.setProgramasService(resp);
 			},
 			(error) => {
+				this.progress = false;
 				console.log("Error Posgrados");
 			},
 			() => {
@@ -238,7 +243,7 @@ export class PregradoComponent implements OnInit {
 		} else if (programa == "DE") {
 			this.registrarInscripcionForm.controls.programaSelected.setValue("2N");
 			this.registrarInscripcionForm.controls.tipoSelected.setValue("3");
-			this.progSelected = "DAN";
+			this.progSelected = "DEN";
 			this.tipSelected = "3";
 		} else {
 			this.progSelected = null;
@@ -259,6 +264,7 @@ export class PregradoComponent implements OnInit {
 			}
 			return 0;
 		});
+		this.progress = false;
 	}
 
 	setDoctorados() {
@@ -310,12 +316,15 @@ export class PregradoComponent implements OnInit {
 	}
 
 	public enviarDatosInscripcion(captchaCode) {
+		this.progress = true;
 		var respCaptcha = captchaCode;
 		if (this.registrarInscripcionForm.invalid) {
 			this.registrarInscripcionForm.markAllAsTouched();
 			this.openMensajes("Fallo en inscripción", "Por favor revise sus datos.", 0);
+			this.progress = false;
 			return;
 		} else {
+			this.registrarInscripcionForm.controls.terminos.setValue(false);
 			var prog = this.registrarInscripcionForm.controls.programaSelected.value;
 			this.getProgramaSeleccionado(prog);
 			var cookieLs = this.cookieService.get(environment.cookieLeadSource).toString();
@@ -325,6 +334,7 @@ export class PregradoComponent implements OnInit {
 				},
 				(error) => {},
 				() => {
+					this.progress = false;
 					if (this.mensaje.status == "ok") {
 						var tipDoc = this.registrarInscripcionForm.controls.tipoDocumentoSelected.value;
 						this.openGracias(tipDoc);
@@ -334,7 +344,18 @@ export class PregradoComponent implements OnInit {
 					} else if (this.mensaje.status == "fail") {
 						this.openMensajes("Mensaje importante", this.mensaje.mensaje, 0);
 					} else {
-						this.openMensajes(this.mensaje.status, this.mensaje.mensaje, 0);
+						//TODO: Si es un programa especial deberia tambien abrir la pantalla de gracias
+						//			Parece que esto no lo guarda en el anañytics...
+						if (this.formReducido) {
+							this.openMensajes(this.mensaje.status.toLocaleUpperCase(), this.mensaje.mensaje, 0);
+							this.registrarInscripcionForm.reset();
+							this.setProgramaByParams();
+						} else {
+							this.openMensajes(this.mensaje.status.toLocaleUpperCase(), this.mensaje.mensaje, 1);
+							setTimeout(function() {
+								this.document.location.href = environment.urlPaginaUniver;
+							}, 5000);
+						}
 					}
 				}
 			);
@@ -355,9 +376,10 @@ export class PregradoComponent implements OnInit {
 		var programa = this.registrarInscripcionForm.controls.programaSelected.value;
 		var documento = this.registrarInscripcionForm.controls.documento.value;
 		var tipo = this.registrarInscripcionForm.controls.tipoSelected.value;
-
+		this.progress = true;
 		this.pregradoServ.validarContinuar(documento, programa.substring(0, 2), programa.substring(2, 3)).subscribe(
 			(resp) => {
+				this.progress = false;
 				if (resp.status == "fail") {
 					this.openMensajes("Mensaje", resp.mensaje, 0);
 				} else if (resp.status == "go") {
@@ -365,6 +387,7 @@ export class PregradoComponent implements OnInit {
 				}
 			},
 			(error) => {
+				this.progress = false;
 				console.log(error);
 			}
 		);
@@ -389,11 +412,11 @@ export class PregradoComponent implements OnInit {
 			if (this.formReducido) {
 				setTimeout(function() {
 					window.open(environment.urlPregrado, "_blank");
-				}, 5000);
+				}, 2000);
 			} else {
 				setTimeout(function() {
 					this.document.location.href = environment.urlPregrado;
-				}, 5000);
+				}, 2000);
 			}
 		} else if (tipo == "2") {
 			var datosPos = {
@@ -405,23 +428,23 @@ export class PregradoComponent implements OnInit {
 			if (this.formReducido) {
 				setTimeout(function() {
 					window.open(environment.urlPosgrado, "_blank");
-				}, 5000);
+				}, 2000);
 			} else {
 				setTimeout(function() {
 					this.document.location.href = environment.urlPosgrado;
-				}, 5000);
+				}, 2000);
 			}
 		} else if (tipo == "3") {
 			if (this.formReducido) {
 				setTimeout(function() {
 					window.open(environment.urlDoctorados.replace("?1", programa.substring(0, 1)).replace("?2", documento), "_blank");
-				}, 5000);
+				}, 2000);
 			} else {
 				setTimeout(function() {
 					this.document.location.href = environment.urlDoctorados
 						.replace("?1", programa.substring(0, 1))
 						.replace("?2", documento);
-				}, 5000);
+				}, 2000);
 			}
 		}
 
@@ -435,15 +458,18 @@ export class PregradoComponent implements OnInit {
 		} else {
 			let insForm = this.fillObjectOfStorage();
 			sessionStorage.setItem("gtifmp0t", JSON.stringify(insForm));
+
+			this.registrarInscripcionForm.reset();
+			this.setProgramaByParams();
+
 			if (this.formReducido) {
-				this.registrarInscripcionForm.reset();
-				window.open("https://" + location.host + "/oar/sia/inscripciones/#/gracias?redirect=1", "_blank");
+				//window.open("https://" + location.host + "/oar/sia/inscripciones/#/gracias?redirect=1", "_blank");
+				window.open("http://" + location.host + "/#/gracias?redirect=1", "_blank");
 			} else {
 				this.pregradoServ.setMensajeGracias(
 					this.stringHelper.getResource("titGracias"),
 					this.stringHelper.getResource("msgGracias")
 				);
-				this.registrarInscripcionForm.reset();
 				this.router.navigateByUrl("gracias");
 			}
 		}
@@ -464,9 +490,12 @@ export class PregradoComponent implements OnInit {
 			fgrado: "e"
 		};
 		sessionStorage.setItem("gtifmp0t", JSON.stringify(insForm));
+		this.registrarInscripcionForm.reset();
+		this.setProgramaByParams();
+
 		if (this.formReducido) {
-			this.registrarInscripcionForm.reset;
-			window.open("https://" + location.host + "/oar/sia/inscripciones/#/gracias?redirect=2", "_blank");
+			// window.open("https://" + location.host + "/oar/sia/inscripciones/#/gracias?redirect=2", "_blank");
+			window.open("http://" + location.host + "/#/gracias?redirect=2", "_blank");
 		} else {
 			this.pregradoServ.setMensajeGracias(
 				this.stringHelper.getResource("titGracias"),
