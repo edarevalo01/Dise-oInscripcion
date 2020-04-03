@@ -463,8 +463,8 @@ export class PregradoComponent implements OnInit {
 			this.setProgramaByParams();
 
 			if (this.formReducido) {
-				//window.open("https://" + location.host + "/oar/sia/inscripciones/#/gracias?redirect=1", "_blank");
-				window.open("http://" + location.host + "/#/gracias?redirect=1", "_blank");
+				window.open("https://" + location.host + "/oar/sia/inscripciones/#/gracias?redirect=1", "_blank");
+				//window.open("http://" + location.host + "/#/gracias?redirect=1", "_blank");
 			} else {
 				this.pregradoServ.setMensajeGracias(
 					this.stringHelper.getResource("titGracias"),
@@ -494,8 +494,8 @@ export class PregradoComponent implements OnInit {
 		this.setProgramaByParams();
 
 		if (this.formReducido) {
-			// window.open("https://" + location.host + "/oar/sia/inscripciones/#/gracias?redirect=2", "_blank");
-			window.open("http://" + location.host + "/#/gracias?redirect=2", "_blank");
+			window.open("https://" + location.host + "/oar/sia/inscripciones/#/gracias?redirect=2", "_blank");
+			//window.open("http://" + location.host + "/#/gracias?redirect=2", "_blank");
 		} else {
 			this.pregradoServ.setMensajeGracias(
 				this.stringHelper.getResource("titGracias"),
