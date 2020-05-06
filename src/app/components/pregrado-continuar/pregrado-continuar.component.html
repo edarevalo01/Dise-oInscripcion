@@ -1,26 +1,17 @@
 <div class="progress-bar-form" *ngIf="progress">
 	<mat-progress-bar mode="indeterminate"></mat-progress-bar>
 </div>
-<mat-grid-list [cols]="pantalla" rowHeight="100%" (window:resize)="onResize($event)" class="mat-grid-styles fontf">
+
+<mat-grid-list [cols]="'1'" rowHeight="100%" (window:resize)="onResize($event)" class="mat-grid-styles fontf">
 	<mat-grid-tile colspan="1" rowspan="1">
 		<mat-card
 			[ngClass]="{
 				'scrollable-content': darkMode || !darkMode,
 				'parte-izquierda-dark': darkMode,
 				'parte-izquierda': !darkMode,
-				'padding-parte-izquierda': true
+				'padding-parte-izquierda': false
 			}"
 		>
-			<div style="width: 100%; margin-bottom: 5%;">
-				<img src="assets/logo_salle.svg" alt="Logo Salle" class="img-logo-salle" *ngIf="!darkMode" />
-				<img src="assets/logo_salle_blanco.svg" alt="Logo Salle" class="img-logo-salle" *ngIf="darkMode" />
-			</div>
-			<mat-card-title class="titulo-izquierda">
-				{{ stringHelper.getResource("titContinuar") }}
-			</mat-card-title>
-			<mat-card-subtitle [ngClass]="darkMode ? 'subtitulo-izquierda-dark' : 'subtitulo-izquierda'">
-				{{ stringHelper.getResource("lblContinuar2") }}
-			</mat-card-subtitle>
 			<mat-card-content [style.overflow]="'auto'" class="form-content-izquierda">
 				<div class="inscripcion-form">
 					<form class="estilo-formulario" [formGroup]="continuarInscripcionForm">
@@ -65,41 +56,11 @@
 					<button
 						mat-raised-button
 						(click)="enviarDatosInscripcionContinuar()"
-						[ngClass]="darkMode ? 'btn-inscribir-dark' : 'btn-inscribir'"
+						[ngClass]="darkMode ? 'btn-inscribir-dark-cnt' : 'btn-inscribir-cnt'"
 						[disabled]="continuarInscripcionForm.invalid"
 					>
 						{{ stringHelper.getResource("lblContinuarr") }}
 					</button>
-				</div>
-			</mat-card-content>
-		</mat-card>
-	</mat-grid-tile>
-	<div class="position-button" (click)="inscribir()">
-		<button mat-fab class="style-button" *ngIf="!responsive">
-			<img src="assets/flechas.svg" />
-		</button>
-		<button mat-button mat-stroked-button class="style-button-two" *ngIf="responsive">Inscribirme</button>
-	</div>
-	<div class="position-button" *ngIf="loading">
-		<mat-progress-spinner [mode]="'indeterminate'"></mat-progress-spinner>
-	</div>
-	<mat-grid-tile colspan="1" rowspan="1" *ngIf="!responsive">
-		<mat-card class="parte-derecha">
-			<img src="assets/astronauta.svg" alt="astronauta" class="astronauta" />
-			<img src="assets/logounisalle.svg" alt="lasalle" class="logolasalle" />
-			<mat-card-content>
-				<div style="width: 100%;">
-					<div class="text-right">
-						<h2 class="titulo-procAdmin">
-							{{ stringHelper.getResource("titInscribete2") }}
-						</h2>
-						<p class="content-procAdmin">
-							{{ stringHelper.getResource("lblDerecha") }}
-						</p>
-						<button mat-raised-button (click)="inscribir()" class="btn-continuar">
-							{{ stringHelper.getResource("lblInscribirme") }}
-						</button>
-					</div>
 				</div>
 			</mat-card-content>
 		</mat-card>

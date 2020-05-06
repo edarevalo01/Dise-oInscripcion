@@ -146,8 +146,10 @@ export class PregradoComponent implements OnInit {
 				this.getProgramaParam(this.parametrosUrl.programa);
 			}
 		} else {
-			this.formReducido = false;
-			this.pantalla = 2;
+			this.formReducido = true;
+			this.pantalla = 1;
+			this.progSelected = null;
+			this.tipSelected = null;
 		}
 	}
 
@@ -159,9 +161,7 @@ export class PregradoComponent implements OnInit {
 				(tiposObs) => {
 					this.setProgramasService(tiposObs);
 				},
-				(error) => {
-					console.log("ERROR PROGRAMAS");
-				},
+				(error) => {},
 				() => {
 					this.sortProgramas();
 				}
@@ -184,7 +184,6 @@ export class PregradoComponent implements OnInit {
 			},
 			(error) => {
 				this.progress = false;
-				console.log("error pregrado");
 			},
 			() => {
 				var programaSearch = this.programs.filter((prog) => prog.codigo == programa && prog.jornada == jornada);
@@ -212,7 +211,6 @@ export class PregradoComponent implements OnInit {
 			},
 			(error) => {
 				this.progress = false;
-				console.log("Error Posgrados");
 			},
 			() => {
 				var programaSearch = this.programs.filter((prog) => prog.codigo == programa && prog.jornada == jornada);
@@ -288,6 +286,16 @@ export class PregradoComponent implements OnInit {
 				contacto: null,
 				fa: null,
 				correo: null
+			},
+			{
+				codigo: "3",
+				nombre: "DOCTORADO EN ESTUDIOS DE DESARROLLO Y TERRITORIO",
+				jornada: "N",
+				inscripcion: "S",
+				jornadas: [],
+				contacto: null,
+				fa: null,
+				correo: null
 			}
 		];
 	}
@@ -345,14 +353,14 @@ export class PregradoComponent implements OnInit {
 						this.openMensajes("Mensaje importante", this.mensaje.mensaje, 0);
 					} else {
 						//TODO: Si es un programa especial deberia tambien abrir la pantalla de gracias
-						//			Parece que esto no lo guarda en el anañytics...
+						//			Parece que esto no lo guarda en el analytics...
 						if (this.formReducido) {
 							this.openMensajes(this.mensaje.status.toLocaleUpperCase(), this.mensaje.mensaje, 0);
 							this.registrarInscripcionForm.reset();
 							this.setProgramaByParams();
 						} else {
 							this.openMensajes(this.mensaje.status.toLocaleUpperCase(), this.mensaje.mensaje, 1);
-							setTimeout(function() {
+							setTimeout(function () {
 								this.document.location.href = environment.urlPaginaUniver;
 							}, 5000);
 						}
@@ -410,11 +418,11 @@ export class PregradoComponent implements OnInit {
 			};
 			this.cookieService.set(environment.cookiePregrado, JSON.stringify(datos), 15 / 1440, "/", environment.dominio);
 			if (this.formReducido) {
-				setTimeout(function() {
+				setTimeout(function () {
 					window.open(environment.urlPregrado, "_blank");
 				}, 2000);
 			} else {
-				setTimeout(function() {
+				setTimeout(function () {
 					this.document.location.href = environment.urlPregrado;
 				}, 2000);
 			}
@@ -426,21 +434,21 @@ export class PregradoComponent implements OnInit {
 			};
 			this.cookieService.set(environment.cookiePosgrado, JSON.stringify(datosPos), 15 / 1440, "/", environment.dominio);
 			if (this.formReducido) {
-				setTimeout(function() {
+				setTimeout(function () {
 					window.open(environment.urlPosgrado, "_blank");
 				}, 2000);
 			} else {
-				setTimeout(function() {
+				setTimeout(function () {
 					this.document.location.href = environment.urlPosgrado;
 				}, 2000);
 			}
 		} else if (tipo == "3") {
 			if (this.formReducido) {
-				setTimeout(function() {
+				setTimeout(function () {
 					window.open(environment.urlDoctorados.replace("?1", programa.substring(0, 1)).replace("?2", documento), "_blank");
 				}, 2000);
 			} else {
-				setTimeout(function() {
+				setTimeout(function () {
 					this.document.location.href = environment.urlDoctorados
 						.replace("?1", programa.substring(0, 1))
 						.replace("?2", documento);

@@ -30,9 +30,9 @@ export class GraciasComponent implements OnInit {
 		this.mensajeService = services.getMensajeGracias();
 
 		this.parametrosUrl = this.route.snapshot.queryParams;
-		// if (!this.tituloGracias && !this.mensajeGracias && !this.parametrosUrl.redirect) {
-		// 	document.location.href = "https://www.lasalle.edu.co/";
-		// }
+		if (!this.tituloGracias && !this.mensajeGracias && !this.parametrosUrl.redirect) {
+			document.location.href = "https://www.lasalle.edu.co/";
+		}
 
 		if (this.parametrosUrl.redirect) {
 			this.registrarInscripcionForm = JSON.parse(sessionStorage.getItem("gtifmp0t"));
@@ -40,7 +40,7 @@ export class GraciasComponent implements OnInit {
 			this.mensajeGracias = this.registrarInscripcionForm.ftitmsgGracias;
 
 			if (this.parametrosUrl.redirect == 2) {
-				setTimeout(function() {
+				setTimeout(function () {
 					this.document.location.href = environment.urlPaginaUniver;
 				}, 2000);
 			} else {
@@ -55,7 +55,7 @@ export class GraciasComponent implements OnInit {
 			this.mensajeGracias = this.registrarInscripcionForm.ftitmsgGracias;
 
 			if (this.registrarInscripcionForm.fgrado == "e") {
-				setTimeout(function() {
+				setTimeout(function () {
 					this.document.location.href = environment.urlPaginaUniver;
 				}, 2000);
 			} else {
@@ -83,7 +83,7 @@ export class GraciasComponent implements OnInit {
 				}
 			};
 			this.cookieService.set(environment.cookiePregrado, JSON.stringify(datos), 15 / 1440, "/", environment.dominio);
-			setTimeout(function() {
+			setTimeout(function () {
 				this.document.location.href = environment.urlPregrado;
 			}, 2000);
 		} else if (tipo == "2") {
@@ -93,11 +93,11 @@ export class GraciasComponent implements OnInit {
 				jor: programa.substring(2, 3)
 			};
 			this.cookieService.set(environment.cookiePosgrado, JSON.stringify(datosPos), 15 / 1440, "/", environment.dominio);
-			setTimeout(function() {
+			setTimeout(function () {
 				this.document.location.href = environment.urlPosgrado;
 			}, 2000);
 		} else if (tipo == "3") {
-			setTimeout(function() {
+			setTimeout(function () {
 				this.document.location.href = environment.urlDoctorados.replace("?1", programa.substring(0, 1)).replace("?2", documento);
 			}, 2000);
 		}

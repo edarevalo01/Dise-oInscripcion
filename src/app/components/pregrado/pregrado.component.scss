@@ -40,6 +40,32 @@
 	font-weight: 400;
 }
 
+.btn-inscribir-cnt {
+	width: 96%;
+	padding: 5px 27px;
+	font: Roboto, Condensed, Regular;
+	font-size: 14px;
+	float: left;
+	border-radius: 0px;
+	margin: 1% 0%;
+	background-color: #000000de;
+	color: #ffc107;
+	font-weight: 400;
+}
+
+.btn-inscribir-dark-cnt {
+	width: 96%;
+	padding: 5px 27px;
+	font: Roboto, Condensed, Regular;
+	font-size: 14px;
+	float: left;
+	border-radius: 0px;
+	margin: 1% 0%;
+	background-color: #03a9f4;
+	color: #ffffff;
+	font-weight: 400;
+}
+
 ::ng-deep .mat-raised-button[disabled].btn-inscribir-dark {
 	color: #ffffff8c !important;
 }
@@ -91,7 +117,7 @@
 	box-shadow: 0 0px 0px -0px rgba(0, 0, 0, 0), 0 0px 0px 0 rgba(0, 0, 0, 0), 0 0px 0px 0 rgba(12, 12, 12, 0) !important;
 }
 
-@media screen and (max-width: 600px) {
+@media screen and (max-width: 800px) {
 	/* Pequeño */
 	.img-logo-salle {
 		margin-top: 25px;
@@ -167,7 +193,7 @@
 	}
 }
 
-@media screen and (min-width: 600px) {
+@media screen and (min-width: 800px) {
 	/* Grande */
 	.img-logo-salle {
 		width: 35%;
@@ -217,7 +243,7 @@
 
 	.form-content-izquierda {
 		height: 100%;
-		padding: 0% 9.21% 12% 9.21%;
+		// padding: 0% 9.21% 12% 9.21%;
 		overflow: auto;
 	}
 

@@ -96,7 +96,6 @@ export class PregradoContinuarComponent implements OnInit {
 				},
 				(error) => {
 					this.progress = false;
-					console.log("ERROR PROGRAMAS");
 				},
 				() => {
 					this.sortProgramas();
@@ -140,6 +139,16 @@ export class PregradoContinuarComponent implements OnInit {
 			{
 				codigo: "2",
 				nombre: "DOCTORADO EN EDUCACIÓN",
+				jornada: "N",
+				inscripcion: "S",
+				jornadas: [],
+				contacto: null,
+				fa: null,
+				correo: null
+			},
+			{
+				codigo: "3",
+				nombre: "DOCTORADO EN ESTUDIOS DE DESARROLLO Y TERRITORIO",
 				jornada: "N",
 				inscripcion: "S",
 				jornadas: [],
@@ -193,7 +202,6 @@ export class PregradoContinuarComponent implements OnInit {
 			},
 			(error) => {
 				this.progress = false;
-				console.log(error);
 			}
 		);
 	}
@@ -215,7 +223,7 @@ export class PregradoContinuarComponent implements OnInit {
 			};
 			this.cookieService.set(environment.cookiePregrado, JSON.stringify(datos), 15 / 1440, "/", environment.dominio);
 
-			setTimeout(function() {
+			setTimeout(function () {
 				this.document.location.href = environment.urlPregrado;
 			}, 100);
 		} else if (tipo == "2") {
@@ -226,11 +234,11 @@ export class PregradoContinuarComponent implements OnInit {
 			};
 			this.cookieService.set(environment.cookiePosgrado, JSON.stringify(datosPos), 15 / 1440, "/", environment.dominio);
 
-			setTimeout(function() {
+			setTimeout(function () {
 				this.document.location.href = environment.urlPosgrado;
 			}, 100);
 		} else if (tipo == "3") {
-			setTimeout(function() {
+			setTimeout(function () {
 				this.document.location.href = environment.urlDoctorados.replace("?1", programa.substring(0, 1)).replace("?2", documento);
 			}, 100);
 		}

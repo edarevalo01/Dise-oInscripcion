@@ -11,17 +11,17 @@ body {
 	background: #ffffff !important;
 }
 
-@media screen and (max-width: 600px) {
+@media screen and (max-width: 800px) {
 	/*pequeño*/
-	.div-fullscreen {
-		padding-top: 3%;
-		padding-bottom: 3%;
-	}
+	// .div-fullscreen {
+	// 	padding-top: 3%;
+	// 	padding-bottom: 3%;
+	// }
 
 	.div-complete {
 		box-shadow: 0 4px 8px 0 #00000033, 0 6px 20px 0 #00000030;
-		height: 94%;
-		width: 95.88%;
+		height: 100%;
+		width: 100%;
 		margin: auto;
 	}
 
@@ -45,13 +45,13 @@ body {
 @media screen and (min-width: 768px) {
 	.div-complete {
 		box-shadow: 0 4px 8px 0 #00000033, 0 6px 20px 0 #00000030;
-		height: 85%;
+		height: 100%;
 		width: 100%;
 		margin: auto;
 	}
 }
 
-@media screen and (min-width: 600px) {
+@media screen and (min-width: 800px) {
 	/* Grande */
 	.div-fullscreen {
 		padding-top: 4%;
@@ -59,7 +59,7 @@ body {
 	}
 
 	.body-complete {
-		background: #e7eff1 url("../assets/fondogris.svg") no-repeat center;
+		background: #ffffff url("../assets/fondogris.svg") no-repeat center;
 	}
 
 	.body-complete-dark {
