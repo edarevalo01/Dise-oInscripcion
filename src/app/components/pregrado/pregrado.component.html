@@ -2,9 +2,6 @@
 	<mat-progress-bar mode="indeterminate"></mat-progress-bar>
 </div>
 <div style="height: 100%;" class="fontf">
-	<!-- <div class="titulo-izquierda-reducido" *ngIf="formReducido">
-		"TopBar" Inscríbete 
-	</div> -->
 	<mat-grid-list [cols]="pantalla" rowHeight="100%" (window:resize)="onResize($event)" class="mat-grid-styles">
 		<mat-grid-tile colspan="1" rowspan="1">
 			<mat-card
@@ -168,9 +165,6 @@
 						>
 							{{ stringHelper.getResource("lblInscribirme") }}
 						</button>
-						<!-- <div style="width: 100%; text-align: center; color: #ffc107; margin-top: 5px; float: right; cursor: pointer;" *ngIf='formReducido'>
-              <span (click)='cambiarPantalla()'>CONTINUAR PROCESO DE ADMISIÓN</span>
-            </div> -->
 					</div>
 				</mat-card-content>
 			</mat-card>
@@ -179,9 +173,6 @@
 			<button mat-fab class="style-button" *ngIf="!responsive"><img src="assets/flechas.svg" /></button>
 			<button mat-button mat-stroked-button class="style-button-two" *ngIf="responsive">Continuar proceso de inscripción</button>
 		</div>
-		<!-- <div class="position-button" *ngIf="loading">
-			<mat-progress-spinner [mode]="'indeterminate'"></mat-progress-spinner>
-		</div> -->
 		<mat-grid-tile colspan="1" rowspan="1" *ngIf="!formReducido && !responsive">
 			<mat-card class="parte-derecha">
 				<img src="assets/astronauta.svg" alt="astronauta" class="astronauta" />

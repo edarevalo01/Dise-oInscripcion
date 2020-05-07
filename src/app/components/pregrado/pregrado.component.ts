@@ -123,14 +123,14 @@ export class PregradoComponent implements OnInit {
 	ngOnInit() {
 		this.siteKey = environment.siteKey;
 		if (!this.formReducido) {
-			this.pantalla = window.innerWidth <= 600 ? 1 : 2;
+			this.pantalla = window.innerWidth <= 800 ? 1 : 2;
 		}
 		this.responsive = this.pantalla == 1;
 	}
 
 	public onResize(event) {
 		if (!this.formReducido) {
-			this.pantalla = event.target.innerWidth <= 600 ? 1 : 2;
+			this.pantalla = event.target.innerWidth <= 800 ? 1 : 2;
 		}
 		this.responsive = this.pantalla == 1;
 	}
@@ -242,6 +242,11 @@ export class PregradoComponent implements OnInit {
 			this.registrarInscripcionForm.controls.programaSelected.setValue("2N");
 			this.registrarInscripcionForm.controls.tipoSelected.setValue("3");
 			this.progSelected = "DEN";
+			this.tipSelected = "3";
+		} else if (programa == "ET") {
+			this.registrarInscripcionForm.controls.programaSelected.setValue("3N");
+			this.registrarInscripcionForm.controls.tipoSelected.setValue("3");
+			this.progSelected = "ETN";
 			this.tipSelected = "3";
 		} else {
 			this.progSelected = null;
@@ -535,7 +540,7 @@ export class PregradoComponent implements OnInit {
 	 * @param opcion 0: si es con boton de cerrar, 1 || 2: si no tiene boton de cerrar (no se cual es la diferencia entre 1 y 2 ._.)
 	 */
 	public openMensajes(titulo: string, mensaje: string, opcion: number): void {
-		var sizeWindow = window.innerWidth <= 600 ? "99%" : "35%";
+		var sizeWindow = window.innerWidth <= 800 ? "99%" : "35%";
 		this.dialogRef = this.dialog.open(VentanaDialogoMensajesPreg, {
 			width: sizeWindow,
 			data: { titulo: titulo, mensaje: mensaje, opcion: opcion },

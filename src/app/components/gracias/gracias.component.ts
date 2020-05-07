@@ -2,8 +2,6 @@ import { Component, OnInit } from "@angular/core";
 import { PregradoService } from "src/app/services/pregrado.service";
 import { ActivatedRoute } from "@angular/router";
 import { environment } from "src/environments/environment";
-import { FormGroup } from "@angular/forms";
-import { Programa } from "src/app/models/Programa";
 import { CookieService } from "ngx-cookie-service";
 import { StringResourceHelper } from "src/app/models/string-resource-helper";
 import { Mensaje } from "src/app/models/Mensaje";
@@ -11,7 +9,7 @@ import { Mensaje } from "src/app/models/Mensaje";
 @Component({
 	selector: "app-gracias",
 	templateUrl: "./gracias.component.html",
-	styleUrls: ["../pregrado/pregrado.component.scss"]
+	styleUrls: ["./gracias.component.scss"]
 })
 export class GraciasComponent implements OnInit {
 	public stringHelper: StringResourceHelper;
@@ -104,7 +102,7 @@ export class GraciasComponent implements OnInit {
 	}
 
 	public onResize(event) {
-		this.pantalla = event.target.innerWidth <= 600 ? 1 : 2;
+		this.pantalla = event.target.innerWidth <= 800 ? 1 : 2;
 	}
 
 	forzarContinuar() {
@@ -115,6 +113,6 @@ export class GraciasComponent implements OnInit {
 	}
 
 	ngOnInit() {
-		this.pantalla = window.innerWidth <= 600 ? 1 : 2;
+		this.pantalla = window.innerWidth <= 800 ? 1 : 2;
 	}
 }

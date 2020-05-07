@@ -1,5 +1,29 @@
+@import "../pregrado/pregrado.component.scss";
+
 .complete-gracias {
 	width: 100%;
 	height: 100%;
+}
+
+.parte-izquierda,
+.complete-gracias {
 	background-color: white;
+}
+
+.btn-continuar-peq {
+	width: 100%;
+	height: 60px;
+	border-radius: 0;
+	background-color: #0066eb;
+	color: white;
+	margin-top: 35px;
+	z-index: 2;
+}
+
+.img-background {
+	position: absolute;
+	bottom: 5px;
+	right: 15px;
+	opacity: 0.6;
+	z-index: 1;
 }

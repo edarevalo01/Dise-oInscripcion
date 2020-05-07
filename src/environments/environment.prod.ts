@@ -3,7 +3,7 @@ export const environment = {
 	siteKey: "6LcLgzEUAAAAAEW_qzzLErRbf_6CicDG7ExEjzQc",
 	urlBackend: "https://jupiter.lasalle.edu.co:8181/admisiones-backend/oar/", //(Pruebas)
 	//urlBackend: "http://vili.lasalle.edu.co:8082/admisiones-backend/oar/",
-	//urlBackend: "http://estctiedarevalo.lasalle.edu.co:8080/admisiones-backend/oar/",
+	//urlBackend: "http://estctiedarevalo.lasalle.edu.co:8080/admisiones-backend/oar/", //(Local)
 	//urlBackend: "https://tigris.lasalle.edu.co/admisiones-backend/oar/", //(Produccion)
 	getProgramas: "facultades.json",
 	urlDoctorados: "http://tigris.lasalle.edu.co/InscripcionDoctorados/IndexDoctorado?idDoctorado=?1&txtDocumento=?2",

@@ -76,12 +76,12 @@ export class PregradoContinuarComponent implements OnInit {
 	}
 
 	ngOnInit() {
-		this.pantalla = window.innerWidth <= 600 ? 1 : 2;
+		this.pantalla = window.innerWidth <= 800 ? 1 : 2;
 		this.responsive = this.pantalla == 1;
 	}
 
 	public onResize(event) {
-		this.pantalla = event.target.innerWidth <= 600 ? 1 : 2;
+		this.pantalla = event.target.innerWidth <= 800 ? 1 : 2;
 		this.responsive = this.pantalla == 1;
 	}
 
@@ -248,7 +248,7 @@ export class PregradoContinuarComponent implements OnInit {
 	////////////////////////////////////////////////////////////////////////////////////////
 
 	public openMensajes(titulo: string, mensaje: string, opcion: number): void {
-		var sizeWindow = window.innerWidth <= 600 ? "99%" : "35%";
+		var sizeWindow = window.innerWidth <= 800 ? "99%" : "35%";
 		const dialogRef = this.dialog.open(VentanaDialogoMensajes, {
 			width: sizeWindow,
 			data: {
