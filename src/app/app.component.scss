@@ -53,10 +53,10 @@ body {
 
 @media screen and (min-width: 800px) {
 	/* Grande */
-	.div-fullscreen {
-		padding-top: 4%;
-		padding-bottom: 3%;
-	}
+	// .div-fullscreen {
+	// 	padding-top: 4%;
+	// 	padding-bottom: 3%;
+	// }
 
 	.body-complete {
 		background: #ffffff url("../assets/fondogris.svg") no-repeat center;
@@ -68,8 +68,8 @@ body {
 
 	.div-complete {
 		box-shadow: 0 4px 8px 0 #00000033, 0 6px 20px 0 #00000030;
-		height: 85%;
-		width: 75%;
+		height: 100%;
+		width: 100%;
 		margin: auto;
 	}
 
