@@ -88,7 +88,7 @@ export class PregradoComponent implements OnInit {
 			primerApellido: ["", Validators.required],
 			segundoApellido: [""],
 			tipoDocumentoSelected: ["", Validators.required],
-			documento: ["", [Validators.required, Validators.pattern("^[0-9]*$")]],
+			documento: ["", Validators.required],
 			correo: ["", [Validators.required, Validators.email]],
 			celular: ["", [Validators.required, Validators.pattern("^[0-9]*$")]],
 			tipoSelected: ["", Validators.required],

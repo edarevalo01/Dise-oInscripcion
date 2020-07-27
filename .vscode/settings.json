@@ -26,6 +26,6 @@
 	"prettier.singleQuote": false,
 	"prettier.tabWidth": 2,
 	"prettier.trailingComma": "none",
-	"prettier.useTabs": true,
+	"prettier.useTabs": false,
 	"prettier.vueIndentScriptAndStyle": false
 }

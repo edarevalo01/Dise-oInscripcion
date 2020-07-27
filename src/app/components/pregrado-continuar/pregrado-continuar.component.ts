@@ -56,7 +56,7 @@ export class PregradoContinuarComponent implements OnInit {
 	) {
 		this.stringHelper = new StringResourceHelper("titulos-mensajes");
 		this.continuarInscripcionForm = this.formBuilder.group({
-			documento: ["", [Validators.required, Validators.pattern("^[0-9]*$")]],
+			documento: ["", Validators.required],
 			tipoSelected: ["", Validators.required],
 			programaSelected: ["", Validators.required]
 		});
@@ -224,7 +224,8 @@ export class PregradoContinuarComponent implements OnInit {
 			this.cookieService.set(environment.cookiePregrado, JSON.stringify(datos), 15 / 1440, "/", environment.dominio);
 
 			setTimeout(function () {
-				this.document.location.href = environment.urlPregrado;
+				// this.document.location.href = environment.urlPregrado;
+				window.open(environment.urlPregrado, "_blank");
 			}, 100);
 		} else if (tipo == "2") {
 			var datosPos = {
@@ -235,11 +236,13 @@ export class PregradoContinuarComponent implements OnInit {
 			this.cookieService.set(environment.cookiePosgrado, JSON.stringify(datosPos), 15 / 1440, "/", environment.dominio);
 
 			setTimeout(function () {
-				this.document.location.href = environment.urlPosgrado;
+				// this.document.location.href = environment.urlPosgrado;
+				window.open(environment.urlPosgrado, "_blank");
 			}, 100);
 		} else if (tipo == "3") {
 			setTimeout(function () {
-				this.document.location.href = environment.urlDoctorados.replace("?1", programa.substring(0, 1)).replace("?2", documento);
+				// this.document.location.href = environment.urlDoctorados.replace("?1", programa.substring(0, 1)).replace("?2", documento);
+				window.open(environment.urlDoctorados.replace("?1", programa.substring(0, 1)).replace("?2", documento), "_blank");
 			}, 100);
 		}
 		this.continuarInscripcionForm.reset();
