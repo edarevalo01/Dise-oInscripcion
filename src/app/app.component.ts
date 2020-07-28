@@ -33,7 +33,6 @@ export class AppComponent {
 
 		this.router.events.subscribe((e) => {
 			if (e instanceof NavigationEnd) {
-				console.log(e.urlAfterRedirects);
 				gtag("config", "UA-159836892-1", { page_path: e.urlAfterRedirects });
 			}
 		});
