@@ -56,7 +56,7 @@ export class PregradoContinuarComponent implements OnInit {
 	) {
 		this.stringHelper = new StringResourceHelper("titulos-mensajes");
 		this.continuarInscripcionForm = this.formBuilder.group({
-			documento: ["", [Validators.required, Validators.pattern("^[a-zA-Z0-9ñáéíóú]*$")]],
+			documento: ["", [Validators.required, Validators.pattern("^[a-zA-Z0-9ñáéíóúÁÉÍÓÚ]*$")]],
 			tipoSelected: ["", Validators.required],
 			programaSelected: ["", Validators.required]
 		});

@@ -83,10 +83,10 @@ export class PregradoComponent implements OnInit {
 
 		this.msgHabeasData = this.stringHelper.getResource("msgHabeasData");
 		this.registrarInscripcionForm = this.formBuilder.group({
-			primerNombre: ["", [Validators.required, Validators.pattern("^[a-zA-Z0-9ñáéíóú]*$")]],
-			segundoNombre: ["", Validators.pattern("^[a-zA-Z0-9ñáéíóú]*$")],
-			primerApellido: ["", [Validators.required, Validators.pattern("^[a-zA-Z0-9ñáéíóú]*$")]],
-			segundoApellido: ["", Validators.pattern("^[a-zA-Z0-9ñáéíóú]*$")],
+			primerNombre: ["", [Validators.required, Validators.pattern("^[a-zA-Z0-9ñáéíóúÁÉÍÓÚ]*$")]],
+			segundoNombre: ["", Validators.pattern("^[a-zA-Z0-9ñáéíóúÁÉÍÓÚ]*$")],
+			primerApellido: ["", [Validators.required, Validators.pattern("^[a-zA-Z0-9ñáéíóúÁÉÍÓÚ]*$")]],
+			segundoApellido: ["", Validators.pattern("^[a-zA-Z0-9ñáéíóúÁÉÍÓÚ]*$")],
 			tipoDocumentoSelected: ["", Validators.required],
 			documento: ["", [Validators.required, Validators.pattern("^[a-zA-Z0-9]*$")]],
 			correo: ["", [Validators.required, Validators.email]],
