@@ -1,6 +1,5 @@
 import { Component } from "@angular/core";
-import { ActivatedRoute, Router, NavigationEnd } from "@angular/router";
-declare let gtag: Function;
+import { ActivatedRoute } from "@angular/router";
 
 @Component({
 	selector: "app-root",
@@ -14,7 +13,7 @@ export class AppComponent {
 	public parametrosUrl: any;
 	public darkMode: boolean = false;
 
-	constructor(private route: ActivatedRoute, private router: Router) {
+	constructor(private route: ActivatedRoute) {
 		this.parametrosUrl = this.route.snapshot.queryParams;
 
 		this.route.queryParams.forEach((parametro) => {
@@ -28,12 +27,6 @@ export class AppComponent {
 				this.darkMode = parametro.dark_mode == 1;
 			} else {
 				this.darkMode = false;
-			}
-		});
-
-		this.router.events.subscribe((e) => {
-			if (e instanceof NavigationEnd) {
-				gtag("config", "UA-159836892-1", { page_path: e.urlAfterRedirects });
 			}
 		});
 	}
