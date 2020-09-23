@@ -36,9 +36,9 @@ export class PregradoComponent implements OnInit {
 	public stringHelper: StringResourceHelper;
 
 	public tiposDocumento: TipoDocumento[] = [
-		{ codigo: "T", nombre: "TARJETA DE IDENTIDAD" },
-		{ codigo: "C", nombre: "CÉDULA DE CIUDADANÍA" },
-		{ codigo: "P", nombre: "PASAPORTE" }
+		{ codigo: "T", nombre: "TI - Tarjeta de identidad" },
+		{ codigo: "C", nombre: "CC - Cédula de ciudadanía" },
+		{ codigo: "P", nombre: "PS - Pasaporte" }
 	];
 	public tipoDocumentoSelected: string;
 
@@ -83,9 +83,9 @@ export class PregradoComponent implements OnInit {
 
 		this.msgHabeasData = this.stringHelper.getResource("msgHabeasData");
 		this.registrarInscripcionForm = this.formBuilder.group({
-			primerNombre: ["", [Validators.required, Validators.pattern("^[a-zA-Z0-9ñáéíóúÁÉÍÓÚ]*$")]],
+			primerNombre: ["", [Validators.required, Validators.pattern("^[a-zA-Z0-9ñáéíóúÁÉÍÓÚ ]*$")]],
 			segundoNombre: ["", Validators.pattern("^[a-zA-Z0-9ñáéíóúÁÉÍÓÚ]*$")],
-			primerApellido: ["", [Validators.required, Validators.pattern("^[a-zA-Z0-9ñáéíóúÁÉÍÓÚ]*$")]],
+			primerApellido: ["", [Validators.required, Validators.pattern("^[a-zA-Z0-9ñáéíóúÁÉÍÓÚ ]*$")]],
 			segundoApellido: ["", Validators.pattern("^[a-zA-Z0-9ñáéíóúÁÉÍÓÚ]*$")],
 			tipoDocumentoSelected: ["", Validators.required],
 			documento: ["", [Validators.required, Validators.pattern("^[a-zA-Z0-9]*$")]],

@@ -75,32 +75,42 @@ export class PregradoService {
 			programa = inter.controls.programaSelected.value.substring(0, 1) == "1" ? "DA" : "DE";
 			jornada = inter.controls.programaSelected.value.substring(1, 2);
 		}
+		let nombres = inter.controls.primerNombre.value.trim().split(" ");
+		let primerNombre = nombres[0];
+		nombres.splice(0, 1);
+		let segundoNombre = nombres.join(" ");
+
+		let apellidos = inter.controls.primerApellido.value.trim().split(" ");
+		let primerApellido = apellidos[0];
+		apellidos.splice(0, 1);
+		let segundoApellido = apellidos.join(" ");
+
 		var interesado = {
-			primerNombre: inter.controls.primerNombre.value
+			primerNombre: primerNombre
 				.toUpperCase()
 				.trim()
 				.normalize("NFD")
 				.replace(/([^n\u0300-\u036f]|n(?!\u0303(?![\u0300-\u036f])))[\u0300-\u036f]+/gi, "$1")
 				.normalize(),
 			segundoNombre:
-				null == inter.controls.segundoNombre.value
+				null == segundoNombre
 					? null
-					: inter.controls.segundoNombre.value
+					: segundoNombre
 							.toUpperCase()
 							.trim()
 							.normalize("NFD")
 							.replace(/([^n\u0300-\u036f]|n(?!\u0303(?![\u0300-\u036f])))[\u0300-\u036f]+/gi, "$1")
 							.normalize(),
-			primerApellido: inter.controls.primerApellido.value
+			primerApellido: primerApellido
 				.toUpperCase()
 				.trim()
 				.normalize("NFD")
 				.replace(/([^n\u0300-\u036f]|n(?!\u0303(?![\u0300-\u036f])))[\u0300-\u036f]+/gi, "$1")
 				.normalize(),
 			segundoApellido:
-				null == inter.controls.segundoApellido.value
+				null == segundoApellido
 					? null
-					: inter.controls.segundoApellido.value
+					: segundoApellido
 							.toUpperCase()
 							.trim()
 							.normalize("NFD")
@@ -117,13 +127,13 @@ export class PregradoService {
 			origen: lead_source,
 			captcha: captcha
 		};
-		console.log(interesado);
-		// this.mensaje = this.http.post<Mensaje>(
-		// 	environment.urlBackend + environment.guardarParte1,
-		// 	JSON.stringify(interesado),
-		// 	httpOptions
-		// );
-		return null;
+
+		this.mensaje = this.http.post<Mensaje>(
+			environment.urlBackend + environment.guardarParte1,
+			JSON.stringify(interesado),
+			httpOptions
+		);
+		return this.mensaje;
 	}
 
 	setMensajeGracias(tituloMensaje: string, mensaje: string) {

@@ -1,208 +1,218 @@
 <div class="progress-bar-form" *ngIf="progress">
-  <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+	<mat-progress-bar mode="indeterminate"></mat-progress-bar>
 </div>
-<div style="height: 100%;" class="fontf">
-  <mat-grid-list [cols]="pantalla" rowHeight="100%" (window:resize)="onResize($event)" class="mat-grid-styles">
-    <mat-grid-tile colspan="1" rowspan="1">
-      <mat-card
-        [ngClass]="{
-          'scrollable-content': darkMode || !darkMode,
-          'parte-izquierda-dark': darkMode,
-          'parte-izquierda': !darkMode,
-          'padding-parte-izquierda-reducido': formReducido,
-          'padding-parte-izquierda': !formReducido
-        }"
-      >
-        <div style="width: 100%; margin-bottom: 5%;" *ngIf="!formReducido">
-          <img src="assets/logo_salle.svg" alt="Logo Salle" class="img-logo-salle" *ngIf="!darkMode" />
-          <img src="assets/logo_salle_blanco.svg" alt="Logo Salle" class="img-logo-salle" *ngIf="darkMode" />
-        </div>
-        <mat-card-title class="titulo-izquierda" *ngIf="!formReducido">
-          {{ stringHelper.getResource("titInscribete") }}
-        </mat-card-title>
-        <mat-card-subtitle [ngClass]="darkMode ? 'subtitulo-izquierda-dark' : 'subtitulo-izquierda'" *ngIf="!formReducido">
-          {{ stringHelper.getResource("lblInscribete") }}
-        </mat-card-subtitle>
-        <mat-card-content [ngClass]="formReducido ? 'form-content-izquierda-reducido' : 'form-content-izquierda'">
-          <div class="inscripcion-form">
-            <form class="estilo-formulario" [formGroup]="registrarInscripcionForm">
-              <mat-form-field [ngClass]="darkMode ? 'campoTexto-dark' : 'campoTexto'">
-                <mat-label [ngClass]="darkMode ? 'mat-label-style-dark' : 'mat-label-style-ligth'">Primer nombre *</mat-label>
-                <input matInput formControlName="primerNombre" [ngClass]="darkMode ? 'input-style-dark' : ''" />
-                <mat-icon matSuffix [ngClass]="darkMode ? 'style-icons-dark' : 'style-icons'">person_outline</mat-icon>
-                <mat-error *ngIf="registrarInscripcionForm.controls.primerNombre.hasError('required')">
-                  {{ stringHelper.getResource("lblRequerido") }}
-                </mat-error>
-                <mat-error *ngIf="registrarInscripcionForm.controls.primerNombre.hasError('pattern')">
-                  No se permiten caracteres especiales.
-                </mat-error>
-              </mat-form-field>
+<div style="height: 100%" class="fontf">
+	<mat-grid-list [cols]="pantalla" rowHeight="100%" (window:resize)="onResize($event)" class="mat-grid-styles">
+		<mat-grid-tile colspan="1" rowspan="1">
+			<mat-card
+				[ngClass]="{
+					'scrollable-content': darkMode || !darkMode,
+					'parte-izquierda-dark': darkMode,
+					'parte-izquierda': !darkMode,
+					'padding-parte-izquierda-reducido': formReducido,
+					'padding-parte-izquierda': !formReducido
+				}"
+			>
+				<div style="width: 100%; margin-bottom: 5%" *ngIf="!formReducido">
+					<img src="assets/logo_salle.svg" alt="Logo Salle" class="img-logo-salle" *ngIf="!darkMode" />
+					<img src="assets/logo_salle_blanco.svg" alt="Logo Salle" class="img-logo-salle" *ngIf="darkMode" />
+				</div>
+				<mat-card-title class="titulo-izquierda" *ngIf="!formReducido">
+					{{ stringHelper.getResource("titInscribete") }}
+				</mat-card-title>
+				<mat-card-subtitle [ngClass]="darkMode ? 'subtitulo-izquierda-dark' : 'subtitulo-izquierda'" *ngIf="!formReducido">
+					{{ stringHelper.getResource("lblInscribete") }}
+				</mat-card-subtitle>
+				<mat-card-content [ngClass]="formReducido ? 'form-content-izquierda-reducido' : 'form-content-izquierda'">
+					<div class="inscripcion-form">
+						<form class="estilo-formulario" [formGroup]="registrarInscripcionForm">
+							<mat-form-field class="campoTexto">
+								<mat-label [ngClass]="darkMode ? 'mat-label-style-dark' : 'mat-label-style-ligth'">Nombres *</mat-label>
+								<input matInput formControlName="primerNombre" [ngClass]="darkMode ? 'input-style-dark' : ''" />
+								<mat-icon matSuffix [ngClass]="darkMode ? 'style-icons-dark' : 'style-icons'">person_outline</mat-icon>
+								<mat-error *ngIf="registrarInscripcionForm.controls.primerNombre.hasError('required')">
+									{{ stringHelper.getResource("lblRequerido") }}
+								</mat-error>
+								<mat-error *ngIf="registrarInscripcionForm.controls.primerNombre.hasError('pattern')">
+									No se permiten caracteres especiales.
+								</mat-error>
+							</mat-form-field>
 
-              <mat-form-field [ngClass]="darkMode ? 'campoTexto-dark' : 'campoTexto'">
+							<!-- <mat-form-field class="campoTexto">
                 <mat-label [ngClass]="darkMode ? 'mat-label-style-dark' : 'mat-label-style-ligth'">Segundo nombre</mat-label>
                 <input [ngClass]="darkMode ? 'input-style-dark' : ''" matInput formControlName="segundoNombre" />
                 <mat-icon matSuffix [ngClass]="darkMode ? 'style-icons-dark' : 'style-icons'">person_outline</mat-icon>
                 <mat-error *ngIf="registrarInscripcionForm.controls.segundoNombre.hasError('pattern')">
                   No se permiten caracteres especiales.
                 </mat-error>
-              </mat-form-field>
+              </mat-form-field> -->
 
-              <mat-form-field [ngClass]="darkMode ? 'campoTexto-dark' : 'campoTexto'">
-                <mat-label [ngClass]="darkMode ? 'mat-label-style-dark' : 'mat-label-style-ligth'">Primer apellido *</mat-label>
-                <input [ngClass]="darkMode ? 'input-style-dark' : ''" matInput formControlName="primerApellido" />
-                <mat-icon matSuffix [ngClass]="darkMode ? 'style-icons-dark' : 'style-icons'">person_outline</mat-icon>
-                <mat-error *ngIf="registrarInscripcionForm.controls.primerApellido.hasError('required')">
-                  {{ stringHelper.getResource("lblRequerido") }}
-                </mat-error>
-                <mat-error *ngIf="registrarInscripcionForm.controls.primerApellido.hasError('pattern')">
-                  No se permiten caracteres especiales.
-                </mat-error>
-              </mat-form-field>
+							<mat-form-field class="campoTexto">
+								<mat-label [ngClass]="darkMode ? 'mat-label-style-dark' : 'mat-label-style-ligth'">Apellidos *</mat-label>
+								<input [ngClass]="darkMode ? 'input-style-dark' : ''" matInput formControlName="primerApellido" />
+								<mat-icon matSuffix [ngClass]="darkMode ? 'style-icons-dark' : 'style-icons'">person_outline</mat-icon>
+								<mat-error *ngIf="registrarInscripcionForm.controls.primerApellido.hasError('required')">
+									{{ stringHelper.getResource("lblRequerido") }}
+								</mat-error>
+								<mat-error *ngIf="registrarInscripcionForm.controls.primerApellido.hasError('pattern')">
+									No se permiten caracteres especiales.
+								</mat-error>
+							</mat-form-field>
 
-              <mat-form-field [ngClass]="darkMode ? 'campoTexto-dark' : 'campoTexto'">
+							<!-- <mat-form-field class="campoTexto">
                 <mat-label [ngClass]="darkMode ? 'mat-label-style-dark' : 'mat-label-style-ligth'">Segundo apellido</mat-label>
                 <input [ngClass]="darkMode ? 'input-style-dark' : ''" matInput formControlName="segundoApellido" />
                 <mat-icon matSuffix [ngClass]="darkMode ? 'style-icons-dark' : 'style-icons'">person_outline</mat-icon>
                 <mat-error *ngIf="registrarInscripcionForm.controls.segundoApellido.hasError('pattern')">
                   No se permiten caracteres especiales.
                 </mat-error>
-              </mat-form-field>
+              </mat-form-field> -->
 
-              <mat-form-field [ngClass]="darkMode ? 'campoTexto-dark' : 'campoTexto'">
-                <mat-label [ngClass]="darkMode ? 'mat-label-style-dark' : 'mat-label-style-ligth'">Tipo de documento</mat-label>
-                <mat-select [ngClass]="darkMode ? 'input-style-dark' : ''" matInput formControlName="tipoDocumentoSelected">
-                  <mat-option *ngFor="let tipoDoc of tiposDocumento" [value]="tipoDoc.codigo">
-                    {{ tipoDoc.nombre }}
-                  </mat-option>
-                </mat-select>
-                <mat-icon matSuffix [ngClass]="darkMode ? 'style-icons-dark' : 'style-icons'">keyboard_arrow_right</mat-icon>
-              </mat-form-field>
+							<mat-form-field class="campoTexto tipo-doc">
+								<mat-label [ngClass]="darkMode ? 'mat-label-style-dark' : 'mat-label-style-ligth'">Tipo Doc</mat-label>
+								<mat-select [ngClass]="darkMode ? 'input-style-dark' : ''" matInput formControlName="tipoDocumentoSelected">
+									<mat-option *ngFor="let tipoDoc of tiposDocumento" [value]="tipoDoc.codigo">
+										{{ tipoDoc.nombre }}
+									</mat-option>
+								</mat-select>
+								<mat-icon matSuffix [ngClass]="darkMode ? 'style-icons-dark' : 'style-icons'">keyboard_arrow_right</mat-icon>
+							</mat-form-field>
 
-              <mat-form-field [ngClass]="darkMode ? 'campoTexto-dark' : 'campoTexto'">
-                <mat-label [ngClass]="darkMode ? 'mat-label-style-dark' : 'mat-label-style-ligth'">Número de Documento</mat-label>
-                <input [ngClass]="darkMode ? 'input-style-dark' : ''" matInput formControlName="documento" />
-                <mat-icon matSuffix [ngClass]="darkMode ? 'style-icons-dark' : 'style-icons'">account_box</mat-icon>
-                <mat-error *ngIf="registrarInscripcionForm.controls.documento.hasError('required')">
-                  {{ stringHelper.getResource("lblRequerido") }}
-                </mat-error>
-                <mat-error *ngIf="registrarInscripcionForm.controls.documento.hasError('pattern')">
-                  No se permiten caracteres especiales.
-                </mat-error>
-              </mat-form-field>
+							<mat-form-field class="campoTexto documento">
+								<mat-label [ngClass]="darkMode ? 'mat-label-style-dark' : 'mat-label-style-ligth'"
+									>Número de Documento *</mat-label
+								>
+								<input [ngClass]="darkMode ? 'input-style-dark' : ''" matInput formControlName="documento" />
+								<mat-icon matSuffix [ngClass]="darkMode ? 'style-icons-dark' : 'style-icons'">account_box</mat-icon>
+								<mat-error *ngIf="registrarInscripcionForm.controls.documento.hasError('required')">
+									{{ stringHelper.getResource("lblRequerido") }}
+								</mat-error>
+								<mat-error *ngIf="registrarInscripcionForm.controls.documento.hasError('pattern')">
+									No se permiten caracteres especiales.
+								</mat-error>
+							</mat-form-field>
 
-              <mat-form-field [ngClass]="darkMode ? 'campoTexto-dark' : 'campoTexto'">
-                <mat-label [ngClass]="darkMode ? 'mat-label-style-dark' : 'mat-label-style-ligth'"
-                  >Correo electrónico *</mat-label
-                >
-                <input [ngClass]="darkMode ? 'input-style-dark' : ''" matInput formControlName="correo" />
-                <mat-icon matSuffix [ngClass]="darkMode ? 'style-icons-dark' : 'style-icons'">mail_outline</mat-icon>
-                <mat-error *ngIf="registrarInscripcionForm.controls.correo.hasError('required')">
-                  {{ stringHelper.getResource("lblRequerido") }}
-                </mat-error>
-                <mat-error *ngIf="registrarInscripcionForm.controls.correo.hasError('email')">
-                  {{ stringHelper.getResource("lblCorreo") }}
-                </mat-error>
-              </mat-form-field>
+							<mat-form-field class="campoTexto">
+								<mat-label [ngClass]="darkMode ? 'mat-label-style-dark' : 'mat-label-style-ligth'"
+									>Correo electrónico *</mat-label
+								>
+								<input [ngClass]="darkMode ? 'input-style-dark' : ''" matInput formControlName="correo" />
+								<mat-icon matSuffix [ngClass]="darkMode ? 'style-icons-dark' : 'style-icons'">mail_outline</mat-icon>
+								<mat-error *ngIf="registrarInscripcionForm.controls.correo.hasError('required')">
+									{{ stringHelper.getResource("lblRequerido") }}
+								</mat-error>
+								<mat-error *ngIf="registrarInscripcionForm.controls.correo.hasError('email')">
+									{{ stringHelper.getResource("lblCorreo") }}
+								</mat-error>
+							</mat-form-field>
 
-              <mat-form-field [ngClass]="darkMode ? 'campoTexto-dark' : 'campoTexto'">
-                <mat-label [ngClass]="darkMode ? 'mat-label-style-dark' : 'mat-label-style-ligth'">Número de celular *</mat-label>
-                <input [ngClass]="darkMode ? 'input-style-dark' : ''" matInput formControlName="celular" />
-                <mat-icon matSuffix [ngClass]="darkMode ? 'style-icons-dark' : 'style-icons'">smartphone</mat-icon>
-                <mat-error *ngIf="registrarInscripcionForm.controls.celular.hasError('required')">
-                  {{ stringHelper.getResource("lblRequerido") }}
-                </mat-error>
-                <mat-error *ngIf="registrarInscripcionForm.controls.celular.hasError('pattern')">
-                  {{ stringHelper.getResource("lblSoloNumeros") }}
-                </mat-error>
-              </mat-form-field>
+							<mat-form-field class="campoTexto tipo-doc">
+								<mat-label [ngClass]="darkMode ? 'mat-label-style-dark' : 'mat-label-style-ligth'">Indicativo</mat-label>
+								<mat-select [ngClass]="darkMode ? 'input-style-dark' : ''" matInput formControlName="tipoDocumentoSelected">
+									<mat-option *ngFor="let tipoDoc of tiposDocumento" [value]="tipoDoc.codigo">
+										{{ "+57" }}
+									</mat-option>
+								</mat-select>
+								<mat-icon matSuffix [ngClass]="darkMode ? 'style-icons-dark' : 'style-icons'">keyboard_arrow_right</mat-icon>
+							</mat-form-field>
 
-              <mat-form-field [ngClass]="darkMode ? 'campoTexto-dark' : 'campoTexto'">
-                <mat-label [ngClass]="darkMode ? 'mat-label-style-dark' : 'mat-label-style-ligth'">Oferta académica</mat-label>
-                <mat-select
-                  [ngClass]="darkMode ? 'input-style-dark' : ''"
-                  matInput
-                  formControlName="tipoSelected"
-                  [value]="tipSelected"
-                >
-                  <mat-option *ngFor="let tipoProg of tiposPrograma" [value]="tipoProg.codigo" (click)="getProgramas()">
-                    {{ tipoProg.nombre }}
-                  </mat-option>
-                </mat-select>
-                <mat-icon matSuffix [ngClass]="darkMode ? 'style-icons-dark' : 'style-icons'">keyboard_arrow_right</mat-icon>
-              </mat-form-field>
+							<mat-form-field class="campoTexto documento">
+								<mat-label [ngClass]="darkMode ? 'mat-label-style-dark' : 'mat-label-style-ligth'">Número de celular *</mat-label>
+								<input [ngClass]="darkMode ? 'input-style-dark' : ''" matInput formControlName="celular" />
+								<mat-icon matSuffix [ngClass]="darkMode ? 'style-icons-dark' : 'style-icons'">smartphone</mat-icon>
+								<mat-error *ngIf="registrarInscripcionForm.controls.celular.hasError('required')">
+									{{ stringHelper.getResource("lblRequerido") }}
+								</mat-error>
+								<mat-error *ngIf="registrarInscripcionForm.controls.celular.hasError('pattern')">
+									{{ stringHelper.getResource("lblSoloNumeros") }}
+								</mat-error>
+							</mat-form-field>
 
-              <mat-form-field [ngClass]="darkMode ? 'campoTexto-dark' : 'campoTexto'">
-                <mat-label [ngClass]="darkMode ? 'mat-label-style-dark' : 'mat-label-style-ligth'"
-                  >Seleccione programa académico</mat-label
-                >
-                <mat-select
-                  [ngClass]="darkMode ? 'input-style-dark' : ''"
-                  matInput
-                  formControlName="programaSelected"
-                  [value]="progSelected"
-                >
-                  <mat-option *ngFor="let prog of programs" [value]="prog.codigo + prog.jornada">
-                    {{ prog.nombre }} ({{ prog.jornada == "D" ? "Diurno" : "Nocturno" }})
-                  </mat-option>
-                </mat-select>
-                <mat-icon matSuffix [ngClass]="darkMode ? 'style-icons-dark' : 'style-icons'">school</mat-icon>
-              </mat-form-field>
+							<mat-form-field class="campoTexto">
+								<mat-label [ngClass]="darkMode ? 'mat-label-style-dark' : 'mat-label-style-ligth'">Oferta académica</mat-label>
+								<mat-select
+									[ngClass]="darkMode ? 'input-style-dark' : ''"
+									matInput
+									formControlName="tipoSelected"
+									[value]="tipSelected"
+								>
+									<mat-option *ngFor="let tipoProg of tiposPrograma" [value]="tipoProg.codigo" (click)="getProgramas()">
+										{{ tipoProg.nombre | titlecase }}
+									</mat-option>
+								</mat-select>
+								<mat-icon matSuffix [ngClass]="darkMode ? 'style-icons-dark' : 'style-icons'">keyboard_arrow_right</mat-icon>
+							</mat-form-field>
 
-              <mat-checkbox matInput formControlName="terminos">
-                <span [ngClass]="darkMode ? 'terminos-cond-dark' : 'terminos-cond'">
-                  He le&iacute;do y acepto los
-                  <span (click)="openHabeasData()" class="vinculo">Términos</span>
-                  <br />
-                  <span (click)="openHabeasData()" class="vinculo">y condiciones</span> (Habeas data)
-                </span>
-              </mat-checkbox>
-              <mat-error *ngIf="registrarInscripcionForm.hasError('required', 'terminos')" style="color: #ffa600;">
-                {{ stringHelper.getResource("lblTerminos") }}
-              </mat-error>
-              <div class="captcha">
-                <re-captcha
-                  #captchaRef="reCaptcha"
-                  [siteKey]="siteKey"
-                  size="invisible"
-                  (resolved)="$event && enviarDatosInscripcion($event)"
-                ></re-captcha>
-              </div>
-            </form>
-            <button
-              [style.width]="formReducido ? '100%' : ''"
-              mat-raised-button
-              (click)="captchaRef.execute()"
-              [ngClass]="darkMode ? 'btn-inscribir-dark' : 'btn-inscribir'"
-              [disabled]="registrarInscripcionForm.invalid"
-            >
-              {{ stringHelper.getResource("lblInscribirme") }}
-            </button>
-          </div>
-        </mat-card-content>
-      </mat-card>
-    </mat-grid-tile>
-    <div class="position-button" *ngIf="!formReducido" (click)="continuarProceso()">
-      <button mat-fab class="style-button" *ngIf="!responsive"><img src="assets/flechas.svg" /></button>
-      <button mat-button mat-stroked-button class="style-button-two" *ngIf="responsive">Continuar proceso de inscripción</button>
-    </div>
-    <mat-grid-tile colspan="1" rowspan="1" *ngIf="!formReducido && !responsive">
-      <mat-card class="parte-derecha">
-        <img src="assets/astronauta.svg" alt="astronauta" class="astronauta" />
-        <img src="assets/logounisalle.svg" alt="lasalle" class="logolasalle" />
-        <mat-card-content [style.overflow]="'auto'" style="height: 100%;">
-          <div style="width: 100%;">
-            <div class="text-right">
-              <h2 class="titulo-procAdmin">{{ stringHelper.getResource("titContinuar") }}</h2>
-              <p class="content-procAdmin">
-                {{ stringHelper.getResource("lblContinuar") }}
-              </p>
-              <button mat-raised-button (click)="continuarProceso()" class="btn-continuar">
-                {{ stringHelper.getResource("lblContinuarr") }}
-              </button>
-            </div>
-          </div>
-        </mat-card-content>
-      </mat-card>
-    </mat-grid-tile>
-  </mat-grid-list>
+							<mat-form-field class="campoTexto">
+								<mat-label [ngClass]="darkMode ? 'mat-label-style-dark' : 'mat-label-style-ligth'">Programa académico</mat-label>
+								<mat-select
+									[ngClass]="darkMode ? 'input-style-dark' : ''"
+									matInput
+									formControlName="programaSelected"
+									[value]="progSelected"
+								>
+									<mat-option *ngFor="let prog of programs" [value]="prog.codigo + prog.jornada" class="opciones">
+										{{ prog.nombre | titlecase }} ({{ prog.jornada == "D" ? "Diurno" : "Nocturno" }})
+									</mat-option>
+								</mat-select>
+								<mat-icon matSuffix [ngClass]="darkMode ? 'style-icons-dark' : 'style-icons'">school</mat-icon>
+							</mat-form-field>
+
+							<mat-checkbox matInput formControlName="terminos">
+								<span [ngClass]="darkMode ? 'terminos-cond-dark' : 'terminos-cond'">
+									He le&iacute;do y acepto los
+									<span (click)="openHabeasData()" class="vinculo">Términos</span>
+									<br />
+									<span (click)="openHabeasData()" class="vinculo">y condiciones</span> (Habeas data)
+								</span>
+							</mat-checkbox>
+							<mat-error *ngIf="registrarInscripcionForm.hasError('required', 'terminos')" style="color: #ffa600">
+								{{ stringHelper.getResource("lblTerminos") }}
+							</mat-error>
+							<div class="captcha">
+								<re-captcha
+									#captchaRef="reCaptcha"
+									[siteKey]="siteKey"
+									size="invisible"
+									(resolved)="$event && enviarDatosInscripcion($event)"
+								></re-captcha>
+							</div>
+						</form>
+						<button
+							[style.width]="formReducido ? '100%' : ''"
+							mat-raised-button
+							(click)="captchaRef.execute()"
+							[ngClass]="darkMode ? 'btn-inscribir-dark' : 'btn-inscribir'"
+							[disabled]="registrarInscripcionForm.invalid"
+						>
+							{{ stringHelper.getResource("lblInscribirme") }}
+						</button>
+					</div>
+				</mat-card-content>
+			</mat-card>
+		</mat-grid-tile>
+		<div class="position-button" *ngIf="!formReducido" (click)="continuarProceso()">
+			<button mat-fab class="style-button" *ngIf="!responsive"><img src="assets/flechas.svg" /></button>
+			<button mat-button mat-stroked-button class="style-button-two" *ngIf="responsive">Continuar proceso de inscripción</button>
+		</div>
+		<mat-grid-tile colspan="1" rowspan="1" *ngIf="!formReducido && !responsive">
+			<mat-card class="parte-derecha">
+				<img src="assets/astronauta.svg" alt="astronauta" class="astronauta" />
+				<img src="assets/logounisalle.svg" alt="lasalle" class="logolasalle" />
+				<mat-card-content [style.overflow]="'auto'" style="height: 100%">
+					<div style="width: 100%">
+						<div class="text-right">
+							<h2 class="titulo-procAdmin">{{ stringHelper.getResource("titContinuar") }}</h2>
+							<p class="content-procAdmin">
+								{{ stringHelper.getResource("lblContinuar") }}
+							</p>
+							<button mat-raised-button (click)="continuarProceso()" class="btn-continuar">
+								{{ stringHelper.getResource("lblContinuarr") }}
+							</button>
+						</div>
+					</div>
+				</mat-card-content>
+			</mat-card>
+		</mat-grid-tile>
+	</mat-grid-list>
 </div>

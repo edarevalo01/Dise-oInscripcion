@@ -182,7 +182,7 @@
 	}
 
 	.terminos-cond {
-		font-size: 12px !important;
+		font-size: 10px !important;
 		color: #00000099;
 		letter-spacing: 0.4px;
 	}
@@ -394,7 +394,7 @@
 }
 
 ::ng-deep .mat-option-text {
-	font-size: 14px !important;
+	font-size: 12px !important;
 }
 
 /*Mariano*/
@@ -406,12 +406,21 @@
 	font-weight: 500;
 }
 
-.campoTexto-dark {
-	width: 100%;
-	font-size: 16px;
-	letter-spacing: 0.15px;
-	color: #ffffff99;
-	font-weight: 500;
+.tipo-doc {
+	width: 26%;
+	::ng-deep .mat-form-field-wrapper {
+		height: 38px;
+	}
+}
+
+.documento {
+	width: 69%;
+	margin-left: 5%;
+}
+
+.mat-option-text {
+	color: red;
+	font-size: 6px !important;
 }
 
 .mat-label-style-ligth {
